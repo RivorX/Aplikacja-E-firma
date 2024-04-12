@@ -13,6 +13,8 @@
   }
   ```
 */
+import ApplicationLogo from './ApplicationLogo';
+
 export default function Login() {
     return (
       <>
@@ -26,11 +28,7 @@ export default function Login() {
         */}
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img
-              className="mx-auto h-10 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="E-firma"
-            />
+          <ApplicationLogo  />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Logowanie do konta
             </h2>
@@ -40,7 +38,7 @@ export default function Login() {
             <form className="space-y-6" action="#" method="POST">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                  Email address
+                  Adres Email
                 </label>
                 <div className="mt-2">
                   <input
@@ -77,10 +75,14 @@ export default function Login() {
                 </div>
               </div>
   
-              <div>
+                 {/* Przyciski - Cofnij i Zaloguj się */}
+              <div className="flex items-center justify-between mt-4">
+                <a href="/" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                        Cofnij
+                </a>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition"
                 >
                   Zaloguj się
                 </button>
