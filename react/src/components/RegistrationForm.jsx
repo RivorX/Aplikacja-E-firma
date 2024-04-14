@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+
+
 export default function RegistrationForm() {
     const [position, setPosition] = useState("");
     const [customPosition, setCustomPosition] = useState("");

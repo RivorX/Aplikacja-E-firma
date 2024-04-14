@@ -5,6 +5,8 @@ import Dashboard from './views/Dashboard.jsx';
 import Login from './views/Login.jsx';
 import GuestLayout from './views/GuestLayout.jsx';
 import NewsMainInfo from './components/NewsMainInfo.jsx';
+import AboutMainInfo from './components/AboutMainInfo.jsx';
+import ContactMainInfo from './components/ContactMainInfo.jsx';
 
 import LogedDefaultLayout from "./views/LogedDefaultLayout.jsx";
 import PanelGłówny from "./views/PanelGółwny.jsx";
@@ -19,11 +21,11 @@ const router = createBrowserRouter([
         element: <LogedDefaultLayout />,
         children: [
             {
-                path: '/panelglowny',
-                element: <Navigate to= "/"/>
+                path: 'panelglowny',
+                element: <Navigate to= ""/>
             },
             {
-                path: '/',
+                path: '',
                 element: <PanelGłówny/>
             },
 
@@ -42,12 +44,20 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: '/',
+        path: '/mainpage',
         element: <GuestLayout/>,
         children: [
             {
                 path: 'news',
-                element: <NewsMainInfo/>
+                element: <Navigate to= ""/>
+            },
+            {
+                path: 'about',
+                element: <AboutMainInfo/>
+            },
+            {
+                path: 'contact',
+                element: <ContactMainInfo/>
             }
         ]
     },
