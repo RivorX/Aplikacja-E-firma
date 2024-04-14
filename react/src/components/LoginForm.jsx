@@ -15,7 +15,7 @@
 */
 import ApplicationLogo from './ApplicationLogo';
 
-export default function Login() {
+export default function LoginForm() {
     return (
       <>
         {/*

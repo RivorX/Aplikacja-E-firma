@@ -1,6 +1,6 @@
-import Login_comp from '../components/LoginPanel'
+import Login_form from '../components/LoginForm'
 export default function Login() {
     return (
-        <Login_comp />
+        <Login_form />
     );
 }

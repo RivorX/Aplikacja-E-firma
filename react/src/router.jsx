@@ -1,21 +1,27 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from './App.jsx';
+import { Routes, Route } from "react-router-dom";
 import Dashboard from './views/Dashboard.jsx';
 import Login from './views/Login.jsx';
-
+import GuestLayout from './views/GuestLayout.jsx';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App/>
-    },
-    {
-        path: '/login',
-        element: <Login/>
+        element: <GuestLayout/>,
+        // children: [
+        //     {
+        //         path: 'newsy',
+        //         element: <NewsMainInfo/>
+        //     }
+        // ]
     },
     {
         path: '/',
         element: <Dashboard/>
+    },
+    {
+        path: '/login',
+        element: <Login/>
     }
 ])
 
