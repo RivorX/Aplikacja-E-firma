@@ -25,11 +25,8 @@ export default function GuestPanel({ auth }) {
         </div>
 
         <div className="flex lg:justify-center lg:col-start-2 w-full lg:w-auto">
-          Nazwa użytkownika
+          
         </div>
-      </div>
-      <div className="flex items-center lg:justify-center py-10">
-        Przyciski wybierania
       </div>
     </header>
   );

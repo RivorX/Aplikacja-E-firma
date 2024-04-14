@@ -1,9 +1,9 @@
 
-export default function NewsMainInfo() {
+export default function ContactMainInfo() {
     return (
         <>
         <div className="container">
-           Newsy na stronie głównej
+           Nasz Kontakt
         </div>
         </>
 
