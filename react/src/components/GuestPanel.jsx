@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ApplicationLogo from './ApplicationLogo';
+import RegistrationForm from './RegistrationForm';
 
 export default function GuestPanel({ auth }) {
   return (
