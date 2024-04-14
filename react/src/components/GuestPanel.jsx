@@ -9,7 +9,7 @@ export default function GuestPanel({ auth }) {
           <div className="bg-white py-2 px-4 w-full flex justify-between items-center">
             <div></div> {/* Pusty element po lewej stronie */}
             <Link
-              to="/login" // użyj to zamiast href={route('login')}
+              to="/login"
               className="text-black hover:text-black/70 dark:text-Black dark:hover:text-Black/80"
             >
               Zaloguj się
@@ -18,8 +18,9 @@ export default function GuestPanel({ auth }) {
       </nav>
       <div className="grid grid-cols-3 flex lg:justify-center lg:col-start-2 w-full lg:w-auto pb-10 mt-0">
         <div className="position-relative">
-          {/* Tutaj załóżmy, że masz komponent ApplicationLogo */}
-          <ApplicationLogo  />
+
+          {/* Logo aplikacji */}
+          <ApplicationLogo /> 
         </div>
 
         <div className="flex lg:justify-center lg:col-start-2 w-full lg:w-auto">

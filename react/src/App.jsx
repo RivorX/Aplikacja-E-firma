@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
-import './components/LoginPanel'
-import Login from './components/LoginPanel'
 import Guestpanel from './components/GuestPanel'
 
 function App() {
@@ -22,7 +19,7 @@ function App() {
           E-firma
       </footer>
     </>
-  )
+  );
 }
 
 export default App

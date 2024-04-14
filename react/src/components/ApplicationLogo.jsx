@@ -5,7 +5,7 @@ export default function ApplicationLogo(props) {
         <img 
             src="/logo.jpg" 
             alt="Logo" 
-            className="img-fluid rounded-circle"
+            className=""
             style={{ maxWidth: "100px" }} 
         />
     );
