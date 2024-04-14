@@ -2,6 +2,11 @@ import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import GuestPanel from '../components/GuestPanel';
 import NewsMainInfo from '../components/NewsMainInfo';
+import RegistrationForm from '../components/RegistrationForm';
+import OgloszeniaForm from '../components/OgloszeniaForm';
+import NewsForm from '../components/NewsForm';
+import EditNewsForm from '../components/EditNewsForm';
+import OgloszeniaEditForm from '../components/OgloszeniaEditForm';
 
 const GuestLayout = () => {
   return (
