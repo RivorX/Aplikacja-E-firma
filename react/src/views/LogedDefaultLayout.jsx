@@ -39,36 +39,11 @@ export default function LogedDefaultLayout() {
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                    <ApplicationLogo />
-                    </div>
-                    <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
-                        {/* WYświetlanie przycisków */}
-                        {navigation.map((item) => (
-                          <NavLink
-                            key={item.name}
-                            to={item.to}
-                            className={({isActive}) =>classNames(
-                                isActive
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
-                            )}
-                          >
-                            {item.name}
-                          </NavLink>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
-
-                      {/* Profile dropdown, czyli przyciski po prawej*/}
+            <header className="items-top bg-gray-200 top-0 w-full">
+              <nav className="w-full flex flex-1 justify-end items-center">
+                  <div className="bg-white py-2 px-4 w-full flex justify-between items-center">
+                    <div></div> {/* Pusty element po lewej stronie */}
+                    {/* Profile dropdown, czyli przyciski po prawej*/}
                       {/* TODO: Proprawić, bo teraz działa dla wielu przyciskach 55 min około*/}
                       {userNavigation.map((item) => ( 
                           <NavLink
@@ -77,17 +52,44 @@ export default function LogedDefaultLayout() {
                             className={classNames(
                                 item.current
                                 ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                : 'text-black-300 hover:bg-gray-700 hover:text-white',
                               'rounded-md px-3 py-2 text-sm font-medium'
                             )}
                           >
                             {item.name}
                           </NavLink>
                         ))}
-                    </div>
                   </div>
+              </nav>
+              <div className="grid grid-cols-3 flex lg:justify-center lg:col-start-2 w-full lg:w-auto pb-10 mt-0">
+                <div className="position-relative">
+
+                  {/* Logo aplikacji */}
+                  <ApplicationLogo /> 
+                </div>
+
+                <div className="flex lg:justify-center lg:col-start-2 w-full lg:w-auto">
+                  Nazwa użytkownika
                 </div>
               </div>
+             <div className="flex justify-around w-full py-5">
+                {/* WYświetlanie przycisków */}
+                {navigation.map((item) => (
+                          <NavLink
+                            key={item.name}
+                            to={item.to}
+                            className={({isActive}) =>classNames(
+                                isActive
+                                ? 'bg-gray-400 text-white'
+                                : 'text-black-300 hover:bg-white hover:text-grey',
+                              'rounded-md px-3 py-2 text-sm font-medium'
+                            )}
+                          >
+                            {item.name}
+                          </NavLink>
+                        ))}
+              </div>
+            </header>
 
             </>
           )}
@@ -96,6 +98,9 @@ export default function LogedDefaultLayout() {
             {/* Tu będzie wyświetlana zawartość podstrony */}
             <Outlet /> 
         </div>
+        <footer className="py-4 text-center text-sm text-white dark:text-White/70 bg-gray-500 w-full">
+        E-firma
+      </footer>
         
       </div>
     </>
