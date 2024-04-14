@@ -3,6 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import GuestPanel from '../components/GuestPanel';
 import Login from './Login';
 import NewsMainInfo from '../components/NewsMainInfo';
+import RegistrationForm from '../components/RegistrationForm';
+import OgloszeniaForm from '../components/OgloszeniaForm';
+import NewsForm from '../components/NewsForm';
+import EditNewsForm from '../components/EditNewsForm';
+import OgloszeniaEditForm from '../components/OgloszeniaEditForm';
 
 const GuestLayout = () => {
   return (
@@ -21,6 +26,7 @@ const GuestLayout = () => {
           <Route path="/news" element={<NewsMainInfo />} />
 
         </Routes>
+        <OgloszeniaEditForm/>
       </main>
       <footer className="py-4 text-center text-sm text-white dark:text-White/70 bg-gray-500 w-full">
         E-firma
