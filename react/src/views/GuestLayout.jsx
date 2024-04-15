@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Navigate, Outlet, Routes, Route } from 'react-router-dom';
 import GuestPanel from '../components/GuestPanel';
 import NewsMainInfo from '../components/NewsMainInfo.jsx';
-import AboutMainInfo from '../components/AboutMainInfo.jsx';
-import ContactMainInfo from '../components/ContactMainInfo.jsx';
+import { userStateContext } from '../contexts/ContextProvider';
 
 import { Disclosure } from '@headlessui/react';
+
+import RegistrationForm from '../components/RegistrationForm';  {/* TODO  usunąć*/}
+
 
 const navigation = [
   { name: 'Aktualności', to: 'news'},
@@ -18,6 +20,10 @@ function classNames(...classes) {
 
 
 const GuestLayout = () => {
+  const { currentUser, userToken } = userStateContext();
+  if (userToken) {
+    return <Navigate to="/" />;
+  }
   const [selectedNavItem, setSelectedNavItem] = useState('news');
 
   const handleNavItemClick = (to) => {
@@ -57,6 +63,7 @@ const GuestLayout = () => {
 
         {/* Wyświetlanie się pod spodem childrenów */}
         {selectedNavItem === 'news' && <NewsMainInfo />}
+
 
         <Outlet />
       </main>

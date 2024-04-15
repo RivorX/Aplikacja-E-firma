@@ -73,8 +73,8 @@ export default function LogedDefaultLayout() {
                 {/* Nazwa użytkownika  TODO*/}
                 <div className="flex lg:justify-center lg:col-start-2 w-full lg:w-auto">
                     Witaj <br/>
-                  {currentUser.name}<br/>
-                  {currentUser.email}
+                  {currentUser.imie}<br/>
+                  {currentUser.nazwisko}
                 </div>
               </div>
              <div className="flex justify-around w-full py-5">
