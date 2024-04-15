@@ -2,6 +2,8 @@ import { useState } from 'react'
 import './App.css'
 import Guestpanel from './components/GuestPanel'
 
+
+// Niby nic nie ma a nie działa bez tego
 function App() {
 
   return (

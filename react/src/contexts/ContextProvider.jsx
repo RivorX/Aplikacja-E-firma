@@ -10,11 +10,10 @@ const StateContext = createContext({
 });
 
 export const ContextProvider = ({children}) => {
-    const [currentUser, setCurrentUser] = useState({
-        name: 'Tom Cook',
-        email: 'tom@example.com',
-    })
-    const [userToken, setUserToken] = useState('');
+    const [currentUser, setCurrentUser] = useState({}); // Aktualnie zalogowany użytkownik (obiekt {id, email, firstName, lastName, group, position
+    const [userToken, setUserToken] = useState(localStorage.getItem('TOKEN') || ''); // Token użytkownika
+
+
 
     return (
         <StateContext.Provider value={{

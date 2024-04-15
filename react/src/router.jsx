@@ -13,6 +13,7 @@ import PanelGłówny from "./views/PanelGółwny.jsx";
 import Ogloszenia from "./views/Ogłoszenia.jsx";
 import Karta from "./views/Karta.jsx";
 import Informacje from "./views/Informacje.jsx";
+import RegistrationForm from "./components/RegistrationForm.jsx";
 
 
 const router = createBrowserRouter([
@@ -64,6 +65,11 @@ const router = createBrowserRouter([
     {
         path: '/login',
         element: <Login/>
+    },
+    {
+        // TODO: usunąć
+        path: '/adduser',
+        element: <RegistrationForm/>
     }
 ])
 

@@ -1,42 +1,71 @@
 import React, { useState } from 'react';
 
+import axiosClient from '../axios';
+
 
 export default function RegistrationForm() {
-    const [position, setPosition] = useState("");
-    const [customPosition, setCustomPosition] = useState("");
-    const [email, setEmail] = useState("");
-    const [login, setLogin] = useState("");
-    const [password, setPassword] = useState("");
-    const [group, setGroup] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const [position, setPosition] = useState("");
+  const [customPosition, setCustomPosition] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [group, setGroup] = useState("");
+  const [error, setError] = useState({__html: ""});
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+    setError({__html: ''});
+
+
+    axiosClient
+      .post('/adduser', {
+        firstName,
+        lastName,
+        email,
+        password,
+        group,
+        position: position === 'other' ? customPosition : position
+      })
+      .then(({data}) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
+  // Walidacje
+  const handlePositionChange = (event) => {
+    const selectedPosition = event.target.value;
+    setPosition(selectedPosition);
+    if (selectedPosition !== "other") {
+      setCustomPosition(""); // Wyczyść wartość niestandardowego stanowiska, jeśli wybrano opcję z listy
+    }
+  };
+
+  const handleCustomPositionChange = (event) => {
+    setCustomPosition(event.target.value);
+  };
+
+  const isPasswordValid = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  };
+
+  return (
+    <>
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Rejestracja nowgo konta
+          </h2>
+        </div>
   
-    const handlePositionChange = (event) => {
-      const selectedPosition = event.target.value;
-      setPosition(selectedPosition);
-      if (selectedPosition !== "other") {
-        setCustomPosition(""); // Wyczyść wartość niestandardowego stanowiska, jeśli wybrano opcję z listy
-      }
-    };
-  
-    const handleCustomPositionChange = (event) => {
-      setCustomPosition(event.target.value);
-    };
-  
-    const isPasswordValid = (password) => {
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      return regex.test(password);
-    };
-  
-    return (
-      <>
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Rejestracja konta
-            </h2>
-          </div>
-  
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
                 Imię
@@ -48,6 +77,8 @@ export default function RegistrationForm() {
                   type="text"
                   autoComplete="given-name"
                   required
+                  value={firstName}
+                  onChange={ev => setFirstName(ev.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -64,6 +95,8 @@ export default function RegistrationForm() {
                   type="text"
                   autoComplete="family-name"
                   required
+                  value={lastName}
+                  onChange={ev => setLastName(ev.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -86,7 +119,7 @@ export default function RegistrationForm() {
                   <option value="">Wybierz z listy</option>
                   <option value="stanowisko1">Stanowisko 1</option>
                   <option value="stanowisko2">Stanowisko 2</option>
-                  <option value="other">Inne</option> {/* Dodana opcja "Inne" */}
+                  <option value="other">Inne</option> {/* Dodana opcja "Inne", wywołuje to dodanie stanowiska */}
                 </select>
               </div>
             </div>
@@ -126,24 +159,6 @@ export default function RegistrationForm() {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="login" className="block text-sm font-medium leading-6 text-gray-900">
-                Login
-              </label>
-              <div className="mt-2">
-                <input
-                  id="login"
-                  name="login"
-                  type="text"
-                  autoComplete="username"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  value={login}
-                  onChange={(e) => setLogin(e.target.value)}
                 />
               </div>
             </div>
