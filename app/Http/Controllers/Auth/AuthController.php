@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\AddUserRequest;
 use App\Http\Requests\LoginRequest;
@@ -8,6 +8,10 @@ use App\Models\Pracownicy;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -55,7 +59,7 @@ class AuthController extends Controller
     }
     public function logout(Request $request)    // Wylogowanie użytkownika
     {
-        /** @var User $user */
+        /** @var Pracownicy $user */
         $user = Auth::user();
         $user->currentAccessToken()->delete();
 
