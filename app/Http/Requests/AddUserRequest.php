@@ -12,7 +12,7 @@ class AddUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,13 +23,13 @@ class AddUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
             'imie' => 'required|string',
             'nazwisko' => 'required|string',
             'email' => 'required|email|string|unique:pracownicy,email',
-            'haslo' =>[
+            'position' => 'required|string',
+            'group' => 'required|string',
+            'password' =>[
                 'required',
-                'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols()
             ]
         ];

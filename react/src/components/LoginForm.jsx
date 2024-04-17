@@ -1,18 +1,21 @@
-
 import ApplicationLogo from './ApplicationLogo';
-import { useState } from 'react';
 import axiosClient from '../axios';
+
+import { useContext } from "react";
+import { useState } from "react";
+import { useStateContext } from '../contexts/ContextProvider';
 
 
 export default function LoginForm() {
+  const { setCurrentUser, setUserToken } = useStateContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState({__html: ""});
+  const [error, setError] = useState(null);
 
   const onSubmit = (ev) => {
     ev.preventDefault();
-    setError({__html: ''});
+    setError(null);
 
 
     axiosClient
@@ -21,11 +24,17 @@ export default function LoginForm() {
         password
       })
       .then(({data}) => {
-        setCurrentUser(data.user);
+        setCurrentUser(data.pracownik_info);
         setUserToken(data.token);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response) {
+          // Obsługa błędów zwróconych z serwera
+          setError(error.response.data.error);
+        } else {
+          // Obsługa innych błędów (np. problem z połączeniem)
+          setError("Wystąpił problem z połączeniem. Spróbuj ponownie.");
+        }
       })
   };
 
@@ -42,6 +51,13 @@ export default function LoginForm() {
           </div>
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {/* Wypisywananie błędów z backendu */}
+            {error && (
+              <div className="bg-red-500 rounded py-2 px-3 text-white">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
