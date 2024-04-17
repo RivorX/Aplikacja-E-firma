@@ -4,64 +4,117 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\AddUserRequest;
 use App\Http\Requests\LoginRequest;
+
+// Modele używanie w bazie
 use App\Models\Pracownicy;
+use App\Models\Grupy;
+use App\Models\Stanowisko;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    public function adduser(AddUserRequest $request)    // Rejestracja nowego użytkownika TODO: dodać walidację
+    public function adduser(AddUserRequest $request)
     {
+        // Walidacja żądania
         $data = $request->validated();
 
-        $user = Pracownicy::create([
-            'imie' => $data['firstname'],
-            'nazwisko' => $data['lastname'],
-            'email' => $data['email'],
-            'haslo' => bcrypt($data['password']),
-            'Grupy_id' => $data['group'],
-            'stanowisko' => $data['position'],
-            'konto_aktywne' => 1,
-            'ilosc_dni_urlopu' => 0,
-        ]); 
-        $token = $user->createToken('main')->plainTextToken;
+        // Sprawdzenie unikalności adresu email
+        $existingUser = Pracownicy::where('email', $data['email'])->first();
+        if ($existingUser) {
+            return response()->json(['error' => 'Podany adres email jest już zajęty. Proszę podać inny adres email.'], 400);
+        }
 
-        return response()->json([
-            'user' => $user,
-            'token' => $token
-        ]);
+        // Rozpoczęcie transakcji
+        DB::beginTransaction();
+
+        try {
+            // Sprawdzenie czy stanowisko istnieje, jeśli nie, utwórz nowe
+            $position = Stanowisko::firstOrCreate(
+                ['nazwa_stanowiska' => $data['position']],
+                ['stawka_h' => 0]
+            );
+
+            // Utworzenie nowego użytkownika
+            $pracownik = Pracownicy::create([
+                'imie' => $data['imie'],
+                'nazwisko' => $data['nazwisko'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'stanowisko_id' => $position->Stanowisko_id,
+                'konto_aktywne' => 1,
+                'ilosc_dni_urlopu' => 0,
+            ]);
+
+            // Sprawdzenie czy grupa "admin" istnieje, jeśli nie, utwórz nową
+            $adminGroup = Grupy::firstOrCreate(['nazwa_grupy' => 'admin']);
+
+            // Sprawdzenie czy grupa "pracownik" istnieje, jeśli nie, utwórz nową
+            $employeeGroup = Grupy::firstOrCreate(['nazwa_grupy' => 'pracownik']);
+
+            // Przypisanie użytkownika do grupy "admin"
+            $pracownik->grupy()->attach($adminGroup->Grupy_id);
+
+            // Przypisanie użytkownika do grupy "pracownik"
+            $pracownik->grupy()->attach($employeeGroup->Grupy_id);
+
+            // Utworzenie tokenu dla nowego użytkownika
+            $token = $pracownik->createToken('main')->plainTextToken;
+
+            // Zakończenie transakcji
+            DB::commit();
+
+            // Zwrócenie odpowiedzi
+            return response()->json([
+                'message' => 'Użytkownik został pomyślnie dodany.',
+                'pracownik' => $pracownik,
+                'token' => $token
+            ], 201); // 201 - Created
+        } catch (\Exception $e) {
+            // W przypadku błędu, wycofanie transakcji
+            DB::rollBack();
+
+            // Zwrócenie odpowiedzi z błędem
+            return response()->json(['error' => 'Wystąpił błąd podczas tworzenia użytkownika.'], 500);
+        }
     }
 
-    public function login(LoginRequest $request)    // Logowanie użytkownika TODO: dodać walidację
+    public function login(LoginRequest $request)
     {
         $credentials = $request->validated();
-        $remember = $credentials['remember'] ?? false; 
-        unset($credentials['remember']);
 
-        if (!Auth::attempt($credentials, $remember)) {
+        // Pobierz pracownika na podstawie adresu e-mail
+        $pracownik = Pracownicy::where('email', $credentials['email'])->first();
+
+        // Sprawdź, czy pracownik istnieje
+        if (!$pracownik || !Hash::check($credentials['password'], $pracownik->password)) {
             return response()->json([
-                'error' => 'The proviede creadentials are not correct.'
+                'error' => 'Podane dane logowania są niepoprawne.'
             ], 422);
+        }
 
-        } 
-        $user = Auth::user();
-        $token = $user->createToken('main')->plainTextToken;
+        // Zaloguj pracownika
+        Auth::login($pracownik);
+
+        // Utwórz token dla pracownika
+        $token = $pracownik->createToken('main')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'pracownik_info' => $pracownik,
             'token' => $token
         ]);
     }
-    public function logout(Request $request)    // Wylogowanie użytkownika
+
+
+    public function logout(Request $request)
     {
-        /** @var Pracownicy $user */
-        $user = Auth::user();
-        $user->currentAccessToken()->delete();
+        $pracownik = Auth::Pracownicy();
+        // Unieważnij token użyty do uwierzytelnienia bieżącego żądania...
+        $pracownik->currentAccessToken()->delete();
 
         return response()->json([
             'success' => true

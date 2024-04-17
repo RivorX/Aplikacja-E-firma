@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, Navigate, Outlet, Routes, Route } from 'react-router-dom';
 import GuestPanel from '../components/GuestPanel';
 import NewsMainInfo from '../components/NewsMainInfo.jsx';
-import { userStateContext } from '../contexts/ContextProvider';
+import { useStateContext } from '../contexts/ContextProvider';
 
 import { Disclosure } from '@headlessui/react';
 
@@ -20,7 +20,7 @@ function classNames(...classes) {
 
 
 const GuestLayout = () => {
-  const { currentUser, userToken } = userStateContext();
+  const { currentUser, userToken } = useStateContext();
   if (userToken) {
     return <Navigate to="/" />;
   }
