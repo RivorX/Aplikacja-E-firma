@@ -11,4 +11,5 @@ Route::get('/pracownik', function (Request $request) {
 
 Route::post('adduser', [AuthController::class, 'adduser']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('positions', [AuthController::class, 'positions']);
 Route::get('GuestNewsInfo', [GuestNewsInfo::class, 'NewsInfo']);

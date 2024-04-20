@@ -1,43 +1,58 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios.js';
 
 export default function RegistrationForm() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
   const [position, setPosition] = useState("");
   const [customPosition, setCustomPosition] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [group, setGroup] = useState("");
-  const [error, setError] = useState({__html: ""});
+  const [description, setDescription] = useState(""); // Dodane
+  const [hourlyRate, setHourlyRate] = useState(""); // Dodane
+  const [positionsList, setPositionsList] = useState([]);
+  const [error, setError] = useState({ __html: "" });
 
+
+  useEffect(() => {
+    // Pobierz stanowiska z bazy danych przy załadowaniu komponentu
+    axiosClient
+      .get('positions')
+      .then(response => {
+        setPositionsList(response.data); // Ustaw listę stanowisk w stanie komponentu
+      })
+      .catch(error => {
+        console.error('Error fetching positions:', error);
+      });
+  }, []);
+
+  
   const onSubmit = (ev) => {
     ev.preventDefault();
-    setError({__html: ''});
-
+    setError({ __html: '' });
 
     axiosClient
       .post('/adduser', {
         imie: firstName,
         nazwisko: lastName,
         email: email,
-        haslo: password,
+        password: password,
         group: group,
-        position: position === 'other' ? customPosition : position
+        position: position === 'other' ? customPosition : position,
+        description: position === 'other' ? description : '',
+        hourlyRate: position === 'other' ? hourlyRate : ''
       })
-      .then(({data}) => {
+      .then(({ data }) => {
         console.log(data);
       })
       .catch((error) => {
         if (error.response && error.response.data && error.response.data.errors) {
           const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
-          setError({__html: finalErrors.join('<br>')}); // Aktualizacja stanu error
+          setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
         }
-      });      
-      
+      });
   };
 
   // Walidacje
@@ -63,10 +78,10 @@ export default function RegistrationForm() {
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Rejestracja nowgo konta
+            Rejestracja nowego konta
           </h2>
         </div>
-  
+
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           {/* Wypisywananie błędów z backendu */}
           {error.__html && (
@@ -74,8 +89,8 @@ export default function RegistrationForm() {
             </div>
           )}
 
-          
-          <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
+
+          <form onSubmit={onSubmit} className="space-y-6" method="POST">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
                 Imię
@@ -85,6 +100,7 @@ export default function RegistrationForm() {
                   id="firstName"
                   name="firstName"
                   type="text"
+                  maxLength="45"
                   autoComplete="given-name"
                   required
                   value={firstName}
@@ -103,6 +119,7 @@ export default function RegistrationForm() {
                   id="lastName"
                   name="lastName"
                   type="text"
+                  maxLength="45"
                   autoComplete="family-name"
                   required
                   value={lastName}
@@ -127,34 +144,78 @@ export default function RegistrationForm() {
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">Wybierz z listy</option>
-                <option value="stanowisko1">Stanowisko 1</option>
-                <option value="stanowisko2">Stanowisko 2</option>
-                {/* Dodaj tutaj */}
+                {positionsList.map(position => (
+                  <option key={position.id} value={position.name}>{position.name}</option>
+                ))}
                 <option value="other">Inne</option>
               </select>
 
               </div>
             </div>
 
-            {/* Dodatkowe pole dla nowego stanowiska */}
+            {/* Dodatkowe pola dla nowego stanowiska */}
             {position === "other" && (
-              <div>
-                <label htmlFor="customPosition" className="block text-sm font-medium leading-6 text-gray-900">
-                  Nowe Stanowisko
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="customPosition"
-                    name="customPosition"
-                    type="text"
-                    autoComplete="off"
-                    value={customPosition}
-                    onChange={handleCustomPositionChange}
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+              <>
+                <div>
+                  <label htmlFor="customPosition" className="block text-sm font-medium leading-6 text-gray-900">
+                    Nazwa Stanowiska
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="customPosition"
+                      name="customPosition"
+                      type="text"
+                      maxLength="45"
+                      autoComplete="off"
+                      value={customPosition}
+                      onChange={handleCustomPositionChange}
+                      required
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
                 </div>
-              </div>
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                    Opis
+                  </label>
+                  <div className="mt-2">
+                    <textarea
+                      id="description"
+                      name="description"
+                      maxLength="200"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      required
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    ></textarea>
+                  </div>
+                </div>
+                <div>
+                <label htmlFor="hourlyRate" className="block text-sm font-medium leading-6 text-gray-900">
+                  Stawka za h
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="hourlyRate"
+                      name="hourlyRate"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      maxLength="45"
+                      autoComplete="off"
+                      value={hourlyRate}
+                      onChange={(e) => setHourlyRate(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === '-' || e.key === 'e') {
+                          e.preventDefault();
+                        }
+                      }}
+                      required
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </>
             )}
 
             <div>
@@ -166,6 +227,7 @@ export default function RegistrationForm() {
                   id="email"
                   name="email"
                   type="email"
+                  maxLength="45"
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -176,61 +238,62 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                Hasło
-              </label>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
-                    password && !isPasswordValid(password) ? 'border-red-500' : ''
-                  }`}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                {password && !isPasswordValid(password) && (
-                  <p className="mt-1 text-sm text-red-500">Hasło musi mieć co najmniej 8 znaków, zawierać przynajmniej jedną małą literę, jedną dużą literę, jedną cyfrę oraz jeden znak specjalny.</p>
-                )}
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                  Hasło
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    maxLength="45"
+                    autoComplete="new-password"
+                    required
+                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
+                      password && !isPasswordValid(password) ? 'border-red-500' : ''
+                      }`}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {password && !isPasswordValid(password) && (
+                    <p className="mt-1 text-sm text-red-500">Hasło musi mieć co najmniej 8 znaków, zawierać przynajmniej jedną małą literę, jedną dużą literę, jedną cyfrę oraz jeden znak specjalny.</p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="group" className="block text-sm font-medium leading-6 text-gray-900">
-                Grupa
-              </label>
-              <div className="mt-2">
-                <select
-                  id="group"
-                  name="group"
-                  autoComplete="group"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  value={group}
-                  onChange={(e) => setGroup(e.target.value)}
+              <div>
+                <label htmlFor="group" className="block text-sm font-medium leading-6 text-gray-900">
+                  Grupa
+                </label>
+                <div className="mt-2">
+                  <select
+                    id="group"
+                    name="group"
+                    autoComplete="group"
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    value={group}
+                    onChange={(e) => setGroup(e.target.value)}
+                  >
+                    <option value="">Wybierz z listy</option>
+                    <option value="admin">Admin</option>
+                    <option value="pracownik">Pracownik</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mt-4">
+                <a href="/" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                  Anuluj
+                </a>
+                <button
+                  type="submit"
+                  className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition"
                 >
-                  <option value="">Wybierz z listy</option>
-                  <option value="admin">Admin</option>
-                  <option value="pracownik">Pracownik</option>
-                </select>
+                  Zarejestruj się
+                </button>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between mt-4">
-              <a href="/" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
-                Anuluj
-              </a>
-              <button
-                type="submit"
-                className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition"
-              >
-                Zarejestruj się
-              </button>
-            </div>
             </div>
           </form>
         </div>
