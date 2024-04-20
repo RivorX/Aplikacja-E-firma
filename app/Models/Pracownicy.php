@@ -21,9 +21,10 @@ class Pracownicy extends Authenticatable
         'email',
         'password',
         'Grupy_id',
-        'stanowisko',
+        'stanowisko_id',
         'konto_aktywne',
         'ilosc_dni_urlopu',
+        'data_edycji',
     ];
 
     protected $hidden = [

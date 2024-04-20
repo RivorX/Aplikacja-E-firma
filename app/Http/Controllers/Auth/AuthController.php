@@ -35,9 +35,12 @@ class AuthController extends Controller
         try {
             // Sprawdzenie czy stanowisko istnieje, jeśli nie, utwórz nowe
             $position = Stanowisko::firstOrCreate(
-                ['nazwa_stanowiska' => $data['position']],
-                ['stawka_h' => 0]
+                ['nazwa_stanowiska' => $data['position']], // Warunki wyszukiwania
+                ['opis' => $data['description'], 'stawka_h' => $data['hourlyRate']] // Wartości do utworzenia
             );
+
+            // Sprawdzenie czy grupa istnieje, jeśli nie, utwórz nową
+            $group = Grupy::firstOrCreate(['nazwa_grupy' => $data['nazwa_grupy']]);
 
             // Utworzenie nowego użytkownika
             $pracownik = Pracownicy::create([
@@ -46,21 +49,11 @@ class AuthController extends Controller
                 'email' => $data['email'],
                 'password' => bcrypt($data['password']),
                 'stanowisko_id' => $position->Stanowisko_id,
+                'grupy_id' => $group->Grupy_id,
                 'konto_aktywne' => 1,
                 'ilosc_dni_urlopu' => 0,
+                'data_edycji' => now()
             ]);
-
-            // Sprawdzenie czy grupa "admin" istnieje, jeśli nie, utwórz nową
-            $adminGroup = Grupy::firstOrCreate(['nazwa_grupy' => 'admin']);
-
-            // Sprawdzenie czy grupa "pracownik" istnieje, jeśli nie, utwórz nową
-            $employeeGroup = Grupy::firstOrCreate(['nazwa_grupy' => 'pracownik']);
-
-            // Przypisanie użytkownika do grupy "admin"
-            $pracownik->grupy()->attach($adminGroup->Grupy_id);
-
-            // Przypisanie użytkownika do grupy "pracownik"
-            $pracownik->grupy()->attach($employeeGroup->Grupy_id);
 
             // Utworzenie tokenu dla nowego użytkownika
             $token = $pracownik->createToken('main')->plainTextToken;
@@ -82,6 +75,29 @@ class AuthController extends Controller
             return response()->json(['error' => 'Wystąpił błąd podczas tworzenia użytkownika.'], 500);
         }
     }
+
+    public function positions()
+    {
+        $positions = Stanowisko::all();
+    
+        if ($positions->isEmpty()) {
+            return response()->json(['message' => 'Brak pozycji'], 404);
+        }
+    
+        return response()->json(['positions' => $positions]);
+    }
+
+    public function groups()
+    {
+        $groups = Grupy::all();
+    
+        if ($groups->isEmpty()) {
+            return response()->json(['message' => 'Brak grup'], 404);
+        }
+    
+        return response()->json(['groups' => $groups]);
+    }
+    
 
     public function login(LoginRequest $request)
     {
