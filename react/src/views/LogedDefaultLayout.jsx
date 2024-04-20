@@ -2,7 +2,9 @@ import { Fragment } from 'react'
 import { NavLink, Navigate, Outlet} from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import ApplicationLogo from '../components/ApplicationLogo'
-import { userStateContext } from '../contexts/ContextProvider';
+import { useStateContext } from '../contexts/ContextProvider';
+import axios from 'axios';
+import axiosClient from '../axios';
 
 
 const navigation = [
@@ -21,7 +23,7 @@ function classNames(...classes) {
 }
 
 export default function LogedDefaultLayout() {
-    const { currentUser, userToken } = userStateContext();
+    const { currentUser, userToken } = useStateContext();
 
     if (!userToken) {
         // Przekierowanie na stronę gdy nie jesteśmy zalogowani
@@ -30,6 +32,8 @@ export default function LogedDefaultLayout() {
 
     const logout = (ev) => {
         ev.preventDefault()
+        axiosClient.post('/logout')
+        
         console.log('Wylogowano')
     }
 
