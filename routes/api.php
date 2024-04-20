@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\GuestNewsInfo;
 
 Route::get('/pracownik', function (Request $request) {
     return $request->pracownik();
@@ -10,3 +11,4 @@ Route::get('/pracownik', function (Request $request) {
 
 Route::post('adduser', [AuthController::class, 'adduser']);
 Route::post('login', [AuthController::class, 'login']);
+Route::get('GuestNewsInfo', [GuestNewsInfo::class, 'NewsInfo']);
