@@ -15,6 +15,9 @@ class GrupySeeder extends Seeder
     public function run()
     {
         // Tworzenie grupy "admin", jeśli nie istnieje
+        Grupy::firstOrCreate(['nazwa_grupy' => 'Super admin']);
+
+        // Tworzenie grupy "admin", jeśli nie istnieje
         Grupy::firstOrCreate(['nazwa_grupy' => 'admin']);
 
         // Tworzenie grupy "pracownik", jeśli nie istnieje
