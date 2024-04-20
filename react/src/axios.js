@@ -6,20 +6,23 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-    const token = '123';    //TODO: get token from local storage
-    config.headers.Authorization = `Bearer ${token}`
+    // const token = '123';    //TODO: get token from local storage
+    // config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = `Bearer ${localStorage.getItem('TOKEN')}`
     return config;
 });
 
 axiosClient.interceptors.response.use(response => {
     return response;
-}, error => {
-    if(error.response && error.response.status === 401) {
-        router.navigate('/login');
-        return error;
+  }, error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('TOKEN')
+      window.location.reload();
+      // router.navigate('/login')
+      return error;
     }
     throw error;
-});
+  })
 
 
 export default axiosClient;

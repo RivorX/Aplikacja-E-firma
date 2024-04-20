@@ -2,50 +2,46 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Pracownicy extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'Pracownicy';
+    protected $primaryKey = 'Pracownicy_id';
+    public $timestamps = false;
+
     protected $fillable = [
         'imie',
         'nazwisko',
         'email',
-        'haslo',
+        'password',
         'Grupy_id',
         'stanowisko',
         'konto_aktywne',
         'ilosc_dni_urlopu',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'haslo',
+        'password',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function getAuthPassword()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->password;
+    }
+
+    public function stanowisko()
+    {
+        return $this->belongsTo(Stanowisko::class, 'Stanowisko_id', 'Stanowisko_id');
+    }
+
+    public function grupa()
+    {
+        return $this->belongsTo(Grupy::class, 'Grupy_id', 'Grupy_id');
     }
 }

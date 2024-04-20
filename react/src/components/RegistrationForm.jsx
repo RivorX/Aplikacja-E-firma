@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import axiosClient from '../axios';
-
+import axiosClient from '../axios.js';
 
 export default function RegistrationForm() {
 
@@ -22,19 +21,23 @@ export default function RegistrationForm() {
 
     axiosClient
       .post('/adduser', {
-        firstName,
-        lastName,
-        email,
-        password,
-        group,
+        imie: firstName,
+        nazwisko: lastName,
+        email: email,
+        haslo: password,
+        group: group,
         position: position === 'other' ? customPosition : position
       })
       .then(({data}) => {
         console.log(data);
       })
       .catch((error) => {
-        console.log(error);
-      })
+        if (error.response && error.response.data && error.response.data.errors) {
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+          setError({__html: finalErrors.join('<br>')}); // Aktualizacja stanu error
+        }
+      });      
+      
   };
 
   // Walidacje
@@ -65,6 +68,13 @@ export default function RegistrationForm() {
         </div>
   
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          {/* Wypisywananie błędów z backendu */}
+          {error.__html && (
+            <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={error}>
+            </div>
+          )}
+
+          
           <form onSubmit={onSubmit} className="space-y-6" action="#" method="POST">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
@@ -107,20 +117,22 @@ export default function RegistrationForm() {
                 Stanowisko
               </label>
               <div className="mt-2">
-                <select
-                  id="position"
-                  name="position"
-                  autoComplete="position"
-                  value={position}
-                  onChange={handlePositionChange}
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                >
-                  <option value="">Wybierz z listy</option>
-                  <option value="stanowisko1">Stanowisko 1</option>
-                  <option value="stanowisko2">Stanowisko 2</option>
-                  <option value="other">Inne</option> {/* Dodana opcja "Inne", wywołuje to dodanie stanowiska */}
-                </select>
+              <select
+                id="position"
+                name="position"
+                autoComplete="position"
+                value={position}
+                onChange={handlePositionChange}
+                required
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">Wybierz z listy</option>
+                <option value="stanowisko1">Stanowisko 1</option>
+                <option value="stanowisko2">Stanowisko 2</option>
+                {/* Dodaj tutaj */}
+                <option value="other">Inne</option>
+              </select>
+
               </div>
             </div>
 
