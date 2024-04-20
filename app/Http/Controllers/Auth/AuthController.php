@@ -61,7 +61,8 @@ class AuthController extends Controller
                 'Grupy_id' => $group->Grupy_id, 
                 'konto_aktywne' => 1,
                 'ilosc_dni_urlopu' => 0,
-                'data_edycji' => now()
+                'Data_edycji' => now(),
+                'Data_utworzenia' => now(),
             ]);
 
             // Utworzenie tokenu dla nowego użytkownika
