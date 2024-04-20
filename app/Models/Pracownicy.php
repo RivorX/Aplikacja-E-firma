@@ -24,7 +24,8 @@ class Pracownicy extends Authenticatable
         'Stanowisko_id',
         'konto_aktywne',
         'ilosc_dni_urlopu',
-        'data_edycji',
+        'Data_edycji',
+        'Data_utworzenia',
     ];
 
     protected $hidden = [
