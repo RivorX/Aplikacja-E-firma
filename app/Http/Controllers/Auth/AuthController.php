@@ -34,13 +34,22 @@ class AuthController extends Controller
 
         try {
             // Sprawdzenie czy stanowisko istnieje, jeśli nie, utwórz nowe
+            $positionData = ['nazwa_stanowiska' => $data['position']];
+            if (isset($data['description'])) {
+                $positionData['opis'] = $data['description'];
+            }
+            if (isset($data['hourlyRate'])) {
+                $positionData['stawka_h'] = $data['hourlyRate'];
+            }
+
             $position = Stanowisko::firstOrCreate(
                 ['nazwa_stanowiska' => $data['position']], // Warunki wyszukiwania
-                ['opis' => $data['description'], 'stawka_h' => $data['hourlyRate']] // Wartości do utworzenia
+                $positionData // Wartości do utworzenia
             );
 
+
             // Sprawdzenie czy grupa istnieje, jeśli nie, utwórz nową
-            $group = Grupy::firstOrCreate(['nazwa_grupy' => $data['nazwa_grupy']]);
+            $group = Grupy::firstOrCreate(['nazwa_grupy' => $data['group']]);
 
             // Utworzenie nowego użytkownika
             $pracownik = Pracownicy::create([
@@ -48,8 +57,8 @@ class AuthController extends Controller
                 'nazwisko' => $data['nazwisko'],
                 'email' => $data['email'],
                 'password' => bcrypt($data['password']),
-                'stanowisko_id' => $position->Stanowisko_id,
-                'grupy_id' => $group->Grupy_id,
+                'Stanowisko_id' => $position->Stanowisko_id,
+                'Grupy_id' => $group->Grupy_id, 
                 'konto_aktywne' => 1,
                 'ilosc_dni_urlopu' => 0,
                 'data_edycji' => now()
@@ -67,7 +76,7 @@ class AuthController extends Controller
                 'pracownik' => $pracownik,
                 'token' => $token
             ], 201); // 201 - Created
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // W przypadku błędu, wycofanie transakcji
             DB::rollBack();
 

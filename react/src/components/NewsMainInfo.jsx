@@ -25,7 +25,8 @@ export default function NewsMainInfo() {
                 {Array.isArray(guestNewsInfo) && guestNewsInfo.map((newsItem, index) => (
                     <li key={index} className="news-item">
                         {/* Wyświetl tutaj odpowiednie dane dla każdej wiadomości */}
-                        {newsItem.title}
+                        {newsItem.tytul}
+                        {newsItem.opis}
                         {/* Tutaj można dodać więcej pól, takich jak data, autor, itp. */}
                     </li>
                 ))}
