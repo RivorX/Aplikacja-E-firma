@@ -144,11 +144,13 @@ export default function RegistrationForm() {
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">Wybierz z listy</option>
-                {positionsList.map(position => (
-                  <option key={position.id} value={position.name}>{position.name}</option>
+                {Array.isArray(positionsList.positions) && positionsList.positions.map(position => (
+                    <option key={position.Stanowisko_id} value={position.nazwa_stanowiska}>{position.nazwa_stanowiska}, {position.stawka_h}zł</option>
                 ))}
                 <option value="other">Inne</option>
               </select>
+
+
 
               </div>
             </div>

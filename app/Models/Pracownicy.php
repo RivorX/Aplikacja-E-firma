@@ -21,7 +21,7 @@ class Pracownicy extends Authenticatable
         'email',
         'password',
         'Grupy_id',
-        'stanowisko_id',
+        'Stanowisko_id',
         'konto_aktywne',
         'ilosc_dni_urlopu',
         'data_edycji',

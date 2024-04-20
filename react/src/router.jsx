@@ -48,30 +48,7 @@ const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: '/admin',
-        element: <LogedDefaultLayout />,
-        children: [
-            {
-                path: 'pracownicy',
-                element: <Navigate to= ""/>
-            },
-            {
-                path: '',
-                element: <PanelGłówny/>
-            },
-            {
-                // TODO: zmienic
-                path: '/adduser',
-                element: <RegistrationForm/>
-            },
-            {
-                // TODO: zmienic
-                path: '/addnews',
-                element: <AddNews/>
-            },
-        ]
-    },
+    
     {
         path: '/mainpage',
         element: <GuestLayout/>,
@@ -94,7 +71,16 @@ const router = createBrowserRouter([
         path: '/login',
         element: <Login/>
     },
-
+    {
+        // TODO: usunąć
+        path: '/adduser',
+        element: <RegistrationForm/>
+    },
+    {
+        // TODO: usunąć
+        path: '/addnews',
+        element: <AddNews/>
+    },
 ])
 
 export default router;
