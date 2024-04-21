@@ -1,8 +1,8 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from './views/Dashboard.jsx';
 
 import Login from './views/Login.jsx';
+
 import GuestLayout from './views/GuestLayout.jsx';
 import NewsMainInfo from './components/NewsMainInfo.jsx';
 import AboutMainInfo from './components/AboutMainInfo.jsx';
@@ -64,6 +64,20 @@ const router = createBrowserRouter([
             {
                 path: 'contact',
                 element: <ContactMainInfo/>
+            }
+        ]
+    },
+    {
+        path: '/admin',
+        element: <LogedDefaultLayout/>,
+        children: [
+            {
+                path: 'addnews',
+                element: <AddNews/>
+            },
+            {
+                path: 'adduser',
+                element: <RegistrationForm/>
             }
         ]
     },
