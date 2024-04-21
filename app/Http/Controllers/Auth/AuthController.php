@@ -138,12 +138,27 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $pracownik = Auth::Pracownicy();
-        // Unieważnij token użyty do uwierzytelnienia bieżącego żądania...
-        $pracownik->currentAccessToken()->delete();
+        if (!Auth::check()) {
+            return response()->json([
+                'error' => 'Użytkownik nie jest zalogowany'
+            ], 401);
+        }
 
-        return response()->json([
-            'success' => true
-        ]);
+        try {
+            // Usuń wszystkie tokeny powiązane z bieżącym użytkownikiem
+            $pracownik = Auth::user();
+            $pracownik->tokens()->delete();
+
+            // Unieważnij token użyty do uwierzytelnienia bieżącego żądania
+            $pracownik->currentAccessToken()->delete();
+
+            return response()->json([
+                'success' => true
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Wystąpił błąd podczas wylogowywania: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

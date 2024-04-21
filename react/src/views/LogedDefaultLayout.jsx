@@ -23,7 +23,7 @@ function classNames(...classes) {
 }
 
 export default function LogedDefaultLayout() {
-    const { currentUser, userToken } = useStateContext();
+    const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
 
     if (!userToken) {
         // Przekierowanie na stronę gdy nie jesteśmy zalogowani
@@ -33,8 +33,10 @@ export default function LogedDefaultLayout() {
     const logout = (ev) => {
         ev.preventDefault()
         axiosClient.post('/logout')
-        
-        console.log('Wylogowano')
+        .then(res => {
+          setCurrentUser({})
+          setUserToken(null)
+        });
     }
 
     return (
