@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { NavLink, Navigate, Outlet} from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import ApplicationLogo from '../components/ApplicationLogo'
@@ -24,12 +24,23 @@ function classNames(...classes) {
 
 export default function LogedDefaultLayout() {
     const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
+    const hasAdminRole = true;
+
 
     if (!userToken) {
         // Przekierowanie na stronę gdy nie jesteśmy zalogowani
         return <Navigate to="/mainpage" />
     }
+    
+    // Wczytanie danych użytkownika
+    useEffect(() => {
+        axiosClient.get('/me')
+        .then(({data}) => {
+            setCurrentUser(data)
+        })
+    }, [])
 
+    // Wylogowanie
     const logout = (ev) => {
         ev.preventDefault()
         axiosClient.post('/logout')
@@ -48,7 +59,18 @@ export default function LogedDefaultLayout() {
             <header className="items-top bg-gray-200 top-0 w-full">
               <nav className="w-full flex flex-1 justify-end items-center">
                   <div className="bg-white py-2 px-4 w-full flex justify-between items-center">
-                    <div></div> {/* Pusty element po lewej stronie */}
+                    <div>               
+                      {/* New Button for Admins */}     
+                      {hasAdminRole && (
+                      <NavLink
+                        key="admin-button"
+                        to="/admin" // Replace with your admin page path
+                        className="text-red-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                      >
+                        Panel Adminstratora
+                      </NavLink>
+                    )}
+                    </div>
                     {/* Profile dropdown, czyli przyciski po prawej*/}
                       {/* TODO: Proprawić, bo teraz działa dla wielu przyciskach 55 min około*/}
                       {userNavigation.map((item) => ( 
@@ -65,6 +87,7 @@ export default function LogedDefaultLayout() {
                             {item.name}
                           </NavLink>
                         ))}
+
                   </div>
               </nav>
               <div className="grid grid-cols-3 flex lg:justify-center lg:col-start-2 w-full lg:w-auto pb-10 mt-0">

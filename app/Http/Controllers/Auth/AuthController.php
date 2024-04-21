@@ -113,8 +113,8 @@ class AuthController extends Controller
     {
         $credentials = $request->validated();
 
-        // Pobierz pracownika na podstawie adresu e-mail
-        $pracownik = Pracownicy::where('email', $credentials['email'])->first();
+        // Pobierz pracownika na podstawie adresu e-mail wraz z powiązaną grupą
+        $pracownik = Pracownicy::with('grupa')->where('email', $credentials['email'])->first();
 
         // Sprawdź, czy pracownik istnieje
         if (!$pracownik || !Hash::check($credentials['password'], $pracownik->password)) {
@@ -160,5 +160,9 @@ class AuthController extends Controller
                 'error' => 'Wystąpił błąd podczas wylogowywania: ' . $e->getMessage()
             ], 500);
         }
+    }
+    public function me(Request $request)
+    {
+        return $request->user();
     }
 }
