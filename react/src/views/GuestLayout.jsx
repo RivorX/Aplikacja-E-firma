@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import { NavLink, Navigate, Outlet, Routes, Route } from 'react-router-dom';
+import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import GuestPanel from '../components/GuestPanel';
 import NewsMainInfo from '../components/NewsMainInfo.jsx';
 import { useStateContext } from '../contexts/ContextProvider';
 
 import { Disclosure } from '@headlessui/react';
 
-import RegistrationForm from '../components/RegistrationForm';  {/* TODO  usunąć*/}
-
-
 const navigation = [
   { name: 'Aktualności', to: 'news'},
   { name: 'O firmie', to: 'about'},
   { name: 'Kontakt', to: 'contact'},
-]
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+];
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
 
 const GuestLayout = () => {
   const { currentUser, userToken } = useStateContext();
@@ -37,9 +34,9 @@ const GuestLayout = () => {
         {/* Ta część wyświetla się na wszystkich stronach */}
       </div>
       <main className="mt-6">
-        <Disclosure as="nav" className="bg-gray-800">
+        <Disclosure as="nav" className="bg-gray-400 flex flex-col items-start">
           {({ open }) => (
-            <nav className="w-full flex flex-1 justify-end items-center">
+            <nav className="w-full">
               {navigation.map((item) => (
                 <NavLink
                   key={item.name}
@@ -50,9 +47,10 @@ const GuestLayout = () => {
                       isActive
                         ? 'bg-gray-400 text-white'
                         : 'text-black-300 hover:bg-white hover:text-grey',
-                      'rounded-md px-3 py-2 text-sm font-medium'
+                      'rounded-md px-3 py-2 text-lg font-medium block w-full text-left'
                     )
                   }
+                  style={{ width: 'auto', textAlign: 'center' }} // Dodane style
                 >
                   {item.name}
                 </NavLink>
@@ -63,7 +61,6 @@ const GuestLayout = () => {
 
         {/* Wyświetlanie się pod spodem childrenów */}
         {selectedNavItem === 'news' && <NewsMainInfo />}
-
 
         <Outlet />
       </main>
