@@ -163,6 +163,13 @@ class AuthController extends Controller
     }
     public function me(Request $request)
     {
-        return $request->user();
+        // Pobierz użytkownika z żądania
+        $user = $request->user();
+
+        // Dołącz do odpowiedzi informacje o grupie użytkownika
+        $user = $user->load('grupa');
+
+        // Zwróć użytkownika wraz z grupą
+        return $user;
     }
 }

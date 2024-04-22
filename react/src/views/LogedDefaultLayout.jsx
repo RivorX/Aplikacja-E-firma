@@ -24,7 +24,7 @@ function classNames(...classes) {
 
 export default function LogedDefaultLayout() {
     const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
-    const hasAdminRole = true;
+    const hasAdminRole = currentUser?.grupa?.nazwa_grupy === "admin" || currentUser?.grupa?.nazwa_grupy === "Super Admin";
 
 
     if (!userToken) {
@@ -37,6 +37,7 @@ export default function LogedDefaultLayout() {
         axiosClient.get('/me')
         .then(({data}) => {
             setCurrentUser(data)
+            console.log(data)
         })
     }, [])
 
