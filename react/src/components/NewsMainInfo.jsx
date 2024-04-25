@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios.js';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export default function NewsMainInfo() {
+function NewsMainInfo() {
   const [guestNewsInfo, setGuestNewsInfo] = useState([]);
   const navigate = useNavigate();
 
@@ -19,22 +19,21 @@ export default function NewsMainInfo() {
   }, []);
 
   return (
-    <div className="container py-4">
-      <div className="news-list">
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Aktualności</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {guestNewsInfo.length === 0 && (
-          <p>Brak aktualności.</p>
+          <p className="text-gray-500">Brak aktualności.</p>
         )}
         {Array.isArray(guestNewsInfo) && guestNewsInfo.map((newsItem, index) => (
-          <div key={index} className="news-item mb-4">
-            <div className="news-item-header">
-              <h1>{newsItem.tytul}</h1>
+          <div key={index} className="bg-white rounded-lg shadow-md">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-2">{newsItem.tytul}</h2>
               {newsItem.obraz && (
-                <img src={newsItem.obraz} alt={newsItem.tytul} className="img-fluid" />
+                <img src={newsItem.obraz} alt={newsItem.tytul} className="w-full mb-4 rounded-lg" />
               )}
-            </div>
-            <div className="news-item-content">
-              <p>{newsItem.opis}</p>
-              <p>Dodano: {newsItem.data_nadania}</p>
+              <p className="text-gray-700">{newsItem.opis}</p>
+              <p className="text-gray-500 mt-4">Dodano: {newsItem.data_nadania}</p>
             </div>
           </div>
         ))}
@@ -42,3 +41,5 @@ export default function NewsMainInfo() {
     </div>
   );
 }
+
+export default NewsMainInfo;
