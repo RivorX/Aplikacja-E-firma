@@ -16,13 +16,19 @@ import Karta from "./views/Karta.jsx";
 import Informacje from "./views/Informacje.jsx";
 
 // Po zalogowaniu jako admin
+import AdminDefaultLayout from "./Admin/views/AdminDefaultLayout.jsx";
+import Pracownicy from "./Admin/views/Pracownicy.jsx";
+import KartyDostepu from "./Admin/views/KartyDostepu.jsx";
+import KodyQR from "./Admin/views/KodyQR.jsx";
+import Aktualnosci from "./Admin/views/Aktualnosci.jsx";
+
+//formularze do admina
 import RegistrationForm from "./components/RegistrationForm.jsx";
 import AddNews from "./Admin/components/NewsForm.jsx";
 
 
 const router = createBrowserRouter([
-    {
-        path: '/',
+    {   path: '/',
         element: <LogedDefaultLayout />,
         children: [
             {
@@ -48,9 +54,7 @@ const router = createBrowserRouter([
             }
         ]
     },
-    
-    {
-        path: '/mainpage',
+    {   path: '/mainpage',
         element: <GuestLayout/>,
         children: [
             {
@@ -67,33 +71,42 @@ const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: '/admin',
-        element: <LogedDefaultLayout/>,
+    {   path: '/admin',
+        element: <AdminDefaultLayout/>,
         children: [
             {
-                path: 'addnews',
-                element: <AddNews/>
+                path: 'pracownicy',
+                element: <Pracownicy/>,
+                children: [
+                    {
+                        path: 'adduser',
+                        element: <RegistrationForm/>
+                    }
+                ]
             },
             {
-                path: 'adduser',
-                element: <RegistrationForm/>
+                path: 'kartyDostepu',
+                element: <KartyDostepu/>
+            },
+            {
+                path: 'KodyQR',
+                element: <KodyQR/>
+            },
+            {
+                path: 'Aktualnosci',
+                element: <Aktualnosci/>,
+                children: [
+                    {
+                        path: 'addnews',
+                        element: <AddNews/>
+                    }
+                ]
             }
+
         ]
     },
-    {
-        path: '/login',
+    {   path: '/login',
         element: <Login/>
-    },
-    {
-        // TODO: usunąć
-        path: '/adduser',
-        element: <RegistrationForm/>
-    },
-    {
-        // TODO: usunąć
-        path: '/addnews',
-        element: <AddNews/>
     },
 ])
 

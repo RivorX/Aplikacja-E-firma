@@ -65,7 +65,7 @@ export default function LogedDefaultLayout() {
                       {hasAdminRole && (
                       <NavLink
                         key="admin-button"
-                        to="/admin" // Replace with your admin page path
+                        to="/admin/pracownicy" 
                         className="text-red-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                       >
                         Panel Adminstratora
@@ -107,21 +107,21 @@ export default function LogedDefaultLayout() {
                   {currentUser.nazwisko}
                 </div>
               </div>
-             <div className="flex justify-around w-full py-5">
-                {/* WYświetlanie przycisków */}
+              <div className="flex flex-wrap justify-center w-full py-5">
+                {/* Wyświetlanie przycisków */}
                 {navigation.map((item) => (
-                    <NavLink
+                  <NavLink
                     key={item.name}
                     to={item.to}
-                    className={({isActive}) =>classNames(
-                        isActive
-                        ? 'bg-gray-400 text-white'
-                        : 'text-black-300 hover:bg-white hover:text-grey',
-                        'rounded-md px-3 py-2 text-sm font-medium'
-                    )}
-                    >
+                    className={({ isActive }) =>
+                      classNames(
+                        'rounded-full px-7 py-2 text-sm font-medium mx-2 sm:mx-4 md:mx-6 lg:mx-8 my-2',
+                        isActive ? 'bg-gray-400 text-white' : 'bg-white text-black-300 hover:bg-gray-100 hover:text-gray-700 transition-colors duration-300'
+                      )
+                    }
+                  >
                     {item.name}
-                    </NavLink>
+                  </NavLink>
                 ))}
               </div>
             </header>
