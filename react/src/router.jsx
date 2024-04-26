@@ -23,8 +23,8 @@ import KodyQR from "./Admin/views/KodyQR.jsx";
 import Aktualnosci from "./Admin/views/Aktualnosci.jsx";
 
 //formularze do admina
-import RegistrationForm from "./components/RegistrationForm.jsx";
-import AddNews from "./Admin/components/NewsForm.jsx";
+import Users_ADD from "./Admin/components/Users_ADD.jsx";
+import AddNews from "./Admin/components/News_ADD.jsx";
 
 
 const router = createBrowserRouter([
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: 'adduser',
-                        element: <RegistrationForm/>
+                        element: <Users_ADD/>
                     }
                 ]
             },
