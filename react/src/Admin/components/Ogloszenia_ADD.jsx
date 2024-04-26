@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-export default function OgloszeniaForm() {
+export default function Ogloszenia_ADD() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [employees1, setemployees1] = useState(false);

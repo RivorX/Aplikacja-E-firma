@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axiosClient from '../axios.js';
+import axiosClient from '../../axios.js';
 
 export default function RegistrationForm() {
 
