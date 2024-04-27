@@ -21,10 +21,12 @@ import Pracownicy from "./Admin/views/Pracownicy.jsx";
 import KartyDostepu from "./Admin/views/KartyDostepu.jsx";
 import KodyQR from "./Admin/views/KodyQR.jsx";
 import Aktualnosci from "./Admin/views/Aktualnosci.jsx";
+import Form from "./Admin/views/Form.jsx";
 
 //formularze do admina
 import Users_ADD from "./Admin/components/Users_ADD.jsx";
 import AddNews from "./Admin/components/News_ADD.jsx";
+import News_UPDATE from "./Admin/components/News_UPDATE.jsx";
 
 
 const router = createBrowserRouter([
@@ -94,19 +96,28 @@ const router = createBrowserRouter([
             },
             {
                 path: 'Aktualnosci',
-                element: <Aktualnosci/>,
-                children: [
-                    {
-                        path: 'addnews',
-                        element: <AddNews/>
-                    }
-                ]
+                element: <Aktualnosci/>
             }
 
         ]
     },
     {   path: '/login',
         element: <Login/>
+    },
+    {
+        path: '/admin/form',
+        element : <Form />,
+        children:
+        [
+            {
+                path: 'addnews',
+                element: <AddNews/>
+            },
+            {
+                path: 'editnews/:id',
+                element: <News_UPDATE/>
+            }
+        ]
     },
 ])
 
