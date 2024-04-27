@@ -10,6 +10,10 @@ class OgloszeniaController extends Controller
     {
 
     }
+    public function Ogloszenia_ALL()
+    {
+
+    }
     public function Ogloszenia_CREATE()
     {
 
