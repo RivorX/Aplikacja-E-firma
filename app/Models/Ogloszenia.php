@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ogloszenia extends Model
 {
-    protected $table = 'Ogłoszenia';
+    protected $table = 'Ogloszenia';
     public $timestamps = false;
-
-    protected $primaryKey = 'Ogłoszenia_id';
+    protected $primaryKey = 'Ogloszenia_id';
 
     protected $fillable = [
         'Pracownicy_id',
-        'nazwa_ogloszenia',
-        'opis_ogloszenia',
+        'tytul',
+        'opis',
         'data_nadania',
     ];
 
@@ -25,6 +24,6 @@ class Ogloszenia extends Model
 
     public function stanowiska()
     {
-        return $this->belongsToMany(Stanowisko::class, 'Ogłoszenia_has_Stanowisko', 'Ogłoszenia_id', 'Stanowisko_id');
+        return $this->belongsToMany(Stanowisko::class, 'Ogloszenia_has_Stanowisko', 'Ogloszenia_id', 'Stanowisko_id');
     }
 }

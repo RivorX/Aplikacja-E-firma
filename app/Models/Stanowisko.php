@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,5 +18,10 @@ class Stanowisko extends Model
     public function pracownicy()
     {
         return $this->hasMany(Pracownicy::class, 'Stanowisko_id', 'Stanowisko_id');
+    }
+
+    public function ogloszenia()
+    {
+        return $this->belongsToMany(Ogloszenia::class, 'Ogloszenia_has_stanowiska', 'stanowisko_id', 'ogloszenia_id');
     }
 }

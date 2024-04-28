@@ -15,18 +15,28 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('adduser', [AuthController::class, 'adduser']);
 Route::post('login', [AuthController::class, 'login']);
 
-
 Route::get('positions', [AuthController::class, 'positions']);
+Route::get('stanowisko', [AuthController::class, 'positions']);
 Route::get('GuestNewsInfo', [AktualnosciController::class, 'Aktualnosci']);
 
+// Aktualnosci
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('aktualnosci', [AktualnosciController::class, 'Aktualnosci']);
+    // Tylko dla admina
     Route::get('aktualnosci_admin', [AktualnosciController::class, 'show']);
     Route::get('aktualnosci/{id}', [AktualnosciController::class, 'show_id']);
     Route::post('aktualnosci', [AktualnosciController::class, 'store']);
     Route::put('aktualnosci/{id}', [AktualnosciController::class, 'update']);
     Route::delete('aktualnosci/{id}', [AktualnosciController::class, 'destroy']);
 });
-Route::get('GuestNewsInfo', [GuestNewsInfoController::class, 'GuestNewsInfo']);
 
-Route::get('Ogłoszenia', [OgloszeniaController::class, 'Ogloszenia']);
+// Ogłoszenia
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('ogloszenia/{Stanowisko_id}', [OgloszeniaController::class, 'Ogloszenia']);
+    // Tylko dla admina
+    Route::get('ogloszenia_admin', [OgloszeniaController::class, 'show_ALL']);
+    Route::get('ogloszenia_up/{id}', [OgloszeniaController::class, 'show_id']);
+    Route::post('ogloszenia', [OgloszeniaController::class, 'store']);
+    Route::put('ogloszenia/{id}', [OgloszeniaController::class, 'update']);
+    Route::delete('ogloszenia/{id}', [OgloszeniaController::class, 'destroy']);
+});

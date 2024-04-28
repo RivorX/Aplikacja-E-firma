@@ -1,24 +1,78 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axiosClient from '../../axios';
+import { useNavigate, Link } from 'react-router-dom';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 export default function Ogloszenia_ADD() {
+  const { currentUser } = useStateContext();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [employees1, setemployees1] = useState(false);
-  const [forEmployees, setforEmployees] = useState(false);
+  const [selectedPositions, setSelectedPositions] = useState([]);
+  const [positions, setPositions] = useState([]);
+  const [error, setError] = useState({ __html: "" });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setError({ __html: '' });
+    // Pobierz stanowiska z bazy danych i ustaw je w stanie komponentu
+    axiosClient.get('stanowisko')
+      .then(({ data }) => {
+        if (Array.isArray(data.positions)) {
+          setPositions(data.positions);
+        } else {
+          console.error('Błąd: Brak stanowisk w formacie tablicy');
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data && error.response.data.errors) {
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+          setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+        }
+      });
+  }, []);
+
+  const handleSaveChanges = () => {
+    setError({ __html: '' });
+    axiosClient.post('ogloszenia', {
+      Pracownicy_id: currentUser.Pracownicy_id,
+      tytul: title,
+      opis: content,
+      stanowiska_id: selectedPositions,
+    })
+    .then(({ data }) => {
+      console.log(data);
+      // Sprawdzamy, czy nie ma błędów w odpowiedzi z serwera
+      if (!data.error) {
+        navigate('/admin/Ogloszenia');
+      } else {
+        console.error('Błąd dodawania ogłoszenia:', data.message);
+      }
+    })
+    .catch((error) => {
+      if (error.response && error.response.data && error.response.data.errors) {
+        const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+        setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+      }
+    });
+  };
+  
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Dodanie ogłoszenia
+            Dodaj Ogłoszenie
           </h2>
+          {/* Wypisywananie błędów z backendu */}
+          {error.__html && (
+            <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={error}>
+            </div>
+          )}
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6">
             <div>
               <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
                 Tytuł
@@ -54,44 +108,43 @@ export default function Ogloszenia_ADD() {
               </div>
             </div>
 
-            <div className="flex items-center">
-              <input
-                id="employees1"
-                name="employees1"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                checked={employees1}
-                onChange={(e) => setemployees1(e.target.checked)}
-              />
-              <label htmlFor="employees1" className="ml-2 block text-sm font-medium leading-5 text-gray-900">
-                Pracownicy 1
+            <div>
+              <label htmlFor="positions" className="block text-sm font-medium leading-6 text-gray-900">
+                Stanowiska
               </label>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="forEmployees"
-                name="forEmployees"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                checked={forEmployees}
-                onChange={(e) => setforEmployees(e.target.checked)}
-              />
-              <label htmlFor="forEmployees" className="ml-2 block text-sm font-medium leading-5 text-gray-900">
-                Pracownicy 2
-              </label>
+              <div className="mt-2">
+                {Array.isArray(positions) && positions.map((position) => (
+                  <div key={position.Stanowisko_id} className="flex items-center">
+                    <input
+                      id={`position-${position.Stanowisko_id}`}
+                      type="checkbox"
+                      value={position.Stanowisko_id}
+                      checked={selectedPositions.includes(position.Stanowisko_id)}
+                      onChange={(e) => {
+                        const positionId = parseInt(e.target.value);
+                        setSelectedPositions(prevPositions =>
+                          prevPositions.includes(positionId)
+                            ? prevPositions.filter(id => id !== positionId)
+                            : [...prevPositions, positionId]
+                        );
+                      }}
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor={`position-${position.Stanowisko_id}`} className="ml-2 text-sm text-gray-700">{position.nazwa_stanowiska}</label>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="flex items-center justify-between mt-4">
-              <a href="/" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+              <Link to="/admin/Ogloszenia" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
                 Anuluj
-              </a>
-              <button
-                type="submit"
-                className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition"
-              >
-                Zapisz zmiany
-              </button>
+              </Link>
+
+
+              <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                Dodaj Ogloszenie
+              </Link>
             </div>
           </form>
         </div>

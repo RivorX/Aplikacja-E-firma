@@ -11,7 +11,7 @@ import ContactMainInfo from './components/ContactMainInfo.jsx';
 // Po zalogowaniu jako zwykły user
 import LogedDefaultLayout from "./views/LogedDefaultLayout.jsx";
 import PanelGłówny from "./views/PanelGółwny.jsx";
-import Ogloszenia from "./views/Ogłoszenia.jsx";
+import Ogloszenia from "./views/Ogloszenia.jsx";
 import Karta from "./views/Karta.jsx";
 import Informacje from "./views/Informacje.jsx";
 
@@ -21,12 +21,17 @@ import Pracownicy from "./Admin/views/Pracownicy.jsx";
 import KartyDostepu from "./Admin/views/KartyDostepu.jsx";
 import KodyQR from "./Admin/views/KodyQR.jsx";
 import Aktualnosci from "./Admin/views/Aktualnosci.jsx";
+import Ogloszenia_ADMIN from "./Admin/views/Ogloszenia.jsx";
 import Form from "./Admin/views/Form.jsx";
 
 //formularze do admina
 import Users_ADD from "./Admin/components/Users_ADD.jsx";
+
 import AddNews from "./Admin/components/News_ADD.jsx";
 import News_UPDATE from "./Admin/components/News_UPDATE.jsx";
+
+import Ogloszenia_ADD from "./Admin/components/Ogloszenia_ADD.jsx";
+import Ogloszenia_UPDATE from "./Admin/components/Ogloszenia_UPDATE.jsx";
 
 
 const router = createBrowserRouter([
@@ -97,6 +102,10 @@ const router = createBrowserRouter([
             {
                 path: 'Aktualnosci',
                 element: <Aktualnosci/>
+            },
+            {
+                path: 'Ogloszenia',
+                element: <Ogloszenia_ADMIN/>
             }
 
         ]
@@ -116,6 +125,14 @@ const router = createBrowserRouter([
             {
                 path: 'editnews/:id',
                 element: <News_UPDATE/>
+            },
+            {
+                path: 'addOgloszenia',
+                element: <Ogloszenia_ADD/>,
+            },
+            {
+                path: 'editOgloszenia/:id',
+                element: <Ogloszenia_UPDATE/>
             }
         ]
     },
