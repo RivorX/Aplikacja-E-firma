@@ -53,7 +53,7 @@ export default function LogedDefaultLayout() {
     // Wylogowanie
     const logout = (ev) => {
         ev.preventDefault()
-        axiosClient.post('/logout')
+        axiosClient.delete('/logout')
         .then(res => {
           setCurrentUser({})
           setUserToken(null)

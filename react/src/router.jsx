@@ -66,7 +66,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: 'news',
-                element: <Navigate to= ""/>
+                element: <Navigate to= "/"/>
             },
             {
                 path: 'about',

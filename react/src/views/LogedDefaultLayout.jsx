@@ -24,7 +24,10 @@ function classNames(...classes) {
 
 export default function LogedDefaultLayout() {
     const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
-    const hasAdminRole = currentUser?.grupa?.nazwa_grupy === "admin" || currentUser?.grupa?.nazwa_grupy === "Super Admin";
+    const hasAdminRole =
+      currentUser?.grupa?.nazwa_grupy.toLowerCase() === "admin" ||
+      currentUser?.grupa?.nazwa_grupy.toLowerCase() === "super admin";
+
 
 
     if (!userToken) {
@@ -44,7 +47,7 @@ export default function LogedDefaultLayout() {
     // Wylogowanie
     const logout = (ev) => {
         ev.preventDefault()
-        axiosClient.post('/logout')
+        axiosClient.delete('/logout')
         .then(res => {
           setCurrentUser({})
           setUserToken(null)
