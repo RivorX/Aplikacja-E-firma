@@ -18,8 +18,6 @@ class OgloszeniaController extends Controller
         return response()->json(['Ogloszenia' => $Ogloszenia]);
     }
     
-    
-
     // Read - wyświetlenie pojedynczej aktualności
     public function show_id($id)
     {
@@ -52,7 +50,7 @@ class OgloszeniaController extends Controller
             'Pracownicy_id' => 'required',
             'tytul' => 'required',
             'opis' => 'required',
-            'stanowiska_id' => 'required|array', // Upewnij się, że stanowiska_id jest tablicą
+            'stanowiska_id' => 'required|array',
         ]);
 
         // Utwórz nowe ogłoszenie
@@ -83,7 +81,7 @@ class OgloszeniaController extends Controller
         $validatedData = $request->validate([
             'tytul' => 'required',
             'opis' => 'required',
-            'stanowiska_id' => 'required|array', // Upewnij się, że stanowiska_id jest tablicą
+            'stanowiska_id' => 'required|array',
         ]);
 
         // Aktualizuj pola aktualności
