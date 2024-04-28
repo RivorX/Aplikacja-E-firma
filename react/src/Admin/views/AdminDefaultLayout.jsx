@@ -13,6 +13,7 @@ const navigation = [
   { name: 'Karty dostepu', to: 'kartyDostepu'},
   { name: 'Drzwi / Kody QR', to: 'kodyQR'},
   { name: 'Aktualnosci', to: 'Aktualnosci'},
+  { name: 'Ogłoszenia', to: 'Ogloszenia'},
 ]
 const userNavigation = [
   { name: 'Wyloguj się' },
