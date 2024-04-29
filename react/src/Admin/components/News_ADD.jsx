@@ -6,7 +6,8 @@ import { useNavigate, Link } from 'react-router-dom';
 export default function News_ADD() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const navigate = useNavigate(); // hook do nawigacji
+  const [error, setError] = useState({ __html: "" });
+  const navigate = useNavigate(); 
 
   const handleSaveChanges = () => {
     axiosClient.post('aktualnosci', {
@@ -18,7 +19,10 @@ export default function News_ADD() {
       navigate('/admin/aktualnosci'); // przekierowanie po dodaniu aktualności
     })
     .catch((error) => {
-      console.error('Błąd dodawania aktualności:', error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+        setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+      }
     });
   };
 
@@ -29,6 +33,11 @@ export default function News_ADD() {
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Dodaj Aktualność
           </h2>
+          {/* Wypisywananie błędów z backendu */}
+          {error.__html && (
+            <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={error}>
+            </div>
+          )}
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -74,7 +83,7 @@ export default function News_ADD() {
               </Link>
 
 
-              <Link to="/admin/aktualnosci" onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+              <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
               Dodaj Aktualność
               </Link>
             </div>

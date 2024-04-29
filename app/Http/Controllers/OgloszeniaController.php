@@ -71,10 +71,10 @@ class OgloszeniaController extends Controller
     // Update - aktualizacja istniejącej aktualności
     public function update(Request $request, $id)
     {
-        // Znajdź aktualność do aktualizacji
+        // Znajdź ogłoszenie do aktualizacji
         $ogloszenia = Ogloszenia::find($id);
         if (!$ogloszenia) {
-            return response()->json(['message' => 'Aktualność nie znaleziona'], 404);
+            return response()->json(['message' => 'Ogłoszenie nie znaleziono'], 404);
         }
 
         // Walidacja danych wejściowych
@@ -93,11 +93,11 @@ class OgloszeniaController extends Controller
             $ogloszenia->stanowiska()->sync($validatedData['stanowiska_id']);
         }
 
-        // Zaktualizuj aktualność
+        // Zaktualizuj ogłoszenie
         $ogloszenia->save();
 
         // Zwróć odpowiedź JSON z informacją o sukcesie oraz zaktualizowaną aktualnością
-        return response()->json(['message' => 'Aktualność zaktualizowana', 'ogloszenia' => $ogloszenia]);
+        return response()->json(['message' => 'Ogłoszenie zaktualizowanae', 'ogloszenia' => $ogloszenia]);
     }
 
 
@@ -111,13 +111,13 @@ class OgloszeniaController extends Controller
             // Usuwanie głównego rekordu z tabeli Ogloszenia
             $ogloszenia = Ogloszenia::find($id);
             if (!$ogloszenia) {
-                return response()->json(['message' => 'Aktualność nie znaleziona'], 404);
+                return response()->json(['message' => 'Ogłoszeń nie znaleziono'], 404);
             }
             $ogloszenia->delete();
             
-            return response()->json(['message' => 'Aktualność usunięta']);
+            return response()->json(['message' => 'Ogłoszenie usunięte']);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Wystąpił błąd podczas usuwania aktualności: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Wystąpił błąd podczas usuwania ogłoszenia: ' . $e->getMessage()], 500);
         }
     }
     
