@@ -51,18 +51,21 @@ class AuthController extends Controller
             // Sprawdzenie czy grupa istnieje, jeśli nie, utwórz nową
             $group = Grupy::firstOrCreate(['nazwa_grupy' => $data['group']]);
 
+            $salt = env('SALT');
+            $dataCzas = now();
+
             // Utworzenie nowego użytkownika
             $pracownik = Pracownicy::create([
                 'imie' => $data['imie'],
                 'nazwisko' => $data['nazwisko'],
                 'email' => $data['email'],
-                'password' => bcrypt($data['password']),
+                'password' => bcrypt($data['password'].$salt.$dataCzas),
                 'Stanowisko_id' => $position->Stanowisko_id,
                 'Grupy_id' => $group->Grupy_id, 
                 'konto_aktywne' => 1,
                 'ilosc_dni_urlopu' => 0,
-                'Data_edycji' => now(),
-                'Data_utworzenia' => now(),
+                'Data_edycji' => null,
+                'Data_utworzenia' => $dataCzas,
             ]);
 
             // Utworzenie tokenu dla nowego użytkownika
@@ -116,8 +119,11 @@ class AuthController extends Controller
         // Pobierz pracownika na podstawie adresu e-mail wraz z powiązaną grupą
         $pracownik = Pracownicy::with('grupa')->where('email', $credentials['email'])->first();
 
+        $salt = env('SALT');
+        $dataCzas = $pracownik->Data_utworzenia;
+
         // Sprawdź, czy pracownik istnieje
-        if (!$pracownik || !Hash::check($credentials['password'], $pracownik->password)) {
+        if (!$pracownik || !Hash::check($credentials['password'].env('SALT').$dataCzas, $pracownik->password)) {
             return response()->json([
                 'error' => 'Podane dane logowania są niepoprawne.'
             ], 422);

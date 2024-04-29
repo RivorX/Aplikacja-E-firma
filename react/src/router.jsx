@@ -133,6 +133,10 @@ const router = createBrowserRouter([
             {
                 path: 'editOgloszenia/:id',
                 element: <Ogloszenia_UPDATE/>
+            },
+            {
+                path: 'addUser',
+                element: <Users_ADD/>
             }
         ]
     },

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../../axios.js';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function RegistrationForm() {
 
@@ -29,8 +30,7 @@ export default function RegistrationForm() {
   }, []);
 
   
-  const onSubmit = (ev) => {
-    ev.preventDefault();
+  const handleSaveChanges = () => {
     setError({ __html: '' });
 
     axiosClient
@@ -46,6 +46,12 @@ export default function RegistrationForm() {
       })
       .then(({ data }) => {
         console.log(data);
+        // Sprawdzamy, czy nie ma błędów w odpowiedzi z serwera
+        if (!data.error) {
+          navigate('/admin/pracownicy');
+        } else {
+          console.error('Błąd dodawania Pracownika:', data.message);
+        }
       })
       .catch((error) => {
         if (error.response && error.response.data && error.response.data.errors) {
@@ -60,7 +66,7 @@ export default function RegistrationForm() {
     const selectedPosition = event.target.value;
     setPosition(selectedPosition);
     if (selectedPosition !== "other") {
-      setCustomPosition(""); // Wyczyść wartość niestandardowego stanowiska, jeśli wybrano opcję z listy
+      setCustomPosition(""); 
     }
   };
 
@@ -90,7 +96,7 @@ export default function RegistrationForm() {
           )}
 
 
-          <form onSubmit={onSubmit} className="space-y-6" method="POST">
+          <form className="space-y-6" method="POST">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
                 Imię
@@ -286,15 +292,14 @@ export default function RegistrationForm() {
               </div>
 
               <div className="flex items-center justify-between mt-4">
-                <a href="/" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                <Link to="/admin/pracownicy" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
                   Anuluj
-                </a>
-                <button
-                  type="submit"
-                  className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition"
-                >
-                  Zarejestruj się
-                </button>
+                </Link>
+
+
+                <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                  Dodaj Ogloszenie
+                </Link>
               </div>
             </div>
           </form>
