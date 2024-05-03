@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../../axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 export default function Ogloszenia_UPDATE() {
   const { id } = useParams();
@@ -9,7 +9,9 @@ export default function Ogloszenia_UPDATE() {
   const [content, setContent] = useState("");
   const [selectedPositions, setSelectedPositions] = useState([]);
   const [positions, setPositions] = useState([]);
+
   const [error, setError] = useState({ __html: "" });
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     setError({ __html: '' });
@@ -57,7 +59,6 @@ export default function Ogloszenia_UPDATE() {
       stanowiska_id: selectedPositions,
     })
     .then(({ data }) => {
-      console.log(data);
       if (!data.error) {
         navigate('/admin/Ogloszenia');
       } else {

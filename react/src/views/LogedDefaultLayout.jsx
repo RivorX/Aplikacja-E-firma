@@ -40,7 +40,7 @@ export default function LogedDefaultLayout() {
         axiosClient.get('/me')
         .then(({data}) => {
             setCurrentUser(data)
-            console.log(data)
+            console.log(data) // TODO Usunąć
         })
     }, [])
 
@@ -99,8 +99,6 @@ export default function LogedDefaultLayout() {
 
                   {/* Logo aplikacji */}
                   <ApplicationLogo /> 
-
-                  {userToken}
                 </div>
 
                 {/* Nazwa użytkownika  TODO*/}

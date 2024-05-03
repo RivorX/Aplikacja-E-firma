@@ -10,7 +10,7 @@ function NewsMainInfo() {
   useEffect(() => {
     // Pobierz wiadomości z bazy danych przy załadowaniu komponentu
     axiosClient
-      .get('GuestNewsInfo')
+      .get('aktualnosci')
       .then(response => {
         setGuestNewsInfo(response.data.Aktualnosci);
         setLoading(false); 

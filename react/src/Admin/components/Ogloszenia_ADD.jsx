@@ -9,6 +9,7 @@ export default function Ogloszenia_ADD() {
   const [content, setContent] = useState("");
   const [selectedPositions, setSelectedPositions] = useState([]);
   const [positions, setPositions] = useState([]);
+  
   const [error, setError] = useState({ __html: "" });
   const navigate = useNavigate();
 
