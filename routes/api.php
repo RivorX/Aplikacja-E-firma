@@ -18,13 +18,12 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::get('positions', [AuthController::class, 'positions']);
 Route::get('stanowisko', [AuthController::class, 'positions']);
-Route::get('GuestNewsInfo', [AktualnosciController::class, 'Aktualnosci']);
+Route::get('aktualnosci', [AktualnosciController::class, 'Aktualnosci']);
 
 // Aktualnosci
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('aktualnosci', [AktualnosciController::class, 'Aktualnosci']);
     // Tylko dla admina
-    Route::get('aktualnosci_admin', [AktualnosciController::class, 'show']);
+    Route::get('aktualnosci_admin', [AktualnosciController::class, 'showALL']);
     Route::get('aktualnosci/{id}', [AktualnosciController::class, 'show_id']);
     Route::post('aktualnosci', [AktualnosciController::class, 'store']);
     Route::put('aktualnosci/{id}', [AktualnosciController::class, 'update']);
