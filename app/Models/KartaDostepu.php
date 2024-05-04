@@ -15,6 +15,7 @@ class KartaDostepu extends Model
         'numer_seryjny',
         'data_wydania',
         'data_waznosci',
+        'karta_aktywna',
         'inne_dane',
     ];
 
