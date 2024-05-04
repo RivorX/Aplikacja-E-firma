@@ -7,6 +7,7 @@ use App\Http\Controllers\AktualnosciController;
 use App\Http\Controllers\GuestNewsInfoController;
 use App\Http\Controllers\OgloszeniaController;
 use App\Http\Controllers\PracownicyController;
+use App\Http\Controllers\DrzwiController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -53,8 +54,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Drzwi
-Route::get('/drzwi', 'DrzwiController@index');
-Route::post('/drzwi', 'DrzwiController@store');
-Route::put('/drzwi/{id}', 'DrzwiController@update');
-Route::delete('/drzwi/{id}', 'DrzwiController@destroy');
-Route::get('/drzwi/{id}', 'DrzwiController@show');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('drzwi', [DrzwiController::class, 'index']);
+    Route::post('drzwi', [DrzwiController::class, 'store']);
+    Route::put('drzwi/{id}', [DrzwiController::class, 'update']);
+    Route::delete('drzwi/{id}', [DrzwiController::class, 'destroy']);
+});
