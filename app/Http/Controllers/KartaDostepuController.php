@@ -7,6 +7,7 @@ use App\Models\KartaDostepu;
 use App\Models\Pracownik;
 use App\Models\StrefyDostepu;
 use App\Models\KartaDostepuHasStrefaDostepu;
+use Illuminate\Support\Facades\DB;
 
 class KartaDostepuController extends Controller
 {
@@ -135,6 +136,41 @@ class KartaDostepuController extends Controller
             return response()->json(['message' => 'Wystąpił błąd podczas aktualizacji karty dostępu: ' . $e->getMessage()], 500);
         }
     }
+
+    public function changeCardStatus($id)
+    {
+        // Wrap logic in a database transaction
+        DB::beginTransaction();
+
+        try {
+            // Fetch the access card to update
+            $kartaDostepu = KartaDostepu::find($id);
+
+            if (!$kartaDostepu) {
+                return response()->json(['message' => 'Karta dostępu o podanym ID nie istnieje'], 404);
+            }
+
+            // Toggle card status
+            $kartaDostepu->karta_aktywna = !$kartaDostepu->karta_aktywna;
+            $kartaDostepu->save();
+
+            // Commit the transaction if successful
+            DB::commit();
+
+            // Return success response with updated card
+            $status = $kartaDostepu->karta_aktywna ? 'aktywowana' : 'dezaktywowana';
+            return response()->json(['message' => "Karta dostępu $status"]);
+        } catch (\Exception $e) {
+            // Rollback the transaction on any error
+            DB::rollBack();
+
+            // Return error response
+            return response()->json(['message' => 'Wystąpił błąd podczas zmiany statusu karty dostępu: ' . $e->getMessage()], 500);
+        }
+    }
+
+    
+
     public function destroy($id)
     {
         // Wrap logic in a database transaction
@@ -142,16 +178,11 @@ class KartaDostepuController extends Controller
 
         try {
             // Fetch the access card to delete
-            $kartaDostepu = KartaDostepu::with('strefyDostepu')->find($id);
+            $kartaDostepu = KartaDostepu::find($id);
 
             if (!$kartaDostepu) {
                 return response()->json(['message' => 'Karta dostępu o podanym ID nie istnieje'], 404);
             }
-
-            // Detach associated access zones (optional)
-            // You can uncomment this line if you want to detach zones before deletion:
-            // $kartaDostepu->strefyDostepu()->detach();
-
             // Delete the access card
             $kartaDostepu->delete();
 
