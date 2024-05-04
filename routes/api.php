@@ -8,6 +8,7 @@ use App\Http\Controllers\GuestNewsInfoController;
 use App\Http\Controllers\OgloszeniaController;
 use App\Http\Controllers\PracownicyController;
 use App\Http\Controllers\DrzwiController;
+use App\Http\Controllers\StrefyDostepuController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -60,3 +61,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('drzwi/{id}', [DrzwiController::class, 'update']);
     Route::delete('drzwi/{id}', [DrzwiController::class, 'destroy']);
 });
+
+// Strefy dostępu
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('strefy-dostepu', [StrefyDostepuController::class, 'index']);
+    Route::post('strefy-dostepu', [StrefyDostepuController::class, 'store']);
+    Route::put('strefy-dostepu/{id}', [StrefyDostepuController::class, 'update']);
+    Route::delete('strefy-dostepu/{id}', [StrefyDostepuController::class, 'destroy']);
+});
+

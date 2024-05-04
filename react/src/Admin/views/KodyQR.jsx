@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../../axios';
+import { NavLink } from 'react-router-dom';
 
 export default function PrzegladDrzwiKodyQR() {
   const [drzwiKodyQR, setDrzwiKodyQR] = useState([]);
@@ -64,6 +65,14 @@ export default function PrzegladDrzwiKodyQR() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div>
+              <NavLink
+                to="/admin/form/addKodyQR"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-2 text-sm font-medium mt-4"
+              >
+                Dodaj nowe drzwi
+              </NavLink>
             </div>
           </section>
         </div>
