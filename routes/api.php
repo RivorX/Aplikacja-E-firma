@@ -51,3 +51,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('pracownicy/{id}', [PracownicyController::class, 'update']);
     Route::delete('pracownicy/{id}', [PracownicyController::class, 'destroy']);
 });
+
+// Drzwi
+Route::get('/drzwi', 'DrzwiController@index');
+Route::post('/drzwi', 'DrzwiController@store');
+Route::put('/drzwi/{id}', 'DrzwiController@update');
+Route::delete('/drzwi/{id}', 'DrzwiController@destroy');
+Route::get('/drzwi/{id}', 'DrzwiController@show');
