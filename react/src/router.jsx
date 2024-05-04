@@ -33,6 +33,7 @@ import News_UPDATE from "./Admin/components/News_UPDATE.jsx";
 import Ogloszenia_ADD from "./Admin/components/Ogloszenia_ADD.jsx";
 import Ogloszenia_UPDATE from "./Admin/components/Ogloszenia_UPDATE.jsx";
 
+import KodyQR_ADD from "./Admin/components/KodyQR_ADD.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'KodyQR',
-                element: <KodyQR/>
+                element: <KodyQR/>,
             },
             {
                 path: 'Aktualnosci',
@@ -137,6 +138,10 @@ const router = createBrowserRouter([
             {
                 path: 'addUser',
                 element: <Users_ADD/>
+            },
+            {
+                path: 'addKodyQR',
+                element: <KodyQR_ADD/>
             }
         ]
     },

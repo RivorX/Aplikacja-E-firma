@@ -12,11 +12,9 @@ class DrzwiController extends Controller
         $drzwis = Drzwi::with('strefyDostepu')->get();
         return response()->json($drzwis);
     }
-
     public function store(Request $request)
     {
         $request->validate([
-            'Drzwi_id' => 'required',
             'nr_drzwi' => 'required',
             'nazwa' => 'required',
             'WeWy' => 'required',
@@ -28,7 +26,6 @@ class DrzwiController extends Controller
         
         return response()->json($drzwi, 201);
     }
-
     public function update(Request $request, $id)
     {
         $request->validate([
