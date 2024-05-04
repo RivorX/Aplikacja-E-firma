@@ -5,15 +5,17 @@ export default function PrzegladDrzwiKodyQR() {
   const [drzwiKodyQR, setDrzwiKodyQR] = useState([]);
 
   useEffect(() => {
-    // Pobierz drzwi/kody QR z bazy danych
-    axiosClient.get('drzwi-kody-qr')
-      .then(response => {
-        setDrzwiKodyQR(response.data);
-      })
-      .catch(error => {
-        console.error('Błąd pobierania drzwi/kodów QR:', error);
-      });
+    fetchDrzwis();
   }, []);
+
+  const fetchDrzwis = async () => {
+    try {
+      const response = await axiosClient.get('drzwi'); 
+      setDrzwiKodyQR(response.data);
+    } catch (error) {
+      console.error('Błąd pobierania drzwi/kodów QR:', error);
+    }
+  };
 
   return (
     <>
@@ -33,19 +35,21 @@ export default function PrzegladDrzwiKodyQR() {
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Nazwa</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">We/Wy</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Strefa wymagana</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Drzwi aktywne</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Ostatnia zmiana kodu</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Kod QR</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Drukuj</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Edytuj</th>
                   </tr>
                 </thead>
                 <tbody>
                   {drzwiKodyQR.map((element, index) => (
                     <tr key={index} className="border-t">
-                      <td className="px-4 py-2">{element.nr_wejscia}</td>
-                      <td className="px-4 py-2">{element.nazwa}</td>
-                      <td className="px-4 py-2">{element.we_wy}</td>
-                      <td className="px-4 py-2">{element.strefa_wymagana}</td>
-                      <td className="px-4 py-2">{element.ostatnia_zmiana_kodu}</td>
+                      <td className="px-4 py-2">{element?.nr_drzwi || '-'}</td>
+                      <td className="px-4 py-2">{element?.nazwa || '-'}</td>
+                      <td className="px-4 py-2">{element?.WeWy || '-'}</td>
+                      <td className="px-4 py-2">{element?.strefy_dostepu?.nazwa_strefy || '-'}</td>
+                      <td className="px-4 py-2">{element?.drzwi_aktywne ? 'Tak' : 'Nie'}</td>
+                      <td className="px-4 py-2">{element?.ostatnia_zmiana_kodu || '-'}</td>
                       <td className="px-4 py-2">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                           Drukuj

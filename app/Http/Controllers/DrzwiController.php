@@ -9,18 +9,18 @@ class DrzwiController extends Controller
 {
     public function index()
     {
-        $drzwis = Drzwi::all();
+        $drzwis = Drzwi::with('strefyDostepu')->get();
         return response()->json($drzwis);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'Drzwi_id_Podstawowy' => 'required',
+            'Drzwi_id' => 'required',
             'nr_drzwi' => 'required',
             'nazwa' => 'required',
             'WeWy' => 'required',
-            'Strefy_Dostepu_id_Indeks' => 'required',
+            'Strefy_Dostepu_id' => 'required',
             'drzwi_aktywne' => 'required',
         ]);
 
@@ -32,11 +32,11 @@ class DrzwiController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'Drzwi_id_Podstawowy' => 'required',
+            'Drzwi_id' => 'required',
             'nr_drzwi' => 'required',
             'nazwa' => 'required',
             'WeWy' => 'required',
-            'Strefy_Dostepu_id_Indeks' => 'required',
+            'Strefy_Dostepu_id' => 'required',
             'drzwi_aktywne' => 'required',
         ]);
 
