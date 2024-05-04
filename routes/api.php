@@ -7,6 +7,7 @@ use App\Http\Controllers\AktualnosciController;
 use App\Http\Controllers\GuestNewsInfoController;
 use App\Http\Controllers\OgloszeniaController;
 use App\Http\Controllers\PracownicyController;
+use App\Http\Controllers\KartaDostepuController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -55,8 +56,9 @@ Route::middleware('auth:sanctum')->group(function () {
 // Karty dostępu
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('karty_dostepu_admin', [KartaDostepuController::class, 'getAll']);
+    Route::put('karty_dostepu/{id}/change-status', [KartaDostepuController::class, 'changeCardStatus']);
     Route::get('karty_dostepu/{id}', [KartaDostepuController::class, 'getById']);
     Route::post('karty_dostepu', [KartaDostepuController::class, 'store']);
     Route::put('karty_dostepu/{id}', [KartaDostepuController::class, 'update']);
-    Route::delete('karty_dostepu/{id}', [KartaDostepuController::class, 'delete']);
+    Route::delete('karty_dostepu/{id}', [KartaDostepuController::class, 'destroy']);
 });

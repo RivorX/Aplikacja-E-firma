@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 export default function Ogloszenia() {
   const [Ogloszenia, setOgloszenia] = useState([]);
   const [loading, setLoading] = useState(true); 
+  const [noOgloszenia, setNoOgloszenia] = useState(false);
 
   useEffect(() => {
     const fetchOgloszenia = async () => {
@@ -12,8 +13,11 @@ export default function Ogloszenia() {
         const response = await axiosClient.get('ogloszenia_admin');
         setOgloszenia(response.data.ogloszenia); 
         setLoading(false); 
+        setNoOgloszenia(false);
       } catch (error) {
         console.error('Błąd pobierania ogłoszeń:', error);
+        setLoading(false);
+        setNoOgloszenia(true);
       }
     };
 
@@ -49,7 +53,7 @@ export default function Ogloszenia() {
             <div className="overflow-x-auto">
               {loading ? (
                 <p>Ładowanie...</p>
-              ) : Ogloszenia.length === 0 ? (
+              ) : noOgloszenia ? (
                 <p>Brak ogloszen do wyświetlenia</p>
               ) : (
                 <table className="w-full table-auto">
