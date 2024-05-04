@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2024 at 11:13 PM
+-- Generation Time: Maj 04, 2024 at 08:08 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -54,7 +54,6 @@ CREATE TABLE `aktualnosci` (
 --
 
 INSERT INTO `aktualnosci` (`Aktualnosci_id`, `tytul`, `opis`, `data_nadania`) VALUES
-(1, 'Test', 'Testowy opis aktualnosci', '2024-04-20 23:00:09'),
 (2, 'Test', 'Witajcie w aktualności 2. mamy wspaniełe wieści dla was :)\r\nMiłego dnia <3', '2024-04-21 21:32:34');
 
 -- --------------------------------------------------------
@@ -107,7 +106,8 @@ CREATE TABLE `drzwi` (
   `nr_drzwi` varchar(45) NOT NULL,
   `nazwa` varchar(45) NOT NULL,
   `WeWy` varchar(45) NOT NULL,
-  `Strefy_Dostepu_id` int(11) NOT NULL
+  `Strefy_Dostepu_id` int(11) NOT NULL,
+  `drzwi_aktywne` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -193,7 +193,8 @@ CREATE TABLE `karta_dostepu` (
   `numer_seryjny` int(11) NOT NULL,
   `data_wydania` date NOT NULL,
   `data_waznosci` date NOT NULL,
-  `inne_dane` varchar(45) DEFAULT NULL
+  `karta_aktywna` tinyint(1) NOT NULL,
+  `inne_dane` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -273,41 +274,46 @@ CREATE TABLE `obecność_pracowników` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `ogłoszenia`
+-- Struktura tabeli dla tabeli `ogloszenia`
 --
 
-CREATE TABLE `ogłoszenia` (
+CREATE TABLE `ogloszenia` (
   `Ogloszenia_id` int(11) NOT NULL,
   `Pracownicy_id` int(11) NOT NULL,
   `tytul` varchar(45) NOT NULL,
   `opis` text NOT NULL,
-  `data_nadania` date NOT NULL
+  `data_nadania` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `ogłoszenia`
+-- Dumping data for table `ogloszenia`
 --
 
-INSERT INTO `ogłoszenia` (`Ogloszenia_id`, `Pracownicy_id`, `tytul`, `opis`, `data_nadania`) VALUES
-(1, 5, 'Ogłoszenie testowe', 'To jest ogłoszenie testowe, prosze to zignoro', '2024-04-27');
+INSERT INTO `ogloszenia` (`Ogloszenia_id`, `Pracownicy_id`, `tytul`, `opis`, `data_nadania`) VALUES
+(6, 7, 'Nie do menedzerów', 'hejka', '2024-04-29 16:36:19'),
+(7, 7, 'Do wszystkich', 'Witajcie w naszej firmie. Miłego dnia <3', '2024-04-29 16:36:40');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `ogłoszenia_has_stanowisko`
+-- Struktura tabeli dla tabeli `ogloszenia_has_stanowisko`
 --
 
-CREATE TABLE `ogłoszenia_has_stanowisko` (
+CREATE TABLE `ogloszenia_has_stanowisko` (
   `Ogloszenia_id` int(11) NOT NULL,
   `Stanowisko_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `ogłoszenia_has_stanowisko`
+-- Dumping data for table `ogloszenia_has_stanowisko`
 --
 
-INSERT INTO `ogłoszenia_has_stanowisko` (`Ogloszenia_id`, `Stanowisko_id`) VALUES
-(1, 1);
+INSERT INTO `ogloszenia_has_stanowisko` (`Ogloszenia_id`, `Stanowisko_id`) VALUES
+(6, 1),
+(6, 9),
+(7, 1),
+(7, 8),
+(7, 9);
 
 -- --------------------------------------------------------
 
@@ -345,8 +351,11 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `expires_at`, `created_at`, `updated_at`) VALUES
-(25, 'App\\Models\\Pracownicy', 6, 'main', '6014bd6b409be8a13e39ad611f98ced4ab253fbac2803982d5d2941de9ea8fbd', '[\"*\"]', '2024-04-23 07:59:08', NULL, '2024-04-23 07:57:52', '2024-04-23 07:59:08'),
-(29, 'App\\Models\\Pracownicy', 5, 'main', 'dc6cddbdef9e30f329903eeb934ec30155a25d3eca8ce6cd29492d66f3634091', '[\"*\"]', '2024-04-27 19:12:48', NULL, '2024-04-27 18:33:12', '2024-04-27 19:12:48');
+(37, 'App\\Models\\Pracownicy', 6, 'main', '61a7b85cbdd581733868714c9cf78447e1b54c5224c96224e51f08098df3e09e', '[\"*\"]', '2024-04-29 13:05:27', NULL, '2024-04-28 17:48:38', '2024-04-29 13:05:27'),
+(43, 'App\\Models\\Pracownicy', 8, 'main', '8274ab00a1a60299c8796bfb538011379fda69dd8db50e537916b637810d880e', '[\"*\"]', NULL, NULL, '2024-04-29 14:35:35', '2024-04-29 14:35:35'),
+(44, 'App\\Models\\Pracownicy', 8, 'main', '82462cf9d558db53b1f052d45747d1f5a3b83eeef0fa9eb75a0dffa942552137', '[\"*\"]', '2024-04-29 14:37:07', NULL, '2024-04-29 14:36:59', '2024-04-29 14:37:07'),
+(48, 'App\\Models\\Pracownicy', 7, 'main', '76accf8fe77f2e28faef2904e67e914be99942d40d1bb69fd35baebb686439ef', '[\"*\"]', '2024-04-30 09:24:41', NULL, '2024-04-30 09:24:22', '2024-04-30 09:24:41'),
+(49, 'App\\Models\\Pracownicy', 7, 'main', 'd4ba5ac8d9b700777bc370f4ffb7ae49c05f56fc43b6e443e132147560299739', '[\"*\"]', '2024-05-04 15:08:36', NULL, '2024-05-04 14:53:52', '2024-05-04 15:08:36');
 
 -- --------------------------------------------------------
 
@@ -364,7 +373,7 @@ CREATE TABLE `pracownicy` (
   `nazwisko` varchar(45) NOT NULL,
   `konto_aktywne` tinyint(1) NOT NULL,
   `ilosc_dni_urlopu` int(11) NOT NULL,
-  `Data_edycji` datetime NOT NULL,
+  `Data_edycji` datetime DEFAULT NULL,
   `Data_utworzenia` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -373,10 +382,8 @@ CREATE TABLE `pracownicy` (
 --
 
 INSERT INTO `pracownicy` (`Pracownicy_id`, `Stanowisko_id`, `Grupy_id`, `email`, `password`, `imie`, `nazwisko`, `konto_aktywne`, `ilosc_dni_urlopu`, `Data_edycji`, `Data_utworzenia`) VALUES
-(3, 1, 1, 'jan2@example.com', '$2y$12$tWBo1N5QNnhorcBp/niKkOrOxeCJ/kqNQHplEHgAYNnstUj7C2cY.', 'Jan', 'Kowalski', 1, 20, '2024-04-17 18:06:41', '2024-04-17 18:06:41'),
-(4, 1, 2, 'anna@example.com', '$2y$12$xMdhMqp0nB9bBt/7JUcoH.vKWLqWsgV1JUR.yUwi4nB7GNQ./swwG', 'Anna', 'Nowak', 1, 20, '2024-04-17 18:06:42', '2024-04-17 18:06:42'),
-(5, 1, 1, 'jan@example.com', '$2y$12$VslQk626lZQyhwYR70kpzOXaqDvYfLG6KV26HZEJrOecDd.FEqUD6', 'Jan', 'Kowalski', 1, 20, '2024-04-17 20:22:09', '2024-04-17 20:22:09'),
-(6, 1, 1, 'rm@example.pl', '$2y$12$xMdhMqp0nB9bBt/7JUcoH.vKWLqWsgV1JUR.yUwi4nB7GNQ./swwG', 'Rafał', 'Madoń', 1, 0, '2024-04-20 21:17:42', '2024-04-20 21:17:42');
+(7, 1, 3, 'admin@example.pl', '$2y$12$p4EMmtbOjan2dI.61zQroeaiMhLVWSTqSNgIb3UM9VVvTUOhiGuf2', 'Rafał', 'Admin', 1, 0, NULL, '2024-04-29 15:01:07'),
+(8, 8, 1, 'aga@example.pl', '$2y$12$BW/PNqICXw1RlCY4HXXk2.0aDJ5VoSD0m0pm4DCf.0gIpWknf/Nuq', 'Agała', 'Magała', 1, 0, NULL, '2024-04-29 16:35:35');
 
 -- --------------------------------------------------------
 
@@ -702,16 +709,16 @@ ALTER TABLE `obecność_pracowników`
   ADD KEY `fk_Pracownicy6_idx` (`Pracownicy_id`);
 
 --
--- Indeksy dla tabeli `ogłoszenia`
+-- Indeksy dla tabeli `ogloszenia`
 --
-ALTER TABLE `ogłoszenia`
+ALTER TABLE `ogloszenia`
   ADD PRIMARY KEY (`Ogloszenia_id`),
   ADD KEY `fk_Pracownicy1_idx` (`Pracownicy_id`);
 
 --
--- Indeksy dla tabeli `ogłoszenia_has_stanowisko`
+-- Indeksy dla tabeli `ogloszenia_has_stanowisko`
 --
-ALTER TABLE `ogłoszenia_has_stanowisko`
+ALTER TABLE `ogloszenia_has_stanowisko`
   ADD PRIMARY KEY (`Ogloszenia_id`,`Stanowisko_id`),
   ADD KEY `fk_Stanowisko3_idx` (`Stanowisko_id`),
   ADD KEY `fk_Ogłoszenia1_idx` (`Ogloszenia_id`);
@@ -860,7 +867,7 @@ ALTER TABLE `adres_zamieszkania`
 -- AUTO_INCREMENT for table `aktualnosci`
 --
 ALTER TABLE `aktualnosci`
-  MODIFY `Aktualnosci_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Aktualnosci_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `badania_okresowe`
@@ -923,22 +930,22 @@ ALTER TABLE `obecność_pracowników`
   MODIFY `Obecność_pracowników_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `ogłoszenia`
+-- AUTO_INCREMENT for table `ogloszenia`
 --
-ALTER TABLE `ogłoszenia`
-  MODIFY `Ogloszenia_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `ogloszenia`
+  MODIFY `Ogloszenia_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
-  MODIFY `Pracownicy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Pracownicy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `rodzaj_etatu`
@@ -1043,16 +1050,16 @@ ALTER TABLE `obecność_pracowników`
   ADD CONSTRAINT `fk_Pracownicy6` FOREIGN KEY (`Pracownicy_id`) REFERENCES `pracownicy` (`Pracownicy_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `ogłoszenia`
+-- Constraints for table `ogloszenia`
 --
-ALTER TABLE `ogłoszenia`
+ALTER TABLE `ogloszenia`
   ADD CONSTRAINT `fk_Pracownicy1` FOREIGN KEY (`Pracownicy_id`) REFERENCES `pracownicy` (`Pracownicy_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `ogłoszenia_has_stanowisko`
+-- Constraints for table `ogloszenia_has_stanowisko`
 --
-ALTER TABLE `ogłoszenia_has_stanowisko`
-  ADD CONSTRAINT `fk_Ogłoszenia1` FOREIGN KEY (`Ogloszenia_id`) REFERENCES `ogłoszenia` (`Ogloszenia_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ALTER TABLE `ogloszenia_has_stanowisko`
+  ADD CONSTRAINT `fk_Ogłoszenia1` FOREIGN KEY (`Ogloszenia_id`) REFERENCES `ogloszenia` (`Ogloszenia_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Stanowisko3` FOREIGN KEY (`Stanowisko_id`) REFERENCES `stanowisko` (`Stanowisko_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
