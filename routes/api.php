@@ -51,3 +51,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('pracownicy/{id}', [PracownicyController::class, 'update']);
     Route::delete('pracownicy/{id}', [PracownicyController::class, 'destroy']);
 });
+
+// Karty dostępu
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('karty_dostepu_admin', [KartaDostepuController::class, 'getAll']);
+    Route::get('karty_dostepu/{id}', [KartaDostepuController::class, 'getById']);
+    Route::post('karty_dostepu', [KartaDostepuController::class, 'store']);
+    Route::put('karty_dostepu/{id}', [KartaDostepuController::class, 'update']);
+    Route::delete('karty_dostepu/{id}', [KartaDostepuController::class, 'delete']);
+});
