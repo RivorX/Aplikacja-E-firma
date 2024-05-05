@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\KartaDostepu;
-use App\Models\Pracownik;
+use App\Models\Pracownicy;
 use App\Models\StrefyDostepu;
 use App\Models\KartaDostepuHasStrefaDostepu;
 use Illuminate\Support\Facades\DB;
@@ -67,7 +67,7 @@ class KartaDostepuController extends Controller
             $numerSeryjny = $this->generateUniqueSerialNumber();
 
             // Fetch employee and access zones
-            $pracownik = Pracownik::find($validatedData['Pracownicy_id']);
+            $pracownik = Pracownicy::find($validatedData['Pracownicy_id']);
             $strefyDostepu = StrefyDostepu::findMany($validatedData['strefy_dostepu_id']);
 
             // Create new access card
@@ -186,32 +186,38 @@ class KartaDostepuController extends Controller
     
 
     public function destroy($id)
-    {
-        // Wrap logic in a database transaction
-        DB::beginTransaction();
+{
+    // Wrap logic in a database transaction
+    DB::beginTransaction();
 
-        try {
-            // Fetch the access card to delete
-            $kartaDostepu = KartaDostepu::find($id);
+    try {
+        // Fetch the access card to delete
+        $kartaDostepu = KartaDostepu::find($id);
 
-            if (!$kartaDostepu) {
-                return response()->json(['message' => 'Karta dostępu o podanym ID nie istnieje'], 404);
-            }
-            // Delete the access card
-            $kartaDostepu->delete();
-
-            // Commit the transaction if successful
-            DB::commit();
-
-            // Return success response
-            return response()->json(['message' => 'Karta dostępu usunięta']);
-        } catch (\Exception $e) {
-            // Rollback the transaction on any error
-            DB::rollBack();
-
-            // Return error response
-            return response()->json(['message' => 'Wystąpił błąd podczas usuwania karty dostępu: ' . $e->getMessage()], 500);
+        if (!$kartaDostepu) {
+            return response()->json(['message' => 'Karta dostępu o podanym ID nie istnieje'], 404);
         }
+
+        // Delete related records from the pivot table
+        $kartaDostepu->strefyDostepu()->detach();
+
+        // Delete the access card
+        $kartaDostepu->delete();
+
+        // Commit the transaction if successful
+        DB::commit();
+
+        // Return success response
+        return response()->json(['message' => 'Karta dostępu usunięta']);
+    } catch (\Exception $e) {
+        // Rollback the transaction on any error
+        DB::rollBack();
+
+        // Return error response
+        return response()->json(['message' => 'Wystąpił błąd podczas usuwania karty dostępu: ' . $e->getMessage()], 500);
     }
+}
+
+
 }
 
