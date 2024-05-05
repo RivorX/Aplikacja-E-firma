@@ -5,6 +5,10 @@ import { NavLink } from 'react-router-dom';
 export default function Ogloszenia() {
   const [Ogloszenia, setOgloszenia] = useState([]);
   const [loading, setLoading] = useState(true); 
+  const [noOgloszenia, setNoOgloszenia] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedOgloszenieId, setSelectedOgloszenieId] = useState(null);
+  const [actionType, setActionType] = useState('');
 
   useEffect(() => {
     const fetchOgloszenia = async () => {
@@ -12,8 +16,11 @@ export default function Ogloszenia() {
         const response = await axiosClient.get('ogloszenia_admin');
         setOgloszenia(response.data.ogloszenia); 
         setLoading(false); 
+        setNoOgloszenia(false);
       } catch (error) {
         console.error('Błąd pobierania ogłoszeń:', error);
+        setLoading(false);
+        setNoOgloszenia(true);
       }
     };
 
@@ -21,19 +28,29 @@ export default function Ogloszenia() {
   }, []);
 
   const handleDeleteOgloszenia = (id) => {
-    axiosClient.delete(`ogloszenia/${id}`)
-      .then(response => {
-        axiosClient.get('ogloszenia_admin')
-          .then(response => {
-            setOgloszenia(response.data.ogloszenia); // Poprawienie nazwy klucza
-          })
-          .catch(error => {
-            console.error('Błąd pobierania ogloszen:', error);
-          });
-      })
-      .catch(error => {
-        console.error('Błąd usuwania ogloszen:', error);
-      });
+    setSelectedOgloszenieId(id);
+    setActionType('delete');
+    setModalVisible(true);
+  };
+
+  const performAction = () => {
+    if (actionType === 'delete') {
+      axiosClient.delete(`ogloszenia/${selectedOgloszenieId}`)
+        .then(() => {
+          setOgloszenia(Ogloszenia.filter(ogloszenie => ogloszenie.Ogloszenia_id !== selectedOgloszenieId));
+          closeModal();
+        })
+        .catch(error => {
+          console.error('Błąd usuwania ogloszenia:', error);
+          closeModal();
+        });
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedOgloszenieId(null);
+    setActionType('');
   };
 
   return (
@@ -49,7 +66,7 @@ export default function Ogloszenia() {
             <div className="overflow-x-auto">
               {loading ? (
                 <p>Ładowanie...</p>
-              ) : Ogloszenia.length === 0 ? (
+              ) : noOgloszenia ? (
                 <p>Brak ogloszen do wyświetlenia</p>
               ) : (
                 <table className="w-full table-auto">
@@ -64,34 +81,34 @@ export default function Ogloszenia() {
                     </tr>
                   </thead>
                   <tbody>
-                  {Ogloszenia.map((OgloszeniaItem, index) => (
-                    <tr key={index} className="border-t">
-                      <td className="px-4 py-2">{OgloszeniaItem.Ogloszenia_id}</td>
-                      <td className="px-4 py-2">{OgloszeniaItem.tytul}</td>
-                      <td className="px-4 py-2">{OgloszeniaItem.opis}</td>
-                      <td className="px-4 py-2">{OgloszeniaItem.data_nadania}</td>
-                      {/* Wyświetlanie stanowisk przypisanych do ogłoszenia */}
-                      <td className="px-4 py-2">
-                        {OgloszeniaItem.stanowiska.map((stanowisko, index) => (
-                          <span key={index}>{stanowisko.nazwa_stanowiska}, </span>
-                        ))}
-                      </td>
-                      <td className="px-4 py-2">
-                        <NavLink
-                          to={`/admin/form/editOgloszenia/${OgloszeniaItem.Ogloszenia_id}`}
-                          className="text-green-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                        >
-                          Edytuj
-                        </NavLink>
-                        <button
-                          onClick={() => handleDeleteOgloszenia(OgloszeniaItem.Ogloszenia_id)}
-                          className="text-red-500 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                        >
-                          Usun
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                    {Ogloszenia.map((OgloszeniaItem, index) => (
+                      <tr key={index} className="border-t">
+                        <td className="px-4 py-2">{OgloszeniaItem.Ogloszenia_id}</td>
+                        <td className="px-4 py-2">{OgloszeniaItem.tytul}</td>
+                        <td className="px-4 py-2">{OgloszeniaItem.opis}</td>
+                        <td className="px-4 py-2">{OgloszeniaItem.data_nadania}</td>
+                        {/* Wyświetlanie stanowisk przypisanych do ogłoszenia */}
+                        <td className="px-4 py-2">
+                          {OgloszeniaItem.stanowiska.map((stanowisko, index) => (
+                            <span key={index}>{stanowisko.nazwa_stanowiska}, </span>
+                          ))}
+                        </td>
+                        <td className="px-4 py-2">
+                          <NavLink
+                            to={`/admin/form/editOgloszenia/${OgloszeniaItem.Ogloszenia_id}`}
+                            className="text-green-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                          >
+                            Edytuj
+                          </NavLink>
+                          <button
+                            onClick={() => handleDeleteOgloszenia(OgloszeniaItem.Ogloszenia_id)}
+                            className="text-red-500 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                          >
+                            Usun
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               )}
@@ -107,6 +124,51 @@ export default function Ogloszenia() {
           </section>
         </div>
       </main>
+
+      {modalVisible && (
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                  </div>
+                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 className="text-lg font-medium text-gray-900" id="modal-title">
+                      {actionType === 'delete' ? 'Usuwanie ogłoszenia' : 'Zmiana statusu ogłoszenia'}
+                    </h3>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-500">
+                        {actionType === 'delete' ? 'Czy na pewno chcesz usunąć to ogłoszenie?' : 'Czy na pewno chcesz zmienić status tego ogłoszenia?'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  onClick={performAction}
+                  type="button"
+                  className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-${actionType === 'delete' ? 'red' : 'green'}-600 text-base font-medium text-white hover:bg-${actionType === 'delete' ? 'red' : 'green'}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${actionType === 'delete' ? 'red' : 'green'}-500 sm:ml-3 sm:w-auto sm:text-sm`}
+                >
+                  {actionType === 'delete' ? 'Usuń' : 'Potwierdź'}
+                </button>
+                <button
+                  onClick={closeModal}
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                >
+                  Anuluj
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
