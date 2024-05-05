@@ -63,9 +63,7 @@ export default function PrzegladDrzwiKodyQR() {
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Strefa wymagana</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Drzwi aktywne</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Ostatnia zmiana kodu</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Drukuj</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Edytuj</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Usuń</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Akcje</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -78,19 +76,15 @@ export default function PrzegladDrzwiKodyQR() {
                       <td className="px-4 py-2">{element?.drzwi_aktywne ? 'Tak' : 'Nie'}</td>
                       <td className="px-4 py-2">{element?.ostatnia_zmiana_kodu || '-'}</td>
                       <td className="px-4 py-2">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
                           Drukuj
                         </button>
-                      </td>
-                      <td className="px-4 py-2">
                         <NavLink
                           to={`/admin/form/editKodyQR/${element.Drzwi_id}`}
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                         >
                           Edytuj
                         </NavLink>
-                        </td>
-                      <td className="px-4 py-2">
                         <button
                           onClick={() => handleDelete(element.Drzwi_id)}
                           className="text-red-500 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
