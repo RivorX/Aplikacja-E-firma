@@ -34,6 +34,7 @@ import Ogloszenia_ADD from "./Admin/components/Ogloszenia_ADD.jsx";
 import Ogloszenia_UPDATE from "./Admin/components/Ogloszenia_UPDATE.jsx";
 
 import KartyDostepu_ADD from "./Admin/components/KartyDostepu_ADD.jsx";
+import StrefaKartaDostepu_UPDATE from "./Admin/components/StrefaKartaDostepu_UPDATE.jsx";
 
 
 const router = createBrowserRouter([
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
             {
                 path: 'ADDKartaDostepu',
                 element: <KartyDostepu_ADD/>
+            },
+            {
+                path: 'StrefaKartaDostepu_UPDATE/:id',
+                element: <StrefaKartaDostepu_UPDATE/>
             }
         ]
     },
