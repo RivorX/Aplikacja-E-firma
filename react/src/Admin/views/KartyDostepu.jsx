@@ -117,23 +117,19 @@ export default function KartyDostepu() {
                         <td className="border px-4 py-2 text-gray-700">{karta.data_waznosci}</td>
                         <td className="border px-4 py-2 text-gray-700">{karta.pracownik.imie}</td>
                         <td className="border px-4 py-2 text-gray-700">{karta.pracownik.nazwisko}</td>
-                        <td className="border px-4 py-2 text-gray-700">{karta.karta_aktywna ? 'Aktywna' : 'Zablokowana'}</td>
+                        <td className={`border px-4 py-2 ${karta.karta_aktywna ? 'text-green-500' : 'text-red-500'}`}>
+                          {karta.karta_aktywna ? 'Aktywna' : 'Zablokowana'}
+                        </td>
+
                         <td className="border px-4 py-2 text-gray-700">
                           <button
                             onClick={() => handleToggleKartaStatus(karta.Karta_Dostepu_id)}
                             className={`hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
-                              karta.karta_aktywna ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
+                              karta.karta_aktywna ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'
                             }`}
                           >
                             {karta.karta_aktywna ? 'Zablokuj' : 'Odblokuj'}
                           </button>
-
-                          <NavLink
-                            to={`/karty-dostepu/${karta.Karta_Dostepu_id}/edytuj`}
-                            className="text-green-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                          >
-                            Edytuj
-                          </NavLink>
                           <button
                             onClick={() => handleDeleteKarta(karta.Karta_Dostepu_id)}
                             className="text-red-500 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
@@ -146,6 +142,14 @@ export default function KartyDostepu() {
                   </tbody>
                 </table>
               )}
+            </div>
+            <div>
+              <NavLink
+                to="/admin/form/ADDKartaDostepu"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-2 text-sm font-medium mt-4"
+              >
+                Dodaj nową Kartę
+              </NavLink>
             </div>
           </section>
         </div>

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class KartaDostepuController extends Controller
 {
+
+  
     // Pobranie wszystkich kart dostępu
     public function getAll()
     {
@@ -34,7 +36,16 @@ class KartaDostepuController extends Controller
 
         return response()->json(['kartaDostepu' => $kartaDostepu]);
     }
-
+    // Generowanie unikalnego numeru seryjnego
+    private function generateUniqueSerialNumber() {
+        $serialNumber = null;
+        do {
+            // Generowanie 11-znakowego numeru seryjnego
+            $serialNumber = strtoupper(bin2hex(random_bytes(5))); // 10 znaków hexadecymalnych
+        } while (KartaDostepu::where('numer_seryjny', $serialNumber)->exists()); // Sprawdzenie czy numer seryjny już istnieje
+        return $serialNumber;
+    }
+    
     // Utworzenie nowej karty dostępu
     public function store(Request $request)
     {
@@ -42,16 +53,18 @@ class KartaDostepuController extends Controller
         DB::beginTransaction();
 
         try {
-            // Validation remains the same
+            // Validation remains the same except for numer_seryjny
             $validatedData = $request->validate([
                 'Pracownicy_id' => 'required|integer|exists:Pracownicy,Pracownicy_id',
-                'numer_seryjny' => 'required|string|unique:Karta_Dostepu,numer_seryjny',
                 'data_wydania' => 'required|date',
                 'data_waznosci' => 'required|date|after:data_wydania',
                 'karta_aktywna' => 'required|boolean',
                 'inne_dane' => 'nullable|string',
                 'strefy_dostepu_id' => 'required|array|exists:Strefy_Dostepu,Strefy_Dostepu_id',
             ]);
+
+            // Generate unique serial number
+            $numerSeryjny = $this->generateUniqueSerialNumber();
 
             // Fetch employee and access zones
             $pracownik = Pracownik::find($validatedData['Pracownicy_id']);
@@ -60,7 +73,7 @@ class KartaDostepuController extends Controller
             // Create new access card
             $kartaDostepu = KartaDostepu::create([
                 'Pracownicy_id' => $validatedData['Pracownicy_id'],
-                'numer_seryjny' => $validatedData['numer_seryjny'],
+                'numer_seryjny' => $numerSeryjny, // Assign generated serial number
                 'data_wydania' => $validatedData['data_wydania'],
                 'data_waznosci' => $validatedData['data_waznosci'],
                 'karta_aktywna' => $validatedData['karta_aktywna'],
@@ -73,8 +86,8 @@ class KartaDostepuController extends Controller
             // Commit the transaction if successful
             DB::commit();
 
-            // Return success response with newly created card
-            return response()->json(['message' => 'Karta dostępu utworzona', 'kartaDostepu' => $kartaDostepu], 201);
+            // Return success response with newly created card and generated serial number
+            return response()->json(['message' => 'Karta dostępu utworzona', 'kartaDostepu' => $kartaDostepu, 'numerSeryjny' => $numerSeryjny], 201);
         } catch (\Exception $e) {
             // Rollback the transaction on any error
             DB::rollBack();
@@ -83,6 +96,7 @@ class KartaDostepuController extends Controller
             return response()->json(['message' => 'Wystąpił błąd podczas tworzenia karty dostępu: ' . $e->getMessage()], 500);
         }
     }
+
 
     // Aktualizacja istniejącej karty dostępu
     public function update(Request $request, $id)

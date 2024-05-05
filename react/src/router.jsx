@@ -33,6 +33,8 @@ import News_UPDATE from "./Admin/components/News_UPDATE.jsx";
 import Ogloszenia_ADD from "./Admin/components/Ogloszenia_ADD.jsx";
 import Ogloszenia_UPDATE from "./Admin/components/Ogloszenia_UPDATE.jsx";
 
+import KartyDostepu_ADD from "./Admin/components/KartyDostepu_ADD.jsx";
+
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -137,6 +139,10 @@ const router = createBrowserRouter([
             {
                 path: 'addUser',
                 element: <Users_ADD/>
+            },
+            {
+                path: 'ADDKartaDostepu',
+                element: <KartyDostepu_ADD/>
             }
         ]
     },
