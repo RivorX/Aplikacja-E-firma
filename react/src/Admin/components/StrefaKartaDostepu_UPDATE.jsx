@@ -5,8 +5,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 export default function StrefaKartaDostepu_UPDATE() {
   const { id } = useParams();
   const [selectedKarta, setSelectedKarta] = useState(null);
-  const [selectedStrefy, setSelectedStrefy] = useState([]);
-  const [strefy, setStrefy] = useState([]);
+  const [wybraneStrefy, setWybraneStrefy] = useState([]);
+  const [strefyDostepu, setStrefy] = useState([]);
   const [error, setError] = useState({ __html: "" });
   const navigate = useNavigate();
 
@@ -17,8 +17,8 @@ export default function StrefaKartaDostepu_UPDATE() {
       .then(response => {
         setSelectedKarta(response.data.kartaDostepu);
         // Ustaw wybrane strefy dostępu
-        const selectedStrefyIds = response.data.kartaDostepu.strefy_dostepu.map(strefa => strefa.Strefa_Dostepu_id);
-        setSelectedStrefy(selectedStrefyIds);
+        const wybraneStrefyIds = response.data.kartaDostepu.strefy_dostepu.map(strefa => strefa.Strefy_Dostepu_id);
+        setWybraneStrefy(wybraneStrefyIds);
       })
       .catch((error) => {
         console.error('Błąd pobierania karty dostępu:', error);
@@ -27,8 +27,8 @@ export default function StrefaKartaDostepu_UPDATE() {
     // Pobierz strefy dostępu z bazy danych
     axiosClient.get('strefy-dostepu')
       .then(({ data }) => {
-        if (Array.isArray(data.strefy)) {
-          setStrefy(data.strefy);
+        if (Array.isArray(data)) {
+          setStrefy(data);
         } else {
           console.error('Błąd: Brak stref dostępu w formacie tablicy');
         }
@@ -43,7 +43,7 @@ export default function StrefaKartaDostepu_UPDATE() {
     setError({ __html: '' });
     axiosClient
       .put(`karty_dostepu/${id}`, {
-        strefy_dostepu: selectedStrefy
+        strefy_dostepu: wybraneStrefy
       })
       .then(() => {
         navigate('/admin/KartyDostepu');
@@ -68,7 +68,7 @@ export default function StrefaKartaDostepu_UPDATE() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6">
             <div>
               <label htmlFor="selectedKarta" className="block text-sm font-medium leading-6 text-gray-900">
                 Karta Dostępu
@@ -104,31 +104,36 @@ export default function StrefaKartaDostepu_UPDATE() {
             
 
             <div>
-              <label htmlFor="selectedStrefy" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="wybraneStrefy" className="block text-sm font-medium leading-6 text-gray-900">
                 Strefy Dostępu
               </label>
               <div className="mt-2">
-                {Array.isArray(strefy) && strefy.map((strefa) => (
-                  <div key={strefa.Strefa_Dostepu_id} className="flex items-center">
-                    <input
-                      id={`strefa-${strefa.Strefa_Dostepu_id}`}
-                      type="checkbox"
-                      value={strefa.Strefa_Dostepu_id}
-                      checked={selectedStrefy.includes(strefa.Strefa_Dostepu_id)}
-                      onChange={(e) => {
-                        const strefaId = parseInt(e.target.value);
-                        setSelectedStrefy(prevStrefy =>
-                          prevStrefy.includes(strefaId)
-                            ? prevStrefy.filter(id => id !== strefaId)
-                            : [...prevStrefy, strefaId]
-                        );
-                      }}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor={`strefa-${strefa.Strefa_Dostepu_id}`} className="ml-2 text-sm text-gray-700">{strefa.nazwa_strefy}</label>
-                  </div>
+                {Array.isArray(strefyDostepu) && strefyDostepu.map((strefa) => (
+                    <div key={strefa.Strefy_Dostepu_id} className="flex items-center">
+                        <input
+                            id={`strefa-${strefa.Strefy_Dostepu_id}`}
+                            name={`strefa-${strefa.Strefy_Dostepu_id}`}
+                            type="checkbox"
+                            value={strefa.Strefy_Dostepu_id}
+                            checked={wybraneStrefy.includes(strefa.Strefy_Dostepu_id)}
+                            onChange={(e) => {
+                                const checked = e.target.checked;
+                                setWybraneStrefy((prevStrefy) => {
+                                    if (checked) {
+                                        return [...prevStrefy, strefa.Strefy_Dostepu_id];
+                                    } else {
+                                        return prevStrefy.filter((id) => id !== strefa.Strefy_Dostepu_id);
+                                    }
+                                });
+                            }}
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        />
+                        <label htmlFor={`strefa-${strefa.Strefy_Dostepu_id}`} className="ml-2 block text-sm text-gray-900">
+                            {strefa.nazwa_strefy}
+                        </label>
+                    </div>
                 ))}
-              </div>
+            </div>
             </div>
 
             <div className="flex items-center justify-between mt-4">
