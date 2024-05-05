@@ -66,9 +66,13 @@ export default function PrzegladDrzwiKodyQR() {
                         </NavLink>
                         </td>
                       <td className="px-4 py-2">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                          Usuń
-                        </button>
+                      <button
+                        onClick={() => handleDelete(drzwiItem.Drzwi_id)}
+                        className="text-red-500 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                      >
+                        Usuń
+                      </button>
+
                       </td>
                     </tr>
                   ))}
