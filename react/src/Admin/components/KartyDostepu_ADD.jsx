@@ -28,7 +28,7 @@ export default function KartyDostepu_ADD() {
         console.error('Błąd pobierania pracowników:', error);
       });
 
-    axiosClient.get('strefy_dostepu')
+    axiosClient.get('strefy-dostepu')
       .then(({ data }) => {
         if (!data.error) {
           setStrefyDostepu(data.strefyDostepu);
@@ -184,37 +184,38 @@ export default function KartyDostepu_ADD() {
             </div>
 
             <div>
-              <label htmlFor="wybraneStrefy" className="block text-sm font-medium leading-6 text-gray-900">
-                Wybierz Strefy Dostępu
-              </label>
-              <div className="mt-2">
-                {strefyDostepu.map((strefa) => (
-                  <div key={strefa.Strefa_Dostepu_id} className="flex items-center">
-                    <input
-                      id={`strefa-${strefa.Strefa_Dostepu_id}`}
-                      name={`strefa-${strefa.Strefa_Dostepu_id}`}
-                      type="checkbox"
-                      value={strefa.Strefa_Dostepu_id}
-                      checked={wybraneStrefy.includes(strefa.id)}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        setWybraneStrefy((prevStrefy) => {
-                          if (checked) {
-                            return [...prevStrefy, strefa.Strefa_Dostepu_id];
-                          } else {
-                            return prevStrefy.filter((id) => id !== strefa.Strefa_Dostepu_id);
-                          }
-                        });
-                      }}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor={`strefa-${strefa.Strefa_Dostepu_id}`} className="ml-2 block text-sm text-gray-900">
-                      {strefa.nazwa_strefy}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
+                <label htmlFor="wybraneStrefy" className="block text-sm font-medium leading-6 text-gray-900">
+                    Wybierz Strefy Dostępu
+                </label>
+                <div className="mt-2">
+                    {strefyDostepu && strefyDostepu.map((strefa) => (
+                    <div key={strefa.Strefy_Dostepu_id} className="flex items-center">
+                        <input
+                        id={`strefa-${strefa.Strefy_Dostepu_id}`}
+                        name={`strefa-${strefa.Strefy_Dostepu_id}`}
+                        type="checkbox"
+                        value={strefa.Strefy_Dostepu_id}
+                        checked={wybraneStrefy.includes(strefa.Strefy_Dostepu_id)}
+                        onChange={(e) => {
+                            const checked = e.target.checked;
+                            setWybraneStrefy((prevStrefy) => {
+                            if (checked) {
+                                return [...prevStrefy, strefa.Strefy_Dostepu_id];
+                            } else {
+                                return prevStrefy.filter((id) => id !== strefa.Strefy_Dostepu_id);
+                            }
+                            });
+                        }}
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        />
+                        <label htmlFor={`strefa-${strefa.Strefy_Dostepu_id}`} className="ml-2 block text-sm text-gray-900">
+                        {strefa.nazwa_strefy}
+                        </label>
+                    </div>
+                    ))}
+                </div>
+                </div>
+
 
             <div className="flex justify-end">
               <Link to="/admin/kartyDostepu" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
