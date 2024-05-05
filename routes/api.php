@@ -56,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Drzwi
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('drzwi/{id}', [DrzwiController::class, 'show']);
     Route::get('drzwi', [DrzwiController::class, 'index']);
     Route::post('drzwi', [DrzwiController::class, 'store']);
     Route::put('drzwi/{id}', [DrzwiController::class, 'update']);
@@ -64,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Strefy dostępu
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('strefy-dostepu/{id}', [StrefyDostepuController::class, 'show']);
     Route::get('strefy-dostepu', [StrefyDostepuController::class, 'index']);
     Route::post('strefy-dostepu', [StrefyDostepuController::class, 'store']);
     Route::put('strefy-dostepu/{id}', [StrefyDostepuController::class, 'update']);

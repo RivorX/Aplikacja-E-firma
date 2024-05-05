@@ -12,6 +12,12 @@ class DrzwiController extends Controller
         $drzwis = Drzwi::with('strefyDostepu')->get();
         return response()->json($drzwis);
     }
+
+    public function show($id)
+    {
+        $drzwi = Drzwi::with('strefyDostepu')->findOrFail($id);
+        return response()->json($drzwi);
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -29,17 +35,16 @@ class DrzwiController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'Drzwi_id' => 'required',
             'nr_drzwi' => 'required',
             'nazwa' => 'required',
             'WeWy' => 'required',
             'Strefy_Dostepu_id' => 'required',
             'drzwi_aktywne' => 'required',
         ]);
-
+    
         $drzwi = Drzwi::findOrFail($id);
         $drzwi->update($request->all());
-
+    
         return response()->json($drzwi, 200);
     }
 
