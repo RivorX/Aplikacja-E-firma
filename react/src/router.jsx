@@ -34,6 +34,7 @@ import Ogloszenia_ADD from "./Admin/components/Ogloszenia_ADD.jsx";
 import Ogloszenia_UPDATE from "./Admin/components/Ogloszenia_UPDATE.jsx";
 
 import KodyQR_ADD from "./Admin/components/KodyQR_ADD.jsx";
+import KodyQR_UPDATE from "./Admin/components/KodyQR_UPDATE.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -142,6 +143,10 @@ const router = createBrowserRouter([
             {
                 path: 'addKodyQR',
                 element: <KodyQR_ADD/>
+            },
+            {
+                path: 'editKodyQR/:id',
+                element: <KodyQR_UPDATE/>
             }
         ]
     },

@@ -40,6 +40,7 @@ export default function PrzegladDrzwiKodyQR() {
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Ostatnia zmiana kodu</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Drukuj</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Edytuj</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Usuń</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -57,8 +58,16 @@ export default function PrzegladDrzwiKodyQR() {
                         </button>
                       </td>
                       <td className="px-4 py-2">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <NavLink
+                          to={`/admin/form/editKodyQR/${element.Drzwi_id}`}
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
                           Edytuj
+                        </NavLink>
+                        </td>
+                      <td className="px-4 py-2">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                          Usuń
                         </button>
                       </td>
                     </tr>
