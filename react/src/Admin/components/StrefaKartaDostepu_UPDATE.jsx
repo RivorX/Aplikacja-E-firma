@@ -25,7 +25,7 @@ export default function StrefaKartaDostepu_UPDATE() {
       });
 
     // Pobierz strefy dostępu z bazy danych
-    axiosClient.get('strefy_dostepu')
+    axiosClient.get('strefy-dostepu')
       .then(({ data }) => {
         if (Array.isArray(data.strefy)) {
           setStrefy(data.strefy);
