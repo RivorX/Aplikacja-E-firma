@@ -105,6 +105,7 @@ export default function KartyDostepu() {
                       <th className="px-4 py-2 bg-gray-200 text-gray-700">Data ważności</th>
                       <th className="px-4 py-2 bg-gray-200 text-gray-700">Imię</th>
                       <th className="px-4 py-2 bg-gray-200 text-gray-700">Nazwisko</th>
+                      <th className="px-4 py-2 bg-gray-200 text-gray-700">Strefy dostępu</th>
                       <th className="px-4 py-2 bg-gray-200 text-gray-700">Status</th>
                       <th className="px-4 py-2 bg-gray-200 text-gray-700">Akcje</th>
                     </tr>
@@ -117,11 +118,26 @@ export default function KartyDostepu() {
                         <td className="border px-4 py-2 text-gray-700">{karta.data_waznosci}</td>
                         <td className="border px-4 py-2 text-gray-700">{karta.pracownik.imie}</td>
                         <td className="border px-4 py-2 text-gray-700">{karta.pracownik.nazwisko}</td>
+                        <td className="border px-4 py-2 text-gray-700">
+                          {karta.strefy_dostepu.length > 0 ? (
+                            karta.strefy_dostepu.map((strefy_dostepu, index) => (
+                              <span key={index}>{strefy_dostepu.nazwa_strefy}, </span>
+                            ))
+                          ) : (
+                            <span>Brak</span>
+                          )}
+                        </td>
                         <td className={`border px-4 py-2 ${karta.karta_aktywna ? 'text-green-500' : 'text-red-500'}`}>
                           {karta.karta_aktywna ? 'Aktywna' : 'Zablokowana'}
                         </td>
 
                         <td className="border px-4 py-2 text-gray-700">
+                        <NavLink
+                          to={`/admin/form/StrefaKartaDostepu_UPDATE/${karta.Karta_Dostepu_id}`}
+                          className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                        >
+                          Edytuj Strefę
+                        </NavLink>
                           <button
                             onClick={() => handleToggleKartaStatus(karta.Karta_Dostepu_id)}
                             className={`hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
