@@ -189,27 +189,27 @@ export default function KartyDostepu_ADD() {
               </label>
               <div className="mt-2">
                 {strefyDostepu.map((strefa) => (
-                  <div key={strefa.strefa_id} className="flex items-center">
+                  <div key={strefa.Strefa_Dostepu_id} className="flex items-center">
                     <input
-                      id={`strefa-${strefa.strefa_id}`}
-                      name={`strefa-${strefa.strefa_id}`}
+                      id={`strefa-${strefa.Strefa_Dostepu_id}`}
+                      name={`strefa-${strefa.Strefa_Dostepu_id}`}
                       type="checkbox"
-                      value={strefa.strefa_id}
+                      value={strefa.Strefa_Dostepu_id}
                       checked={wybraneStrefy.includes(strefa.id)}
                       onChange={(e) => {
                         const checked = e.target.checked;
                         setWybraneStrefy((prevStrefy) => {
                           if (checked) {
-                            return [...prevStrefy, strefa.strefa_id];
+                            return [...prevStrefy, strefa.Strefa_Dostepu_id];
                           } else {
-                            return prevStrefy.filter((id) => id !== strefa.strefa_id);
+                            return prevStrefy.filter((id) => id !== strefa.Strefa_Dostepu_id);
                           }
                         });
                       }}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
-                    <label htmlFor={`strefa-${strefa.id}`} className="ml-2 block text-sm text-gray-900">
-                      {strefa.nazwa}
+                    <label htmlFor={`strefa-${strefa.Strefa_Dostepu_id}`} className="ml-2 block text-sm text-gray-900">
+                      {strefa.nazwa_strefy}
                     </label>
                   </div>
                 ))}
