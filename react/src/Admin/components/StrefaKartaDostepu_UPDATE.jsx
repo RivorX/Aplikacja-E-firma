@@ -21,7 +21,10 @@ export default function StrefaKartaDostepu_UPDATE() {
         setWybraneStrefy(wybraneStrefyIds);
       })
       .catch((error) => {
-        console.error('Błąd pobierania karty dostępu:', error);
+        if (error.response && error.response.data && error.response.data.errors) {
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+          setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+        }
       });
 
     // Pobierz strefy dostępu z bazy danych
@@ -30,28 +33,43 @@ export default function StrefaKartaDostepu_UPDATE() {
         if (Array.isArray(data)) {
           setStrefy(data);
         } else {
-          console.error('Błąd: Brak stref dostępu w formacie tablicy');
+          if (error.response && error.response.data && error.response.data.errors) {
+            const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+            setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+          }
         }
       })
       .catch((error) => {
-        console.error('Błąd pobierania stref dostępu:', error);
+        if (error.response && error.response.data && error.response.data.errors) {
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+          setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+        }
       });
   }, [id]);
 
   // Funkcja do zapisywania edycji dostępu do stref dla karty dostępu
   const handleSaveChanges = () => {
     setError({ __html: '' });
+    // Sprawdź, czy przynajmniej jedna strefa została wybrana
+    if (wybraneStrefy.length === 0) {
+      setError({ __html: 'Proszę wybrać przynajmniej jedną strefę dostępu.' });
+      return; // Przerwij operację zapisu
+    }
     axiosClient
       .put(`karty_dostepu/${id}`, {
-        strefy_dostepu: wybraneStrefy
+        strefy_dostepu_id: wybraneStrefy
       })
       .then(() => {
         navigate('/admin/KartyDostepu');
       })
       .catch((error) => {
-        console.error('Błąd edycji dostępu do stref dla karty dostępu:', error);
+        if (error.response && error.response.data && error.response.data.errors) {
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+          setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+        }
       });
   };
+
 
   return (
     <>
@@ -140,9 +158,9 @@ export default function StrefaKartaDostepu_UPDATE() {
               <Link to="/admin/KartyDostepu" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
                 Anuluj
               </Link>
-              <button onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+              <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
                 Zapisz zmiany
-              </button>
+              </Link>
             </div>
           </form>
         </div>
