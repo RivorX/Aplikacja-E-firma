@@ -114,23 +114,12 @@ class KartaDostepuController extends Controller
 
             // Validation remains the same
             $validatedData = $request->validate([
-                'numer_seryjny' => 'required|string|unique:Karta_Dostepu,numer_seryjny,' . $id,
-                'data_wydania' => 'required|date',
-                'data_waznosci' => 'required|date|after:data_wydania',
-                'karta_aktywna' => 'required|boolean',
-                'inne_dane' => 'nullable|string',
                 'strefy_dostepu_id' => 'required|array|exists:Strefy_Dostepu,Strefy_Dostepu_id',
             ]);
 
             // Detach existing access zones
             $kartaDostepu->strefyDostepu()->detach();
-
-            // Update card details
-            $kartaDostepu->numer_seryjny = $validatedData['numer_seryjny'];
-            $kartaDostepu->data_wydania = $validatedData['data_wydania'];
-            $kartaDostepu->data_waznosci = $validatedData['data_waznosci'];
-            $kartaDostepu->karta_aktywna = $validatedData['karta_aktywna'];
-            $kartaDostepu->inne_dane = $validatedData['inne_dane'];
+            
             $kartaDostepu->save();
 
             // Attach updated access zones
