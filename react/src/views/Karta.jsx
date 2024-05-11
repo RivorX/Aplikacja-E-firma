@@ -1,17 +1,87 @@
+import React, { useState, useEffect } from 'react';
+import axiosClient from '../axios';
+
 export default function Karta() {
-    return (
-        <>
-            <header className="bg-white shadow">
-                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Karta</h1>
-                </div>
-            </header>
-            <main>
-                <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                    {/* Your content */}
-                    
-                </div>
-            </main>
-        </>
-    );
+  const [karty, setKarty] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [noKarty, setNoKarty] = useState(false);
+
+  useEffect(() => {
+    const fetchUserAndKarty = async () => {
+      try {
+        const { data: userData } = await axiosClient.get('/me');
+        const userId = userData.Pracownicy_id;
+
+        const { data: userKarty } = await axiosClient.get(`/karty_dostepu/${userId}/pracownik`);
+        setKarty(userKarty.kartyDostepu || []);
+        setLoading(false);
+        if (userKarty.kartyDostepu.length === 0) {
+          setNoKarty(true);
+        }
+      } catch (error) {
+        console.error('Błąd pobierania kart dostępu:', error);
+        setLoading(false);
+        setNoKarty(true);
+        setKarty([]);
+      }
+    };
+  
+    fetchUserAndKarty();
+  }, []);
+
+  return (
+    <>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Twoje karty dostępu</h1>
+        </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+          <section>
+            <div className="overflow-x-auto">
+              {loading ? (
+                <p>Ładowanie...</p>
+              ) : noKarty ? (
+                <p>Brak kart do wyświetlenia</p>
+              ) : (
+                <table className="w-full table-auto">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-2 bg-gray-200 text-gray-700">Nr karty</th>
+                      <th className="px-4 py-2 bg-gray-200 text-gray-700">Data wydania</th>
+                      <th className="px-4 py-2 bg-gray-200 text-gray-700">Data ważności</th>
+                      <th className="px-4 py-2 bg-gray-200 text-gray-700">Strefy dostępu</th>
+                      <th className="px-4 py-2 bg-gray-200 text-gray-700">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {karty.map((karta) => (
+                      <tr key={karta.Karta_Dostepu_id}>
+                        <td className="border px-4 py-2 text-gray-700">{karta.numer_seryjny}</td>
+                        <td className="border px-4 py-2 text-gray-700">{karta.data_wydania}</td>
+                        <td className="border px-4 py-2 text-gray-700">{karta.data_waznosci}</td>
+                        <td className="border px-4 py-2 text-gray-700">
+                          {karta.strefy_dostepu.length > 0 ? (
+                            karta.strefy_dostepu.map((strefy_dostepu, index) => (
+                              <span key={index}>{strefy_dostepu.nazwa_strefy}, </span>
+                            ))
+                          ) : (
+                            <span>Brak</span>
+                          )}
+                        </td>
+                        <td className={`border px-4 py-2 ${karta.karta_aktywna ? 'text-green-500' : 'text-red-500'}`}>
+                          {karta.karta_aktywna ? 'Aktywna' : 'Zablokowana'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
+  );
 }
