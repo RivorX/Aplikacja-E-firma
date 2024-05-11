@@ -3,7 +3,6 @@ import { NavLink, Navigate, Outlet} from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import ApplicationLogo from '../components/ApplicationLogo'
 import { useStateContext } from '../contexts/ContextProvider';
-import axios from 'axios';
 import axiosClient from '../axios';
 
 

@@ -36,6 +36,20 @@ class KartaDostepuController extends Controller
 
         return response()->json(['kartaDostepu' => $kartaDostepu]);
     }
+    // Pobranie kart dostępu na podstawie Pracownicy_id
+    public function getByPracownicyId($pracownicyId)
+    {
+        $kartyDostepu = KartaDostepu::with('pracownik', 'strefyDostepu')
+            ->where('Pracownicy_id', $pracownicyId)
+            ->orderBy('data_waznosci', 'asc')
+            ->get();
+
+        if ($kartyDostepu->isEmpty()) {
+            return response()->json(['message' => 'Brak kart dostępu dla pracownika o podanym ID'], 404);
+        }
+
+        return response()->json(['kartyDostepu' => $kartyDostepu]);
+    }
     // Generowanie unikalnego numeru seryjnego
     private function generateUniqueSerialNumber() {
         $serialNumber = null;

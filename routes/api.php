@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('karty_dostepu_admin', [KartaDostepuController::class, 'getAll']);
     Route::put('karty_dostepu/{id}/change-status', [KartaDostepuController::class, 'changeCardStatus']);
     Route::get('karty_dostepu/{id}', [KartaDostepuController::class, 'getById']);
+    Route::get('karty_dostepu/{id}/pracownik', [KartaDostepuController::class, 'getByPracownicyId']);
     Route::post('karty_dostepu', [KartaDostepuController::class, 'store']);
     Route::put('karty_dostepu/{id}', [KartaDostepuController::class, 'update']);
     Route::delete('karty_dostepu/{id}', [KartaDostepuController::class, 'destroy']);
