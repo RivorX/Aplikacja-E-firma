@@ -43,6 +43,10 @@ export default function LogedDefaultLayout() {
         })
     }, [])
 
+    if(currentUser.Data_edycji == null) {
+      return <Navigate to="/change-password" />
+    }
+
     // Wylogowanie
     const logout = (ev) => {
         ev.preventDefault()

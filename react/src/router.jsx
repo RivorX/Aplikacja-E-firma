@@ -38,6 +38,7 @@ import StrefaKartaDostepu_UPDATE from "./Admin/components/StrefaKartaDostepu_UPD
 
 import KodyQR_ADD from "./Admin/components/KodyQR_ADD.jsx";
 import KodyQR_UPDATE from "./Admin/components/KodyQR_UPDATE.jsx";
+import ChangePasswordForm from "./components/changePassword.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -117,6 +118,10 @@ const router = createBrowserRouter([
     },
     {   path: '/login',
         element: <Login/>
+    },
+    {
+        path: '/change-password',
+        element: <ChangePasswordForm/>
     },
     {
         path: '/admin/form',

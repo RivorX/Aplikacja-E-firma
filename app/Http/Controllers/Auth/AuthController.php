@@ -96,6 +96,33 @@ class AuthController extends Controller
         }
     }
 
+    public function changePassword(Request $request)
+    {
+        // Walidacja danych wejściowych
+        $data = $request->validate([
+            'Pracownicy_id' => 'required|integer',
+            'Data_utworzenia' => 'required',
+            'new_password' => 'required|string|min:6',
+        ]);
+
+        $salt = env('SALT');
+        $dataCzas = $data['Data_utworzenia'];
+    
+        // Zaktualizuj hasło użytkownika
+        $Pracownik = Pracownicy::findOrFail($data['Pracownicy_id']);
+        $Pracownik->Data_edycji = now();
+        $Pracownik->password = bcrypt($data['new_password'].$salt.$dataCzas);
+        $Pracownik->save();
+
+        $token = $Pracownik->createToken('main')->plainTextToken;
+
+    
+        return response()->json([
+            'pracownik_info' => $Pracownik,
+            'token' => $token
+        ]);
+    }
+    
     public function positions()
     {
         $positions = Stanowisko::all();
