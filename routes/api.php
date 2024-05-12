@@ -10,6 +10,7 @@ use App\Http\Controllers\PracownicyController;
 use App\Http\Controllers\KartaDostepuController;
 use App\Http\Controllers\DrzwiController;
 use App\Http\Controllers\StrefyDostepuController;
+use App\Http\Controllers\AdresZamieszkaniaController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -86,3 +87,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('strefy-dostepu/{id}', [StrefyDostepuController::class, 'destroy']);
 });
 
+
+// Adresy zamieszkania
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('adresy-zamieszkania', [AdresZamieszkaniaController::class, 'index']);
+    Route::get('adresy-zamieszkania/{id}', [AdresZamieszkaniaController::class, 'show']); 
+    Route::get('adresy-zamieszkania/{id}/pracownik', [AdresZamieszkaniaController::class, 'show_pracownik_id']); 
+    Route::post('adresy-zamieszkania', [AdresZamieszkaniaController::class, 'store']);
+    Route::put('adresy-zamieszkania/{id}', [AdresZamieszkaniaController::class, 'update']);
+    Route::delete('adresy-zamieszkania/{id}', [AdresZamieszkaniaController::class, 'destroy']);
+});
