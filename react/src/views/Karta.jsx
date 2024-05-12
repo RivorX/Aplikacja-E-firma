@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 
 export default function Karta() {
   const [karty, setKarty] = useState([]);
   const [loading, setLoading] = useState(true);
   const [noKarty, setNoKarty] = useState(false);
+  const [scanResult, setScanResult] = useState(null);
+  const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
     const fetchUserAndKarty = async () => {
@@ -27,7 +30,42 @@ export default function Karta() {
     };
   
     fetchUserAndKarty();
-  }, []);
+
+    // Zdarzenie przed opuszczeniem strony
+    const cleanup = () => {
+      if (scanning) {
+        window.removeEventListener('beforeunload', cleanup);
+        stopScanning();
+      }
+    };
+    window.addEventListener('beforeunload', cleanup);
+
+    return () => window.removeEventListener('beforeunload', cleanup);
+  }, [scanning]);
+
+  const startScanning = () => {
+    setScanning(true);
+    const scanner = new Html5QrcodeScanner('reader', {
+      fps: 10,
+      qrbox: 250,
+    });
+    scanner.render(success, error);
+
+    function success(result) {
+      scanner.clear();
+      setScanResult(result);
+      console.log(result);
+      setScanning(false);
+    }
+    function error(error) {
+      console.log(error);
+      setScanning(false);
+    }
+  };
+
+  const stopScanning = () => {
+    setScanning(false);
+  };
 
   return (
     <>
@@ -39,6 +77,11 @@ export default function Karta() {
       <main>
         <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
           <section>
+            <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-4">
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">QR Code Scanning</h1>
+              {!scanning && <button onClick={startScanning} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Skanuj</button>}
+              {scanResult ? <p>{scanResult}</p> : <div id="reader"></div>}
+            </div>
             <div className="overflow-x-auto">
               {loading ? (
                 <p>Ładowanie...</p>
