@@ -16,6 +16,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewAccountEmail;
+
+
 class AuthController extends Controller
 {
     public function adduser(AddUserRequest $request)
@@ -53,13 +57,14 @@ class AuthController extends Controller
 
             $salt = env('SALT');
             $dataCzas = now();
+            $randomPassword = strtoupper(bin2hex(random_bytes(5)));
 
             // Utworzenie nowego użytkownika
             $pracownik = Pracownicy::create([
                 'imie' => $data['imie'],
                 'nazwisko' => $data['nazwisko'],
                 'email' => $data['email'],
-                'password' => bcrypt($data['password'].$salt.$dataCzas),
+                'password' => bcrypt($randomPassword.$salt.$dataCzas),
                 'Stanowisko_id' => $position->Stanowisko_id,
                 'Grupy_id' => $group->Grupy_id, 
                 'konto_aktywne' => 1,
@@ -67,6 +72,8 @@ class AuthController extends Controller
                 'Data_edycji' => null,
                 'Data_utworzenia' => $dataCzas,
             ]);
+            $email = $data['email'];
+            Mail::to( $data['email'])->send(new NewAccountEmail( $email, $randomPassword));
 
             // Utworzenie tokenu dla nowego użytkownika
             $token = $pracownik->createToken('main')->plainTextToken;
