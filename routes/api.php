@@ -22,6 +22,8 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('positions', [AuthController::class, 'positions']);
 Route::get('stanowisko', [AuthController::class, 'positions']);
 Route::get('aktualnosci', [AktualnosciController::class, 'Aktualnosci']);
+Route::post('change-password', [AuthController::class, 'changePassword']);
+
 
 // Aktualnosci
 Route::middleware('auth:sanctum')->group(function () {
