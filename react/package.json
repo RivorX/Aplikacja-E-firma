@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.24.5",
     "@tailwindcss/forms": "^0.5.7",
     "@vituum/vite-plugin-postcss": "^1.1.0",
     "axios": "^1.6.8",
+    "html5-qrcode": "^2.3.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-qr-scanner": "^1.0.0-alpha.11",
     "react-router-dom": "^6.22.3"
   },
   "devDependencies": {
