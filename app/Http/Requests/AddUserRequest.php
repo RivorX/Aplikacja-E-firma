@@ -27,11 +27,7 @@ class AddUserRequest extends FormRequest
             'nazwisko' => 'required|string',
             'email' => 'required|email|string|unique:pracownicy,email',
             'position' => 'required|string',
-            'group' => 'required|string',
-            'password' =>[
-                'required',
-                Password::min(8)->mixedCase()->numbers()->symbols()
-            ]
+            'group' => 'required|string'
         ];
     }
 }

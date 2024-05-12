@@ -38,7 +38,6 @@ export default function RegistrationForm() {
         imie: firstName,
         nazwisko: lastName,
         email: email,
-        password: password,
         group: group,
         position: position === 'other' ? customPosition : position,
         description: position === 'other' ? description : '',
@@ -74,10 +73,6 @@ export default function RegistrationForm() {
     setCustomPosition(event.target.value);
   };
 
-  const isPasswordValid = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
-  };
 
   return (
     <>
@@ -246,29 +241,6 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Hasło
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    maxLength="45"
-                    autoComplete="new-password"
-                    required
-                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
-                      password && !isPasswordValid(password) ? 'border-red-500' : ''
-                      }`}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  {password && !isPasswordValid(password) && (
-                    <p className="mt-1 text-sm text-red-500">Hasło musi mieć co najmniej 8 znaków, zawierać przynajmniej jedną małą literę, jedną dużą literę, jedną cyfrę oraz jeden znak specjalny.</p>
-                  )}
-                </div>
-              </div>
 
               <div>
                 <label htmlFor="group" className="block text-sm font-medium leading-6 text-gray-900">
@@ -298,7 +270,7 @@ export default function RegistrationForm() {
 
 
                 <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
-                  Dodaj Ogloszenie
+                  Dodaj
                 </Link>
               </div>
             </div>
