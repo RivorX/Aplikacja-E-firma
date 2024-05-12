@@ -7,7 +7,7 @@ export default function Karta() {
   const [loading, setLoading] = useState(true);
   const [noKarty, setNoKarty] = useState(false);
   const [scanResult, setScanResult] = useState(null);
-  const [scanning, setScanning] = useState(false); // Dodajemy stan do śledzenia czy skanowanie jest włączone
+  const [scanning, setScanning] = useState(false);
 
   useEffect(() => {
     const fetchUserAndKarty = async () => {
@@ -30,10 +30,21 @@ export default function Karta() {
     };
   
     fetchUserAndKarty();
-  }, []);
+
+    // Zdarzenie przed opuszczeniem strony
+    const cleanup = () => {
+      if (scanning) {
+        window.removeEventListener('beforeunload', cleanup);
+        stopScanning();
+      }
+    };
+    window.addEventListener('beforeunload', cleanup);
+
+    return () => window.removeEventListener('beforeunload', cleanup);
+  }, [scanning]);
 
   const startScanning = () => {
-    setScanning(true); // Ustawienie stanu na true rozpoczyna skanowanie
+    setScanning(true);
     const scanner = new Html5QrcodeScanner('reader', {
       fps: 10,
       qrbox: 250,
@@ -44,12 +55,16 @@ export default function Karta() {
       scanner.clear();
       setScanResult(result);
       console.log(result);
-      setScanning(false); // Po zakończeniu skanowania ustaw stan na false
+      setScanning(false);
     }
     function error(error) {
       console.log(error);
-      setScanning(false); // W przypadku błędu również ustaw stan na false
+      setScanning(false);
     }
+  };
+
+  const stopScanning = () => {
+    setScanning(false);
   };
 
   return (
@@ -64,7 +79,6 @@ export default function Karta() {
           <section>
             <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-4">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">QR Code Scanning</h1>
-              {/* Dodajemy przycisk do rozpoczęcia skanowania */}
               {!scanning && <button onClick={startScanning} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Skanuj</button>}
               {scanResult ? <p>{scanResult}</p> : <div id="reader"></div>}
             </div>
