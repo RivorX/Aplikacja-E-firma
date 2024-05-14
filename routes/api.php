@@ -11,6 +11,7 @@ use App\Http\Controllers\KartaDostepuController;
 use App\Http\Controllers\DrzwiController;
 use App\Http\Controllers\StrefyDostepuController;
 use App\Http\Controllers\AdresZamieszkaniaController;
+use App\Http\Controllers\BudynkiController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);

@@ -48,7 +48,7 @@ export default function StrefyDostepu() {
       axiosClient
         .delete(`strefy-dostepu/${selectedStrefaId}`)
         .then(() => {
-          setStrefy(strefy.filter(strefa => strefa.Strefa_Dostepu_id !== selectedStrefaId));
+          setStrefy(strefy.filter(strefa => strefa.Strefy_Dostepu_id !== selectedStrefaId));
           closeModal();
         })
         .catch((error) => {
@@ -91,10 +91,10 @@ export default function StrefyDostepu() {
                   </thead>
                   <tbody>
                     {strefy.map((strefa) => (
-                      <tr key={strefa.Strefa_Dostepu_id}>
+                      <tr key={strefa.Strefy_Dostepu_id}>
                         <td className="border px-4 py-2 text-gray-700">{strefa.Strefy_Dostepu_id}</td>
                         <td className="border px-4 py-2 text-gray-700">{strefa.nazwa_strefy}</td>
-                        <td className="border px-4 py-2 text-gray-700">{strefa.budynek}</td>
+                        <td className="border px-4 py-2 text-gray-700">{strefa.budynek ? strefa.budynek.nazwa_budynku : 'Brak'}</td>
                         <td className="border px-4 py-2 text-gray-700">
                           <NavLink
                             to={`/admin/form/StrefaDostepu_UPDATE/${strefa.Strefy_Dostepu_id}`}
