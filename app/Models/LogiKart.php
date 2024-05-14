@@ -13,6 +13,7 @@ class LogiKart extends Model
     protected $fillable = [
         'Karta_Dostepu_id',
         'Strefy_Dostepu_id',
+        'Drzwi_id',
         'data_proby',
         'dostęp_przyznany',
     ];
@@ -25,5 +26,10 @@ class LogiKart extends Model
     public function strefyDostepu()
     {
         return $this->belongsTo(StrefyDostepu::class, 'Strefy_Dostepu_id', 'Strefy_Dostepu_id');
+    }
+
+    public function drzwi()
+    {
+        return $this->belongsTo(Drzwi::class, 'Drzwi_id', 'Drzwi_id');
     }
 }

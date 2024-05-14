@@ -7,15 +7,17 @@ use App\Models\StrefyDostepu;
 
 class StrefyDostepuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $strefyDostepu = StrefyDostepu::all();
-        return response()->json($strefyDostepu);
+        $strefyDostepu =  StrefyDostepu::with('budynek')->get();
+
+        return response()->json(['strefyDostepu' => $strefyDostepu]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'budynek_id' => 'required|integer',
             'nazwa_strefy' => 'required|string|max:45',
         ]);
 
@@ -33,6 +35,7 @@ class StrefyDostepuController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'budynek_id' => 'required|integer',
             'nazwa_strefy' => 'required|string|max:45',
         ]);
 

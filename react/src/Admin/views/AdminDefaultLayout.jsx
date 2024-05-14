@@ -12,6 +12,7 @@ const navigation = [
   { name: 'Pracownicy', to: 'pracownicy'},
   { name: 'Karty dostepu', to: 'kartyDostepu'},
   { name: 'Drzwi / Kody QR', to: 'kodyQR'},
+  { name: 'Strefy Dostepu', to: 'StrefyDostepu'},
   { name: 'Aktualnosci', to: 'Aktualnosci'},
   { name: 'Ogłoszenia', to: 'Ogloszenia'},
 ]

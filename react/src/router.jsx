@@ -39,6 +39,9 @@ import StrefaKartaDostepu_UPDATE from "./Admin/components/StrefaKartaDostepu_UPD
 import KodyQR_ADD from "./Admin/components/KodyQR_ADD.jsx";
 import KodyQR_UPDATE from "./Admin/components/KodyQR_UPDATE.jsx";
 import ChangePasswordForm from "./components/changePassword.jsx";
+import StrefyDostępu_ADD from "./Admin/components/StrefaDostepu_ADD.jsx";
+import StrefyDostepu from "./Admin/views/StrefyDostepu.jsx";
+import StrefaDostepu_UPDATE from "./Admin/components/StrefaDostepu_UPDATE.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -112,6 +115,10 @@ const router = createBrowserRouter([
             {
                 path: 'Ogloszenia',
                 element: <Ogloszenia_ADMIN/>
+            },
+            {
+                path: 'StrefyDostepu',
+                element: <StrefyDostepu/>
             }
 
         ]
@@ -163,6 +170,14 @@ const router = createBrowserRouter([
             {
                 path: 'editKodyQR/:id',
                 element: <KodyQR_UPDATE/>
+            },
+            {
+                path: 'ADDStrefaDostepu',
+                element: <StrefyDostępu_ADD/>
+            },
+            {
+                path: 'StrefaDostepu_UPDATE/:id',
+                element: <StrefaDostepu_UPDATE/>
             }
         ]
     },
