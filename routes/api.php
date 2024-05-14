@@ -97,3 +97,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('adresy-zamieszkania/{id}', [AdresZamieszkaniaController::class, 'update']);
     Route::delete('adresy-zamieszkania/{id}', [AdresZamieszkaniaController::class, 'destroy']);
 });
+
+
+// Budynki
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('budynki', [BudynkiController::class, 'index']);
+    Route::post('budynki', [BudynkiController::class, 'store']);
+    Route::get('budynki/{id}', [BudynkiController::class, 'show']);
+    Route::put('budynki/{id}', [BudynkiController::class, 'update']);
+    Route::delete('budynki/{id}', [BudynkiController::class, 'destroy']);
+});
+

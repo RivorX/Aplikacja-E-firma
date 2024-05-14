@@ -11,7 +11,8 @@ class StrefyDostepu extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nazwa_strefy'
+        'nazwa_strefy',
+        'budynek_id'
     ];
 
     public function drzwi()
@@ -22,5 +23,16 @@ class StrefyDostepu extends Model
     public function kartyDostepu()
     {
         return $this->belongsToMany(KartaDostepu::class, 'Karta_Dostepu_has_Strefy_Dostepu', 'Strefy_Dostepu_id', 'Karta_Dostepu_id');
+    }
+
+    public function budynek()
+    {
+        return $this->belongsTo(Budynki::class, 'budynek_id', 'budynek_id');
+    }
+
+    // Relacja z logami kart
+    public function logiKart()
+    {
+        return $this->hasMany(LogiKart::class, 'Strefy_Dostepu_id', 'Strefy_Dostepu_id');
     }
 }

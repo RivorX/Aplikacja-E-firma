@@ -13,20 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('Pracownicy', function (Blueprint $table) {
-            $table->bigIncrements('Pracownicy_id')->unsigned()->primary(); // Primary key with auto-incrementing unsigned integer
-            $table->string('imie');
-            $table->string('nazwisko');
-            $table->string('email')->unique(); // Unique email address
-            $table->string('password'); // Encrypted password (Laravel will handle this)
-            $table->bigInteger('Grupy_id')->unsigned()->nullable(); // Foreign key referencing Grupy table (nullable)
-            $table->string('stanowisko');
-            $table->boolean('konto_aktywne')->default(true); // Active account by default
-            $table->integer('ilosc_dni_urlopu')->default(0); // Default number of vacation days
-            $table->timestamps(false); // Exclude timestamps (matches your model definition)
-
-            // Foreign key constraint referencing Grupy table (if it exists)
-            $table->foreign('Grupy_id')->references('id')->on('Grupy')->onDelete('cascade')->onUpdate('cascade');
+        Schema::create('pracownicy', function (Blueprint $table) {
+            $table->increments('Pracownicy_id');
+            $table->integer('Stanowisko_id')->unsigned();
+            $table->integer('Grupy_id')->unsigned();
+            $table->string('email', 45);
+            $table->string('password', 100);
+            $table->string('imie', 45);
+            $table->string('nazwisko', 45);
+            $table->boolean('konto_aktywne');
+            $table->integer('ilosc_dni_urlopu');
+            $table->datetime('Data_edycji')->nullable();
+            $table->datetime('Data_utworzenia');
+            
+            // Definicja kluczy obcych
+            $table->foreign('Stanowisko_id')->references('Stanowisko_id')->on('Stanowisko')->onDelete('cascade');
+            $table->foreign('Grupy_id')->references('Grupy_id')->on('Grupy')->onDelete('cascade');
         });
     }
 
@@ -37,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Pracownicy');
+        Schema::dropIfExists('pracownicy');
     }
 };

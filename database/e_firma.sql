@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 04, 2024 at 08:08 PM
+-- Generation Time: Maj 14, 2024 at 12:53 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -35,6 +35,14 @@ CREATE TABLE `adres_zamieszkania` (
   `nr_domu` varchar(45) NOT NULL,
   `kod_pocztowy` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `adres_zamieszkania`
+--
+
+INSERT INTO `adres_zamieszkania` (`Adres_Zamieszkania_id`, `data_dodania`, `miasto`, `ulica`, `nr_domu`, `kod_pocztowy`) VALUES
+(1, '2024-05-11', 'Limanowa', 'Bednarczyka', '36', '34-600'),
+(2, '2020-05-20', 'Nowy Sącz', 'Mariana Cyconia', '5', '33-300');
 
 -- --------------------------------------------------------
 
@@ -109,6 +117,18 @@ CREATE TABLE `drzwi` (
   `Strefy_Dostepu_id` int(11) NOT NULL,
   `drzwi_aktywne` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `drzwi`
+--
+
+INSERT INTO `drzwi` (`Drzwi_id`, `nr_drzwi`, `nazwa`, `WeWy`, `Strefy_Dostepu_id`, `drzwi_aktywne`) VALUES
+(1, '1a', 'Wejście do kuchni. Wyjście z strefa A', 'We/Wy', 2, 1),
+(4, '1b', 'Wyjście z kuchni. Wejście do strefy A', 'We/Wy', 1, 1),
+(5, '2a', 'Wejście do strefy C. Wyjście z strefy B', 'We/Wy', 4, 1),
+(6, '2b', 'Wyjście z strefy C. Wejście do strefy B', 'We/Wy', 3, 1),
+(7, '3a', 'Wejście do kuchni. Wyjście z strefy B', 'We/Wy', 2, 1),
+(8, '3b', 'Wyjście z kuchni. Wejście do strefy B', 'We/Wy', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -190,12 +210,19 @@ CREATE TABLE `job_batches` (
 CREATE TABLE `karta_dostepu` (
   `Karta_Dostepu_id` int(11) NOT NULL,
   `Pracownicy_id` int(11) NOT NULL,
-  `numer_seryjny` int(11) NOT NULL,
+  `numer_seryjny` varchar(11) NOT NULL,
   `data_wydania` date NOT NULL,
   `data_waznosci` date NOT NULL,
   `karta_aktywna` tinyint(1) NOT NULL,
   `inne_dane` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `karta_dostepu`
+--
+
+INSERT INTO `karta_dostepu` (`Karta_Dostepu_id`, `Pracownicy_id`, `numer_seryjny`, `data_wydania`, `data_waznosci`, `karta_aktywna`, `inne_dane`) VALUES
+(1, 7, '23432424', '2024-05-04', '2024-05-04', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -218,9 +245,66 @@ CREATE TABLE `logi_kart` (
   `Logi_kart_id` int(11) NOT NULL,
   `Karta_Dostepu_id` int(11) NOT NULL,
   `Strefy_Dostepu_id` int(11) NOT NULL,
+  `Drzwi_id` int(11) DEFAULT NULL,
   `data_proby` datetime NOT NULL,
   `dostęp_przyznany` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `logi_kart`
+--
+
+INSERT INTO `logi_kart` (`Logi_kart_id`, `Karta_Dostepu_id`, `Strefy_Dostepu_id`, `Drzwi_id`, `data_proby`, `dostęp_przyznany`) VALUES
+(51, 1, 3, 1, '2024-05-12 12:03:59', 0),
+(52, 1, 1, 1, '2024-05-12 09:04:00', 0),
+(53, 1, 3, 1, '2024-05-13 08:04:00', 0),
+(54, 1, 2, 1, '2024-05-13 05:04:00', 0),
+(55, 1, 3, 1, '2024-05-12 13:04:00', 1),
+(56, 1, 1, 1, '2024-05-13 06:04:00', 1),
+(57, 1, 4, 1, '2024-05-12 09:04:00', 0),
+(58, 1, 2, 1, '2024-05-13 00:04:00', 1),
+(59, 1, 3, 1, '2024-05-13 04:04:00', 1),
+(60, 1, 3, 1, '2024-05-12 18:04:00', 1),
+(61, 1, 3, 1, '2024-05-12 09:04:00', 0),
+(62, 1, 1, 1, '2024-05-13 03:04:00', 1),
+(63, 1, 4, 1, '2024-05-13 06:04:00', 1),
+(64, 1, 3, 1, '2024-05-12 10:04:00', 0),
+(65, 1, 3, 1, '2024-05-12 21:04:00', 0),
+(66, 1, 3, 1, '2024-05-12 16:04:00', 1),
+(67, 1, 4, 1, '2024-05-13 02:04:00', 0),
+(68, 1, 1, 1, '2024-05-12 13:04:00', 1),
+(69, 1, 4, 1, '2024-05-13 05:04:00', 1),
+(70, 1, 3, 1, '2024-05-12 15:04:00', 1),
+(71, 1, 4, 1, '2024-05-12 20:04:00', 1),
+(72, 1, 2, 1, '2024-05-12 14:04:00', 0),
+(73, 1, 1, 1, '2024-05-12 20:04:00', 0),
+(74, 1, 1, 1, '2024-05-12 17:04:00', 1),
+(75, 1, 3, 1, '2024-05-12 23:04:00', 1),
+(76, 1, 2, 1, '2024-05-13 02:04:00', 1),
+(77, 1, 3, 1, '2024-05-13 07:04:00', 1),
+(78, 1, 1, 1, '2024-05-12 14:04:00', 1),
+(79, 1, 2, 1, '2024-05-12 09:04:00', 0),
+(80, 1, 1, 1, '2024-05-12 09:04:00', 1),
+(81, 1, 3, 1, '2024-05-12 10:04:00', 1),
+(82, 1, 3, 1, '2024-05-13 08:04:00', 1),
+(83, 1, 4, 1, '2024-05-12 19:04:00', 0),
+(84, 1, 1, 1, '2024-05-13 02:04:00', 1),
+(85, 1, 4, 1, '2024-05-12 13:04:00', 1),
+(86, 1, 3, 1, '2024-05-13 03:04:00', 0),
+(87, 1, 1, 1, '2024-05-13 05:04:00', 1),
+(88, 1, 4, 1, '2024-05-12 09:04:00', 0),
+(89, 1, 2, 1, '2024-05-13 07:04:00', 0),
+(90, 1, 4, 1, '2024-05-12 13:04:00', 1),
+(91, 1, 4, 1, '2024-05-12 20:04:00', 1),
+(92, 1, 2, 1, '2024-05-13 07:04:00', 1),
+(93, 1, 4, 1, '2024-05-13 08:04:00', 0),
+(94, 1, 4, 1, '2024-05-13 00:04:00', 0),
+(95, 1, 2, 1, '2024-05-12 18:04:00', 0),
+(96, 1, 4, 1, '2024-05-12 22:04:00', 1),
+(97, 1, 2, 1, '2024-05-13 08:04:00', 1),
+(98, 1, 2, 1, '2024-05-12 21:04:00', 1),
+(99, 1, 1, 1, '2024-05-13 03:04:00', 0),
+(100, 1, 3, 1, '2024-05-12 17:04:00', 0);
 
 -- --------------------------------------------------------
 
@@ -290,7 +374,7 @@ CREATE TABLE `ogloszenia` (
 --
 
 INSERT INTO `ogloszenia` (`Ogloszenia_id`, `Pracownicy_id`, `tytul`, `opis`, `data_nadania`) VALUES
-(6, 7, 'Nie do menedzerów', 'hejka', '2024-04-29 16:36:19'),
+(6, 7, 'Nie do menedzerów', 'hejka 2', '2024-04-29 16:36:19'),
 (7, 7, 'Do wszystkich', 'Witajcie w naszej firmie. Miłego dnia <3', '2024-04-29 16:36:40');
 
 -- --------------------------------------------------------
@@ -354,8 +438,11 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (37, 'App\\Models\\Pracownicy', 6, 'main', '61a7b85cbdd581733868714c9cf78447e1b54c5224c96224e51f08098df3e09e', '[\"*\"]', '2024-04-29 13:05:27', NULL, '2024-04-28 17:48:38', '2024-04-29 13:05:27'),
 (43, 'App\\Models\\Pracownicy', 8, 'main', '8274ab00a1a60299c8796bfb538011379fda69dd8db50e537916b637810d880e', '[\"*\"]', NULL, NULL, '2024-04-29 14:35:35', '2024-04-29 14:35:35'),
 (44, 'App\\Models\\Pracownicy', 8, 'main', '82462cf9d558db53b1f052d45747d1f5a3b83eeef0fa9eb75a0dffa942552137', '[\"*\"]', '2024-04-29 14:37:07', NULL, '2024-04-29 14:36:59', '2024-04-29 14:37:07'),
-(48, 'App\\Models\\Pracownicy', 7, 'main', '76accf8fe77f2e28faef2904e67e914be99942d40d1bb69fd35baebb686439ef', '[\"*\"]', '2024-04-30 09:24:41', NULL, '2024-04-30 09:24:22', '2024-04-30 09:24:41'),
-(49, 'App\\Models\\Pracownicy', 7, 'main', 'd4ba5ac8d9b700777bc370f4ffb7ae49c05f56fc43b6e443e132147560299739', '[\"*\"]', '2024-05-04 15:08:36', NULL, '2024-05-04 14:53:52', '2024-05-04 15:08:36');
+(52, 'App\\Models\\Pracownicy', 7, 'main', '1962b794ede5b046e2d20dd00915d27c4829f85dc5f6428337e447e7a400a4e8', '[\"*\"]', '2024-05-07 11:10:26', NULL, '2024-05-05 09:44:44', '2024-05-07 11:10:26'),
+(53, 'App\\Models\\Pracownicy', 7, 'main', 'a8bde012ee3d72d3a53addf1feecfb67eecd768e1ab1424b398b2baa3fd0a0cb', '[\"*\"]', '2024-05-12 16:41:08', NULL, '2024-05-11 10:47:01', '2024-05-12 16:41:08'),
+(54, 'App\\Models\\Pracownicy', 7, 'main', '51308d3d59723ccf33116dec567e79d1663aa00a3d3d87992dca900f2f84d4ff', '[\"*\"]', '2024-05-14 08:52:59', NULL, '2024-05-12 16:41:16', '2024-05-14 08:52:59'),
+(55, 'App\\Models\\Pracownicy', 9, 'main', '51a401949ee27c9fdc42c7cf8ebd17cde17536bc551cf3d1d5f76e67cbd7c7a0', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:41', '2024-05-12 16:41:41'),
+(56, 'App\\Models\\Pracownicy', 10, 'main', '663014fa85a6e01645c2941947ff1c9b6bac0bb9724ba3f599cd559682de01cc', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:52', '2024-05-12 16:41:52');
 
 -- --------------------------------------------------------
 
@@ -382,8 +469,10 @@ CREATE TABLE `pracownicy` (
 --
 
 INSERT INTO `pracownicy` (`Pracownicy_id`, `Stanowisko_id`, `Grupy_id`, `email`, `password`, `imie`, `nazwisko`, `konto_aktywne`, `ilosc_dni_urlopu`, `Data_edycji`, `Data_utworzenia`) VALUES
-(7, 1, 3, 'admin@example.pl', '$2y$12$p4EMmtbOjan2dI.61zQroeaiMhLVWSTqSNgIb3UM9VVvTUOhiGuf2', 'Rafał', 'Admin', 1, 0, NULL, '2024-04-29 15:01:07'),
-(8, 8, 1, 'aga@example.pl', '$2y$12$BW/PNqICXw1RlCY4HXXk2.0aDJ5VoSD0m0pm4DCf.0gIpWknf/Nuq', 'Agała', 'Magała', 1, 0, NULL, '2024-04-29 16:35:35');
+(7, 1, 3, 'admin@example.pl', '$2y$12$G4fTGOhmj1Rom2Wx4sLSiORhzmC2HnB/QmVhzSvVxx.Rpe1lM9vGq', 'Rafał', 'Admin', 1, 0, '2024-05-12 18:41:16', '2024-04-29 15:01:07'),
+(8, 8, 1, 'aga@example.pl', '$2y$12$BW/PNqICXw1RlCY4HXXk2.0aDJ5VoSD0m0pm4DCf.0gIpWknf/Nuq', 'Agała', 'Magała', 1, 0, NULL, '2024-04-29 16:35:35'),
+(9, 8, 1, 'rm@example.pl', '$2y$12$736I2qwGclz9LFxsp3pX.uVTKUxM9oD2lJ3fN2O7d6kJRt.sieXc.', 'Rafał', 'Madoń', 1, 0, NULL, '2024-05-12 18:41:37'),
+(10, 8, 1, 'rm1@example.pl', '$2y$12$DZ7ghIVMndAX0q9K33ia4.28HkUkM3i4tPDAURAd5xZYrw.Fk.g6e', 'Rafał', 'Madoń', 1, 0, NULL, '2024-05-12 18:41:50');
 
 -- --------------------------------------------------------
 
@@ -395,6 +484,14 @@ CREATE TABLE `pracownicy_has_adres_zamieszkania` (
   `Pracownicy_id` int(11) NOT NULL,
   `Adres_Zamieszkania_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `pracownicy_has_adres_zamieszkania`
+--
+
+INSERT INTO `pracownicy_has_adres_zamieszkania` (`Pracownicy_id`, `Adres_Zamieszkania_id`) VALUES
+(7, 1),
+(7, 2);
 
 -- --------------------------------------------------------
 
@@ -450,11 +547,13 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('Bf5ZxHYilkMj1BhEA7e1NqjBIO34hYkOVFbpVEGx', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMjZUZWpUb3l6Q1dkVUtRMzdWdWtzZkdQZTJydFR3YkppYmFLVTM5UCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1714846690),
 ('gSzLRxqmcDsELRwsAsJwkminQsXMrJsiBaIzayP9', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTW5ueEk2SnJ4WnZJWHhwSGV2SWxXTmxwbmdHUnRtNG1kSGNCNHd6MiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713696097),
 ('jogtYTkCIcrgJLd8zVPul4UQ9FCM2BtZ5PsI5w7V', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTVFqTUpFMXBhRlUzdTJVazRXTlZud2xuSU80d2pWTjZ4TWpNdmZUbyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713638117),
 ('JOUPa0MVzp8xhXMKu5WKeA9N17e2CSa44DUYJgNj', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWWFOR0drTGY5bFRuQ1ZuVEpnRFRqZjc3NGxvbGlydTFCOW5jN3FpNyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713807779),
 ('k7tQKperE3zKITSD1gjiSuWSkrtRFkQIpwaDynKO', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiY0YwdjhXNnJjdk1SQ3BybjJlSTB5UXZYSG84SU45OTh2UUxsN2s0diI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713642903),
-('nNAXiysVc6S4ERXxpYSEXU2n3eWyTpAu4KjFqbvN', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibHRKUWhLa21zT3dnOTFOZW94OHJNT1VKRWVheFJPeUR6NzY5SVR2byI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713694710);
+('nNAXiysVc6S4ERXxpYSEXU2n3eWyTpAu4KjFqbvN', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibHRKUWhLa21zT3dnOTFOZW94OHJNT1VKRWVheFJPeUR6NzY5SVR2byI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713694710),
+('YDjmiODV5eT9SIApsozjuHGfCdURSjPJLeP1Txxt', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVjQxUGpQV2JjdjUyN1NOZnRmYjRrRk5PZEpuam5maXoyeW9KZnRzMiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1715431603);
 
 -- --------------------------------------------------------
 
@@ -499,6 +598,16 @@ CREATE TABLE `strefy_dostepu` (
   `Strefy_Dostepu_id` int(11) NOT NULL,
   `nazwa_strefy` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `strefy_dostepu`
+--
+
+INSERT INTO `strefy_dostepu` (`Strefy_Dostepu_id`, `nazwa_strefy`) VALUES
+(1, 'Strefa A'),
+(2, 'Kuchnia'),
+(3, 'Strefa B'),
+(4, 'Strefa C');
 
 -- --------------------------------------------------------
 
@@ -686,7 +795,8 @@ ALTER TABLE `karta_dostepu_has_strefy_dostepu`
 ALTER TABLE `logi_kart`
   ADD PRIMARY KEY (`Logi_kart_id`),
   ADD KEY `fk_Strefy_Dostepu2_idx` (`Strefy_Dostepu_id`),
-  ADD KEY `fk_Karta_Dostepu3_idx` (`Karta_Dostepu_id`);
+  ADD KEY `fk_Karta_Dostepu3_idx` (`Karta_Dostepu_id`),
+  ADD KEY `Drzwi_id` (`Drzwi_id`);
 
 --
 -- Indeksy dla tabeli `migrations`
@@ -861,7 +971,7 @@ ALTER TABLE `wypłata_pracownicza_has_urlopy`
 -- AUTO_INCREMENT for table `adres_zamieszkania`
 --
 ALTER TABLE `adres_zamieszkania`
-  MODIFY `Adres_Zamieszkania_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Adres_Zamieszkania_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `aktualnosci`
@@ -879,7 +989,7 @@ ALTER TABLE `badania_okresowe`
 -- AUTO_INCREMENT for table `drzwi`
 --
 ALTER TABLE `drzwi`
-  MODIFY `Drzwi_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Drzwi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -903,13 +1013,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `karta_dostepu`
 --
 ALTER TABLE `karta_dostepu`
-  MODIFY `Karta_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Karta_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `logi_kart`
 --
 ALTER TABLE `logi_kart`
-  MODIFY `Logi_kart_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Logi_kart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -933,19 +1043,19 @@ ALTER TABLE `obecność_pracowników`
 -- AUTO_INCREMENT for table `ogloszenia`
 --
 ALTER TABLE `ogloszenia`
-  MODIFY `Ogloszenia_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Ogloszenia_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
-  MODIFY `Pracownicy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Pracownicy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `rodzaj_etatu`
@@ -969,7 +1079,7 @@ ALTER TABLE `stanowisko`
 -- AUTO_INCREMENT for table `strefy_dostepu`
 --
 ALTER TABLE `strefy_dostepu`
-  MODIFY `Strefy_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Strefy_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `szkolenia`
