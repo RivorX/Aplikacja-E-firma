@@ -8,23 +8,8 @@ import axiosClient from '../../axios';
 
 
 
-const navigation = [
-  { name: 'Pracownicy', to: 'pracownicy'},
-  { name: 'Karty dostepu', to: 'kartyDostepu'},
-  { name: 'Drzwi / Kody QR', to: 'kodyQR'},
-  { name: 'Aktualnosci', to: 'Aktualnosci'},
-]
-const userNavigation = [
-  { name: 'Wyloguj się' },
-]
-
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function LogedDefaultLayout() {
-    const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
+    const { currentUser, userToken } = useStateContext();
     const hasAdminRole =
       currentUser?.grupa?.nazwa_grupy.toLowerCase() === "admin" ||
       currentUser?.grupa?.nazwa_grupy.toLowerCase() === "super admin";
@@ -39,15 +24,6 @@ export default function LogedDefaultLayout() {
         // Przekierowanie na stronę gdy nie jesteśmy adminem
         return <Navigate to="/" />
     }
-    
-    // Wczytanie danych użytkownika
-    useEffect(() => {
-        axiosClient.get('/me')
-        .then(({data}) => {
-            setCurrentUser(data)
-            console.log(data)
-        })
-    }, [])
 
     return (
     <>
