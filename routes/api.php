@@ -12,9 +12,12 @@ use App\Http\Controllers\DrzwiController;
 use App\Http\Controllers\StrefyDostepuController;
 use App\Http\Controllers\AdresZamieszkaniaController;
 use App\Http\Controllers\BudynkiController;
+use App\Http\Controllers\ObecnoscPracownikowController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
+    Route::post('/obecnosc', [ObecnoscPracownikowController::class, 'store']);
+    Route::put('/obecnosc/{id}', [ObecnoscPracownikowController::class, 'update']);
     Route::get('/me', [AuthController::class, 'me']);
 });
 
