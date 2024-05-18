@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 14, 2024 at 12:53 PM
+-- Generation Time: Maj 18, 2024 at 08:07 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -78,6 +78,27 @@ CREATE TABLE `badania_okresowe` (
   `data_waznosci_badania` date NOT NULL,
   `Pracownicy_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `budynki`
+--
+
+CREATE TABLE `budynki` (
+  `budynek_id` int(11) NOT NULL,
+  `nazwa_budynku` varchar(45) NOT NULL,
+  `opis_budynku` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `budynki`
+--
+
+INSERT INTO `budynki` (`budynek_id`, `nazwa_budynku`, `opis_budynku`) VALUES
+(3, 'Siedziba główna', NULL),
+(4, 'Plan główny', NULL),
+(5, 'testowy', NULL);
 
 -- --------------------------------------------------------
 
@@ -438,11 +459,9 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (37, 'App\\Models\\Pracownicy', 6, 'main', '61a7b85cbdd581733868714c9cf78447e1b54c5224c96224e51f08098df3e09e', '[\"*\"]', '2024-04-29 13:05:27', NULL, '2024-04-28 17:48:38', '2024-04-29 13:05:27'),
 (43, 'App\\Models\\Pracownicy', 8, 'main', '8274ab00a1a60299c8796bfb538011379fda69dd8db50e537916b637810d880e', '[\"*\"]', NULL, NULL, '2024-04-29 14:35:35', '2024-04-29 14:35:35'),
 (44, 'App\\Models\\Pracownicy', 8, 'main', '82462cf9d558db53b1f052d45747d1f5a3b83eeef0fa9eb75a0dffa942552137', '[\"*\"]', '2024-04-29 14:37:07', NULL, '2024-04-29 14:36:59', '2024-04-29 14:37:07'),
-(52, 'App\\Models\\Pracownicy', 7, 'main', '1962b794ede5b046e2d20dd00915d27c4829f85dc5f6428337e447e7a400a4e8', '[\"*\"]', '2024-05-07 11:10:26', NULL, '2024-05-05 09:44:44', '2024-05-07 11:10:26'),
-(53, 'App\\Models\\Pracownicy', 7, 'main', 'a8bde012ee3d72d3a53addf1feecfb67eecd768e1ab1424b398b2baa3fd0a0cb', '[\"*\"]', '2024-05-12 16:41:08', NULL, '2024-05-11 10:47:01', '2024-05-12 16:41:08'),
-(54, 'App\\Models\\Pracownicy', 7, 'main', '51308d3d59723ccf33116dec567e79d1663aa00a3d3d87992dca900f2f84d4ff', '[\"*\"]', '2024-05-14 08:52:59', NULL, '2024-05-12 16:41:16', '2024-05-14 08:52:59'),
 (55, 'App\\Models\\Pracownicy', 9, 'main', '51a401949ee27c9fdc42c7cf8ebd17cde17536bc551cf3d1d5f76e67cbd7c7a0', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:41', '2024-05-12 16:41:41'),
-(56, 'App\\Models\\Pracownicy', 10, 'main', '663014fa85a6e01645c2941947ff1c9b6bac0bb9724ba3f599cd559682de01cc', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:52', '2024-05-12 16:41:52');
+(56, 'App\\Models\\Pracownicy', 10, 'main', '663014fa85a6e01645c2941947ff1c9b6bac0bb9724ba3f599cd559682de01cc', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:52', '2024-05-12 16:41:52'),
+(60, 'App\\Models\\Pracownicy', 7, 'main', 'a0518def00641be0729969fba44b78c8e6ae12e9acbd50d10ac320ba72a480a8', '[\"*\"]', '2024-05-15 10:59:49', NULL, '2024-05-14 18:22:53', '2024-05-15 10:59:49');
 
 -- --------------------------------------------------------
 
@@ -502,17 +521,6 @@ INSERT INTO `pracownicy_has_adres_zamieszkania` (`Pracownicy_id`, `Adres_Zamiesz
 CREATE TABLE `pracownicy_has_szkolenia` (
   `Pracownicy_id` int(11) NOT NULL,
   `Szkolenia_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `rodzaj_drzwi_has_logi_kart`
---
-
-CREATE TABLE `rodzaj_drzwi_has_logi_kart` (
-  `Drzwi_id` int(11) NOT NULL,
-  `Logi_kart_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -596,18 +604,20 @@ INSERT INTO `stanowisko` (`Stanowisko_id`, `nazwa_stanowiska`, `opis`, `stawka_h
 
 CREATE TABLE `strefy_dostepu` (
   `Strefy_Dostepu_id` int(11) NOT NULL,
-  `nazwa_strefy` varchar(45) NOT NULL
+  `nazwa_strefy` varchar(45) NOT NULL,
+  `budynek_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `strefy_dostepu`
 --
 
-INSERT INTO `strefy_dostepu` (`Strefy_Dostepu_id`, `nazwa_strefy`) VALUES
-(1, 'Strefa A'),
-(2, 'Kuchnia'),
-(3, 'Strefa B'),
-(4, 'Strefa C');
+INSERT INTO `strefy_dostepu` (`Strefy_Dostepu_id`, `nazwa_strefy`, `budynek_id`) VALUES
+(1, 'Strefa A', NULL),
+(2, 'Kuchnia', NULL),
+(3, 'Strefa B', NULL),
+(4, 'Strefa C', NULL),
+(5, 'Atrefa AB', NULL);
 
 -- --------------------------------------------------------
 
@@ -728,6 +738,12 @@ ALTER TABLE `aktualnosci`
 ALTER TABLE `badania_okresowe`
   ADD PRIMARY KEY (`Badania_Okresowe_id`),
   ADD KEY `fk_Pracownicy7_idx` (`Pracownicy_id`);
+
+--
+-- Indeksy dla tabeli `budynki`
+--
+ALTER TABLE `budynki`
+  ADD PRIMARY KEY (`budynek_id`);
 
 --
 -- Indeksy dla tabeli `cache`
@@ -872,14 +888,6 @@ ALTER TABLE `pracownicy_has_szkolenia`
   ADD KEY `fk_Pracownicy2_idx` (`Pracownicy_id`);
 
 --
--- Indeksy dla tabeli `rodzaj_drzwi_has_logi_kart`
---
-ALTER TABLE `rodzaj_drzwi_has_logi_kart`
-  ADD PRIMARY KEY (`Drzwi_id`,`Logi_kart_id`),
-  ADD KEY `fk_Logi_kart1_idx` (`Logi_kart_id`),
-  ADD KEY `fk_Rodzaj_drzwi1_idx` (`Drzwi_id`);
-
---
 -- Indeksy dla tabeli `rodzaj_etatu`
 --
 ALTER TABLE `rodzaj_etatu`
@@ -909,7 +917,8 @@ ALTER TABLE `stanowisko`
 -- Indeksy dla tabeli `strefy_dostepu`
 --
 ALTER TABLE `strefy_dostepu`
-  ADD PRIMARY KEY (`Strefy_Dostepu_id`);
+  ADD PRIMARY KEY (`Strefy_Dostepu_id`),
+  ADD KEY `budynki_id` (`budynek_id`);
 
 --
 -- Indeksy dla tabeli `szkolenia`
@@ -986,6 +995,12 @@ ALTER TABLE `badania_okresowe`
   MODIFY `Badania_Okresowe_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `budynki`
+--
+ALTER TABLE `budynki`
+  MODIFY `budynek_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `drzwi`
 --
 ALTER TABLE `drzwi`
@@ -1049,7 +1064,7 @@ ALTER TABLE `ogloszenia`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
@@ -1079,7 +1094,7 @@ ALTER TABLE `stanowisko`
 -- AUTO_INCREMENT for table `strefy_dostepu`
 --
 ALTER TABLE `strefy_dostepu`
-  MODIFY `Strefy_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `Strefy_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `szkolenia`
@@ -1145,7 +1160,8 @@ ALTER TABLE `karta_dostepu_has_strefy_dostepu`
 --
 ALTER TABLE `logi_kart`
   ADD CONSTRAINT `fk_Karta_Dostepu3` FOREIGN KEY (`Karta_Dostepu_id`) REFERENCES `karta_dostepu` (`Karta_Dostepu_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Strefy_Dostepu2` FOREIGN KEY (`Strefy_Dostepu_id`) REFERENCES `strefy_dostepu` (`Strefy_Dostepu_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Strefy_Dostepu2` FOREIGN KEY (`Strefy_Dostepu_id`) REFERENCES `strefy_dostepu` (`Strefy_Dostepu_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `logi_kart_ibfk_1` FOREIGN KEY (`Drzwi_id`) REFERENCES `drzwi` (`Drzwi_id`);
 
 --
 -- Constraints for table `nadgodziny`
@@ -1194,11 +1210,10 @@ ALTER TABLE `pracownicy_has_szkolenia`
   ADD CONSTRAINT `fk_Szkolenia1` FOREIGN KEY (`Szkolenia_id`) REFERENCES `szkolenia` (`Szkolenia_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `rodzaj_drzwi_has_logi_kart`
+-- Constraints for table `strefy_dostepu`
 --
-ALTER TABLE `rodzaj_drzwi_has_logi_kart`
-  ADD CONSTRAINT `fk_Logi_kart1` FOREIGN KEY (`Logi_kart_id`) REFERENCES `logi_kart` (`Logi_kart_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Rodzaj_drzwi1` FOREIGN KEY (`Drzwi_id`) REFERENCES `drzwi` (`Drzwi_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `strefy_dostepu`
+  ADD CONSTRAINT `strefy_dostepu_ibfk_1` FOREIGN KEY (`budynek_id`) REFERENCES `budynki` (`budynek_id`);
 
 --
 -- Constraints for table `urlopy`

@@ -12,6 +12,7 @@ use App\Http\Controllers\DrzwiController;
 use App\Http\Controllers\StrefyDostepuController;
 use App\Http\Controllers\AdresZamieszkaniaController;
 use App\Http\Controllers\BudynkiController;
+use App\Http\Controllers\QrCodeController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -109,3 +110,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('budynki/{id}', [BudynkiController::class, 'destroy']);
 });
 
+
+//QRcode
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/qrcode/download', [QrCodeController::class, 'download']);
+    Route::get('/qrcode/{door_id}', [QrCodeController::class, 'generateQRCode']);
+});
