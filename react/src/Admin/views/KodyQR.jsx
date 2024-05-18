@@ -43,6 +43,32 @@ export default function PrzegladDrzwiKodyQR() {
     setSelectedDrzwiId(null);
   };
 
+  const handleDownloadPDF = async (id, doorName, requiredZone) => {
+    try {
+        console.log('id:', id, 'doorName:', doorName, 'requiredZone:', requiredZone);
+        
+        const response = await axiosClient.get('/qrcode/download', {
+            params: {
+                door_id: id,
+                door_name: doorName,
+                required_zone: requiredZone,
+            },
+            responseType: 'blob',
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        const name = 'qrcode'+id+'.pdf';
+        link.setAttribute('download', name);
+        document.body.appendChild(link);
+        link.click();
+    } catch (error) {
+        console.error('Błąd pobierania PDF:', error);
+    }
+  };
+
+
   return (
     <>
       <header className="bg-white shadow">
@@ -76,9 +102,13 @@ export default function PrzegladDrzwiKodyQR() {
                       <td className="px-4 py-2">{element?.drzwi_aktywne ? 'Tak' : 'Nie'}</td>
                       <td className="px-4 py-2">{element?.ostatnia_zmiana_kodu || '-'}</td>
                       <td className="px-4 py-2">
-                        <button className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        <button
+                          onClick={() => handleDownloadPDF(element.Drzwi_id.toString(), element?.nr_drzwi || '-', element?.strefy_dostepu?.nazwa_strefy || '-')}
+                          className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                        >
                           Drukuj
                         </button>
+
                         <NavLink
                           to={`/admin/form/editKodyQR/${element.Drzwi_id}`}
                           className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
