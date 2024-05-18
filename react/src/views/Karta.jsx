@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios';
 import { Html5QrcodeScanner } from 'html5-qrcode';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function Karta() {
   const [karty, setKarty] = useState([]);
   const [loading, setLoading] = useState(true);
   const [noKarty, setNoKarty] = useState(false);
-  const [scanResult, setScanResult] = useState(null);
   const [scanning, setScanning] = useState(false);
+  const [alert, setAlert] = useState(null);
+  const { currentUser } = useStateContext();
+  const userId = currentUser.Pracownicy_id;
 
   useEffect(() => {
     const fetchUserAndKarty = async () => {
       try {
-        const { data: userData } = await axiosClient.get('/me');
-        const userId = userData.Pracownicy_id;
-
         const { data: userKarty } = await axiosClient.get(`/karty_dostepu/${userId}/pracownik`);
         setKarty(userKarty.kartyDostepu || []);
         setLoading(false);
@@ -28,7 +28,7 @@ export default function Karta() {
         setKarty([]);
       }
     };
-  
+
     fetchUserAndKarty();
 
     // Zdarzenie przed opuszczeniem strony
@@ -53,8 +53,8 @@ export default function Karta() {
 
     function success(result) {
       scanner.clear();
-      setScanResult(result);
       console.log(result);
+      sendScanResultToBackend(result, userId); // Dodane wysłanie zeskanowanego tekstu do backendu
       setScanning(false);
     }
     function error(error) {
@@ -65,6 +65,17 @@ export default function Karta() {
 
   const stopScanning = () => {
     setScanning(false);
+  };
+
+  const sendScanResultToBackend = async (result, userId) => {
+    try {
+      const response = await axiosClient.post('/qrcodeCheckAccess', { scannedText: result, userId });
+      setAlert({ type: 'success', message: response.data.message });
+      console.log('Zeskanowany tekst i Pracownicy_id zostały wysłane do backendu.');
+    } catch (error) {
+      setAlert({ type: 'error', message: error.response?.data.message || 'Błąd podczas wysyłania zeskanowanego tekstu i Pracownicy_id do backendu.' });
+      console.error('Błąd podczas wysyłania zeskanowanego tekstu i Pracownicy_id do backendu:', error);
+    }
   };
 
   return (
@@ -80,7 +91,12 @@ export default function Karta() {
             <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-4">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">QR Code Scanning</h1>
               {!scanning && <button onClick={startScanning} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Skanuj</button>}
-              {scanResult ? <p>{scanResult}</p> : <div id="reader"></div>}
+              <div id="reader"></div>
+              {alert && (
+                <div className={`mt-4 p-4 ${alert.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} rounded`}>
+                  {alert.message}
+                </div>
+              )}
             </div>
             <div className="overflow-x-auto">
               {loading ? (

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function Informacje() {
   const [adresyZamieszkania, setAdresyZamieszkania] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { currentUser } = useStateContext();
+  const userId = currentUser.Pracownicy_id;
 
   useEffect(() => {
     const fetchAdresyZamieszkania = async () => {
       try {
-        const { data: userData } = await axiosClient.get('/me');
-        const userId = userData.Pracownicy_id;
 
         const { data } = await axiosClient.get(`/adresy-zamieszkania/${userId}/pracownik`);
         setAdresyZamieszkania(data.adresZamieszkania || []);

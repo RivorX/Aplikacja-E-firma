@@ -31,7 +31,7 @@ export default function KartyDostepu_ADD() {
       axiosClient.get('strefy-dostepu')
       .then(({ data }) => {
         if (!data.error) {
-          setStrefyDostepu(data);
+          setStrefyDostepu(data.strefyDostepu);
         } else {
           console.error('Błąd pobierania stref dostępu:', data.message);
         }
@@ -212,7 +212,7 @@ export default function KartyDostepu_ADD() {
                                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                             />
                             <label htmlFor={`strefa-${strefa.Strefy_Dostepu_id}`} className="ml-2 block text-sm text-gray-900">
-                                {strefa.nazwa_strefy}
+                                {strefa.nazwa_strefy}{strefa.budynek && ` (${strefa.budynek.nazwa_budynku})`}
                             </label>
                         </div>
                     ))}

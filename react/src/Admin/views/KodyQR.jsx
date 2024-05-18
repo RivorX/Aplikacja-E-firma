@@ -103,7 +103,7 @@ export default function PrzegladDrzwiKodyQR() {
                       <td className="px-4 py-2">{element?.ostatnia_zmiana_kodu || '-'}</td>
                       <td className="px-4 py-2">
                         <button
-                          onClick={() => handleDownloadPDF(element.Drzwi_id.toString(), element?.nr_drzwi || '-', element?.strefy_dostepu?.nazwa_strefy || '-')}
+                          onClick={() => handleDownloadPDF(element.Drzwi_id, element?.nr_drzwi || '-', element?.strefy_dostepu?.nazwa_strefy || '-')}
                           className="text-indigo-600 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                         >
                           Drukuj

@@ -116,4 +116,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/qrcode/download', [QrCodeController::class, 'download']);
     Route::get('/qrcode/{door_id}', [QrCodeController::class, 'generateQRCode']);
+    Route::post('/qrcodeCheckAccess', [QrCodeController::class, 'qrcodeCheckAccess']);
 });
