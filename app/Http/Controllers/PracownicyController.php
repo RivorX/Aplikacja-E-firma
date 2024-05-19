@@ -6,16 +6,35 @@ use Illuminate\Http\Request;
 use App\Models\Pracownicy;
 use App\Models\Stanowisko;
 use App\Models\PracownicyHasStanowisko;
+use Illuminate\Support\Facades\DB;
 
 class PracownicyController extends Controller
 {
     public function Pracownicy()
     {
-        $pracownicy = Pracownicy::get();
+        $pracownicy = DB::select("
+            SELECT 
+                Pracownicy.Pracownicy_id,
+                Pracownicy.Stanowisko_id,
+                Pracownicy.Grupy_id,
+                Pracownicy.email,
+                Pracownicy.imie,
+                Pracownicy.nazwisko,
+                Pracownicy.konto_aktywne,
+                Pracownicy.ilosc_dni_urlopu,
+                Pracownicy.Data_edycji,
+                Pracownicy.Data_utworzenia,
+                Karta_dostepu.Karta_Dostepu_id,
+                Karta_dostepu.numer_seryjny,
+                Karta_dostepu.data_wydania
+            FROM 
+                Pracownicy
+            LEFT JOIN 
+                Karta_dostepu
+            ON 
+                Pracownicy.Pracownicy_id = Karta_dostepu.Pracownicy_id
+        ");
 
-        if ($pracownicy->isEmpty()) {
-            return response()->json(['message' => 'Brak pracowników'], 404);
-        }
 
         return response()->json(['pracownicy' => $pracownicy]);
     }

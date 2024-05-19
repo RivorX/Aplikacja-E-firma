@@ -42,7 +42,7 @@ export default function Pracownicy() {
         </div>
       </header>
       <main>
-        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl py-6 px-2 sm:px-4 lg:px-4">
           <section>
             <div className="overflow-x-auto">
             {loading ? (
@@ -55,8 +55,9 @@ export default function Pracownicy() {
                   <tr>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Imię</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Nazwisko</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Nr karty</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Liczba nieudanych prób (24h)</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Email</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Numer seryjny</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Status konta</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Akcje</th>
                   </tr>
                 </thead>
@@ -65,8 +66,11 @@ export default function Pracownicy() {
                     <tr key={index} className="border-t">
                       <td className="px-4 py-2">{pracownik.imie}</td>
                       <td className="px-4 py-2">{pracownik.nazwisko}</td>
-                      <td className="px-4 py-2">{pracownik.nr_karty}</td>
-                      <td className="px-4 py-2">{pracownik.liczba_nieudanych_prob}</td>
+                      <td className="px-4 py-2">{pracownik.email}</td>
+                      <td className="px-4 py-2">{pracownik.numer_seryjny}</td>
+                      <td className={`border px-4 py-2 ${pracownik.konto_aktywne ? 'text-green-500' : 'text-red-500'}`}>
+                          {pracownik.konto_aktywne ? 'Aktywne' : 'Zablokowane'}
+                        </td>
                       <td className="px-4 py-2">
                       <NavLink
                           to={`/admin/editPracownik/${pracownik.id}`}
