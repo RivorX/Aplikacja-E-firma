@@ -125,14 +125,28 @@ class QrCodeController extends Controller
             ->exists();
     
         if (!$access) {
+            // Logowanie próby dostępu
+            DB::table('logi_kart')->insert([
+                'Karta_Dostepu_id' => $latestCard->Karta_Dostepu_id,
+                'Strefy_Dostepu_id' => $door->Strefy_Dostepu_id,
+                'Drzwi_id' => $decryptedDoorId,
+                'data_proby' => now(),
+                'dostęp_przyznany' => 0,
+            ]);
             return response()->json(['message' => 'Pracownik nie ma dostępu do tej strefy.'], 403);
         }
+    
+        // Logowanie udanej próby dostępu
+        DB::table('logi_kart')->insert([
+            'Karta_Dostepu_id' => $latestCard->Karta_Dostepu_id,
+            'Strefy_Dostepu_id' => $door->Strefy_Dostepu_id,
+            'Drzwi_id' => $decryptedDoorId,
+            'data_proby' => now(),
+            'dostęp_przyznany' => 1,
+        ]);
     
         return response()->json(['message' => 'Pracownik ma dostęp do tej strefy.'], 200);
     }
     
-
-
-
 
 }
