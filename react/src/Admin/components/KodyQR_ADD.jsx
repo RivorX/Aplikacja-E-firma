@@ -19,7 +19,7 @@ export default function Drzwi_ADD() {
   const fetchStrefyDostepu = async () => {
     try {
       const response = await axiosClient.get('strefy-dostepu');
-      setStrefyDostepu(response.data);
+      setStrefyDostepu(response.data.strefyDostepu);
     } catch (error) {
       console.error('Błąd pobierania stref dostępu:', error);
       setStrefyDostepu([]); // Ustaw pustą tablicę, jeśli wystąpi błąd
@@ -41,7 +41,6 @@ export default function Drzwi_ADD() {
       drzwi_aktywne: drzwiAktywne
     })
     .then(({ data }) => {
-      console.log(data);
       navigate('/admin/kodyQR');
     })
     .catch((error) => {

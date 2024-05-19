@@ -5,7 +5,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 
 export default function KodyQR_UPDATE() {
   const { id } = useParams(); // Pobranie parametru id z adresu URL
-  console.log('ID:', id);
   const [selectedDrzwi, setSelectedDrzwi] = useState(null);
   const [nrDrzwi, setNrDrzwi] = useState("");
   const [nazwa, setNazwa] = useState("");
@@ -36,11 +35,7 @@ export default function KodyQR_UPDATE() {
     // Pobierz strefy dostępu z bazy danych
     axiosClient.get('strefy-dostepu')
     .then(({ data }) => {
-      if (Array.isArray(data)) {
-        setStrefyDostepu(data);
-      } else {
-        console.error('Błąd: Brak stref dostępu w formacie tablicy');
-      }
+        setStrefyDostepu(data.strefyDostepu);
     })
     .catch((error) => {
       console.error('Błąd pobierania stref dostępu:', error);
