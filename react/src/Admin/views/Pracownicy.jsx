@@ -21,7 +21,7 @@ export default function Pracownicy() {
   const handleDeletePracownik = (id) => {
     axiosClient.delete(`pracownicy/${id}`)
       .then(response => {
-        axiosClient.get('pracownicy')
+        axiosClient.get('pracownicy_admin')
           .then(response => {
             setPracownicy(response.data.pracownicy);
           })
@@ -56,7 +56,7 @@ export default function Pracownicy() {
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Imię</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Nazwisko</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Email</th>
-                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Numer seryjny</th>
+                    <th className="px-4 py-2 bg-gray-200 text-gray-700">Numer seryjny Karty</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Status konta</th>
                     <th className="px-4 py-2 bg-gray-200 text-gray-700">Akcje</th>
                   </tr>
@@ -73,19 +73,19 @@ export default function Pracownicy() {
                         </td>
                       <td className="px-4 py-2">
                       <NavLink
-                          to={`/admin/editPracownik/${pracownik.id}`}
+                          to={`/admin/editPracownik/${pracownik.Pracownicy_id}`}
                           className="text-green-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                         >
                           Edytuj Pracownika
                         </NavLink>
                         <NavLink
-                          to={`/admin/editPracownik/${pracownik.id}`}
+                          to={`/admin/editPracownik/${pracownik.Pracownicy_id}`}
                           className="text-green-500 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                         >
                           Edytuj Kartę
                         </NavLink>
                         <button
-                          onClick={() => handleDeletePracownik(pracownik.id)}
+                          onClick={() => handleDeletePracownik(pracownik.Pracownicy_id)}
                           className="text-red-500 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                         >
                           Usuń
