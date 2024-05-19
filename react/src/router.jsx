@@ -42,6 +42,7 @@ import ChangePasswordForm from "./components/changePassword.jsx";
 import StrefyDostępu_ADD from "./Admin/components/StrefaDostepu_ADD.jsx";
 import StrefyDostepu from "./Admin/views/StrefyDostepu.jsx";
 import StrefaDostepu_UPDATE from "./Admin/components/StrefaDostepu_UPDATE.jsx";
+import Raporty from "./Admin/views/Raporty.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
             {
                 path: 'StrefyDostepu',
                 element: <StrefyDostepu/>
+            },
+            {
+                path: 'Raporty',
+                element: <Raporty/>
             }
 
         ]

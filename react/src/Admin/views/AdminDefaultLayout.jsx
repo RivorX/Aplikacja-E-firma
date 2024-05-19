@@ -15,6 +15,7 @@ const navigation = [
   { name: 'Strefy Dostepu', to: 'StrefyDostepu'},
   { name: 'Aktualnosci', to: 'Aktualnosci'},
   { name: 'Ogłoszenia', to: 'Ogloszenia'},
+  { name: 'Raporty', to: 'Raporty'},
 ]
 const userNavigation = [
   { name: 'Wyloguj się' },
