@@ -13,6 +13,7 @@ use App\Http\Controllers\StrefyDostepuController;
 use App\Http\Controllers\AdresZamieszkaniaController;
 use App\Http\Controllers\BudynkiController;
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\LogiKartController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -117,4 +118,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/qrcode/download', [QrCodeController::class, 'download']);
     Route::get('/qrcode/{door_id}', [QrCodeController::class, 'generateQRCode']);
     Route::post('/qrcodeCheckAccess', [QrCodeController::class, 'qrcodeCheckAccess']);
+});
+
+//Raporty
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logs/card', [LogiKartController::class, 'cardLogsReport']);
 });
