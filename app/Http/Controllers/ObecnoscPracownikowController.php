@@ -37,13 +37,19 @@ class ObecnoscPracownikowController extends Controller
         
         // Sprawdź, czy znaleziono obecność
         if ($obecnosc) {
-            // Ustaw czas wyjścia na aktualny czas
-            $obecnosc->Wyjście = Carbon::now();
-            $obecnosc->save();
-        
-            return response()->json($obecnosc);
+            // Sprawdź, czy pole "Wyjście" jest puste
+            if ($obecnosc->Wyjście === null) {
+                // Ustaw czas wyjścia na aktualny czas
+                $obecnosc->Wyjście = Carbon::now();
+                $obecnosc->save();
+            
+                return response()->json($obecnosc);
+            } else {
+                return response()->json(['message' => 'Pracownik już opuścił miejsce pracy.'], 400);
+            }
         } else {
             return response()->json(['message' => 'Nie znaleziono obecności dla pracownika o podanym identyfikatorze.'], 404);
         }
     }
+
 }
