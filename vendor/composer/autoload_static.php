@@ -679,6 +679,8 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DrzwiController' => __DIR__ . '/../..' . '/app/Http/Controllers/DrzwiController.php',
         'App\\Http\\Controllers\\KartaDostepuController' => __DIR__ . '/../..' . '/app/Http/Controllers/KartaDostepuController.php',
+        'App\\Http\\Controllers\\LogiKartController' => __DIR__ . '/../..' . '/app/Http/Controllers/LogiKartController.php',
+        'App\\Http\\Controllers\\ObecnoscPracownikowController' => __DIR__ . '/../..' . '/app/Http/Controllers/ObecnoscPracownikowController.php',
         'App\\Http\\Controllers\\OgloszeniaController' => __DIR__ . '/../..' . '/app/Http/Controllers/OgloszeniaController.php',
         'App\\Http\\Controllers\\PracownicyController' => __DIR__ . '/../..' . '/app/Http/Controllers/PracownicyController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',

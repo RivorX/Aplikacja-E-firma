@@ -22,6 +22,8 @@ return array(
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\DrzwiController' => $baseDir . '/app/Http/Controllers/DrzwiController.php',
     'App\\Http\\Controllers\\KartaDostepuController' => $baseDir . '/app/Http/Controllers/KartaDostepuController.php',
+    'App\\Http\\Controllers\\LogiKartController' => $baseDir . '/app/Http/Controllers/LogiKartController.php',
+    'App\\Http\\Controllers\\ObecnoscPracownikowController' => $baseDir . '/app/Http/Controllers/ObecnoscPracownikowController.php',
     'App\\Http\\Controllers\\OgloszeniaController' => $baseDir . '/app/Http/Controllers/OgloszeniaController.php',
     'App\\Http\\Controllers\\PracownicyController' => $baseDir . '/app/Http/Controllers/PracownicyController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
