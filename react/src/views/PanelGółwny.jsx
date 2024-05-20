@@ -67,13 +67,14 @@ export default function PanelGłówny() {
         wyjscie: new Date().toISOString(),
       };
 
-      const response = await axiosClient.post('/obecnosc/koniec-pracy', koniecPracyData);
+      const response = await axiosClient.put(`/obecnosc/${userId}`, koniecPracyData);
 
       console.log('Dane zakończenia pracy zostały zapisane:', response.data);
       setEndWork(true);
     } catch (error) {
       console.error('Błąd podczas zapisywania danych zakończenia pracy:', error);
     }
+    console.log('handleKoniecPracySubmit zostało wywołane');
   };
 
   return (

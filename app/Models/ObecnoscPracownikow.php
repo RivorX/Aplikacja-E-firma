@@ -10,6 +10,8 @@ class ObecnoscPracownikow extends Model
     use HasFactory;
 
     protected $table = 'obecność_pracowników';
+
+    protected $primaryKey = 'Obecność_pracowników_id';
     public $timestamps = false; 
     protected $fillable = [
         'Pracownicy_id',

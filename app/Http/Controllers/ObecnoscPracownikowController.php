@@ -30,12 +30,20 @@ class ObecnoscPracownikowController extends Controller
     return response()->json($obecnosc);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $userId)
     {
-        $obecnosc = ObecnoscPracownikow::findOrFail($id);
-        $obecnosc->wyjscie = Carbon::now();
-        $obecnosc->save();
-
-        return response()->json($obecnosc);
+        // Znajdź najnowszą obecność pracownika
+        $obecnosc = ObecnoscPracownikow::where('Pracownicy_id', $userId)->latest('Wejście')->first();
+        
+        // Sprawdź, czy znaleziono obecność
+        if ($obecnosc) {
+            // Ustaw czas wyjścia na aktualny czas
+            $obecnosc->Wyjście = Carbon::now();
+            $obecnosc->save();
+        
+            return response()->json($obecnosc);
+        } else {
+            return response()->json(['message' => 'Nie znaleziono obecności dla pracownika o podanym identyfikatorze.'], 404);
+        }
     }
 }
