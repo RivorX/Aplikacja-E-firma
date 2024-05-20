@@ -9,7 +9,9 @@ export default function PanelGłówny() {
   const [vacationDays, setVacationDays] = useState(0);
   const [selectedDate, setSelectedDate] = useState('');
   const [isPresent, setIsPresent] = useState(false);
-  const [endWork, setEndWork] = useState(false);
+  const [obecnoscButtonDisabled, setObecnoscButtonDisabled] = useState(false);
+  const [koniecPracyButtonDisabled, setKoniecPracyButtonDisabled] = useState(false);
+  const [initialButtonClicked, setInitialButtonClicked] = useState('');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -54,6 +56,8 @@ export default function PanelGłówny() {
 
       console.log('Dane obecności zostały zapisane:', response.data);
       setIsPresent(true);
+      setObecnoscButtonDisabled(true);
+      setInitialButtonClicked('Zgłoś obecność');
     } catch (error) {
       console.error('Błąd podczas zapisywania danych obecności:', error);
     }
@@ -70,12 +74,21 @@ export default function PanelGłówny() {
       const response = await axiosClient.put(`/obecnosc/${userId}`, koniecPracyData);
 
       console.log('Dane zakończenia pracy zostały zapisane:', response.data);
-      setEndWork(true);
+      setIsPresent(false);
+      setKoniecPracyButtonDisabled(true);
+      setInitialButtonClicked('Koniec pracy');
     } catch (error) {
       console.error('Błąd podczas zapisywania danych zakończenia pracy:', error);
     }
-    console.log('handleKoniecPracySubmit zostało wywołane');
   };
+
+  useEffect(() => {
+    if (initialButtonClicked === 'Zgłoś obecność') {
+      setKoniecPracyButtonDisabled(false);
+    } else if (initialButtonClicked === 'Koniec pracy') {
+      setObecnoscButtonDisabled(false);
+    }
+  }, [initialButtonClicked]);
 
   return (
     <>
@@ -85,19 +98,13 @@ export default function PanelGłówny() {
         </div>
       </header>
       <main>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <section>
-          <div className="overflow-x-auto">
-            {loading ? (
-              <p>Ładowanie...</p>
-            ) : (
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <section>
+            <div className="overflow-x-auto">
+              {loading ? (
+                <p>Ładowanie...</p>
+              ) : (
                 <div>
-                  <h2 className="text-xl font-semibold mb-4">Zgłoś obecność</h2>
-                  <select className="form-select mb-3 block w-full mt-1" value={absence} onChange={handleAbsenceChange}>
-                    <option value="">Wybierz rodzaj obecności</option>
-                    <option value="Przyjście">Przyjście</option>
-                    <option value="Wyjście">Wyjście</option>
-                  </select>
                   <h2 className="text-xl font-semibold mb-4">Forma wykorzystania nadgodzin:</h2>
                   <select className="form-select mb-3 block w-full mt-1" value={overtimeForm} onChange={handleOvertimeFormChange}>
                     <option value="">Wybierz formę wykorzystania nadgodzin</option>
@@ -108,20 +115,20 @@ export default function PanelGłówny() {
                   <input type="number" className="form-control mb-3 block w-full mt-1" min="0" step="1" value={vacationDays} onChange={handleVacationDaysChange} />
                   <h2 className="text-xl font-semibold mb-4">Kalendarz</h2>
                   <input type="date" className="form-control mb-3 block w-full mt-1" value={selectedDate} onChange={(e) => handleDateChange(e.target.value)} />
-                  <button 
-                  className={`btn btn-primary font-bold py-2 px-4 rounded text-white ${isPresent ? 'bg-gray-500 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'}`}
-                  onClick={handleObecnoscSubmit} 
-                  disabled={isPresent}
-                >
-                  Zgłoś obecność
-                </button>
-                <button 
-                  className={`btn btn-secondary font-bold py-2 px-4 rounded text-white ${!isPresent || endWork ? 'bg-blue-200' : 'bg-blue-500 hover:bg-blue-700'}`}
-                  onClick={handleKoniecPracySubmit} 
-                  disabled={!isPresent || endWork}
-                >
-                  Koniec pracy
-                </button>
+                  <button
+                    className={`btn btn-primary font-bold py-2 px-4 rounded text-white ${obecnoscButtonDisabled ? 'bg-gray-500 pointer-events-none' : 'bg-blue-500 hover:bg-blue-700'}`}
+                    onClick={handleObecnoscSubmit}
+                    disabled={obecnoscButtonDisabled}
+                  >
+                    Zgłoś obecność
+                  </button>
+                  <button
+                    className={`btn btn-secondary font-bold py-2 px-4 rounded text-white ${koniecPracyButtonDisabled ? 'bg-gray-500 pointer-events-none' : 'bg-red-500 hover:bg-red-700'}`}
+                    onClick={handleKoniecPracySubmit}
+                    disabled={koniecPracyButtonDisabled}
+                  >
+                    Koniec pracy
+                  </button>
                 </div>
               )}
             </div>
