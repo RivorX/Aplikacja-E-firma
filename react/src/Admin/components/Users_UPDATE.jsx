@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../../axios.js';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 
-export default function RegistrationForm() {
+export default function Users_UPDATE() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [position, setPosition] = useState("");
   const [customPosition, setCustomPosition] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [group, setGroup] = useState("");
-  const [description, setDescription] = useState(""); // Dodane
-  const [hourlyRate, setHourlyRate] = useState(""); // Dodane
+  const [description, setDescription] = useState("");
+  const [hourlyRate, setHourlyRate] = useState("");
   const [positionsList, setPositionsList] = useState([]);
   const [error, setError] = useState({ __html: "" });
-  const navigate = useNavigate();
-
 
   useEffect(() => {
     // Pobierz stanowiska z bazy danych przy załadowaniu komponentu
@@ -28,40 +27,58 @@ export default function RegistrationForm() {
       .catch(error => {
         console.error('Error fetching positions:', error);
       });
-  }, []);
+    
+    // Pobierz dane użytkownika do edycji
+    axiosClient
+      .get(`pracownicy/${id}`)
+      .then(response => {
+        const user = response.data.pracownik;
+        setFirstName(user.imie);
+        setLastName(user.nazwisko);
+        setEmail(user.email);
+        setGroup(user.Grupy_id);
+        setPosition(user.stanowisko.Stanowisko_id); // Pobieraj Stanowisko_id zamiast nazwy
 
-  
+        if (user.stanowisko.Stanowisko_id === "other") {
+          setCustomPosition(user.stanowisko.nazwa_stanowiska);
+          setDescription(user.stanowisko.opis);
+          setHourlyRate(user.stanowisko.stawka_h);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+  }, [id]);
+
   const handleSaveChanges = () => {
     setError({ __html: '' });
 
     axiosClient
-      .post('/adduser', {
+      .put(`/pracownicy/${id}`, {
         imie: firstName,
         nazwisko: lastName,
         email: email,
-        group: group,
-        position: position === 'other' ? customPosition : position,
-        description: position === 'other' ? description : '',
-        hourlyRate: position === 'other' ? hourlyRate : ''
+        Grupy_id: group,
+        Stanowisko_id: position === 'other' ? customPosition : position,
+        opis: position === 'other' ? description : '',
+        stawka_h: position === 'other' ? hourlyRate : ''
       })
       .then(({ data }) => {
         console.log(data);
-        // Sprawdzamy, czy nie ma błędów w odpowiedzi z serwera
         if (!data.error) {
           navigate('/admin/pracownicy');
         } else {
-          console.error('Błąd dodawania Pracownika:', data.message);
+          console.error('Błąd aktualizacji Pracownika:', data.message);
         }
       })
       .catch((error) => {
         if (error.response && error.response.data && error.response.data.errors) {
-          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
-          setError({ __html: finalErrors.join('<br>') }); // Aktualizacja stanu error
+          const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], []);
+          setError({ __html: finalErrors.join('<br>') });
         }
       });
   };
 
-  // Walidacje
   const handlePositionChange = (event) => {
     const selectedPosition = event.target.value;
     setPosition(selectedPosition);
@@ -74,23 +91,19 @@ export default function RegistrationForm() {
     setCustomPosition(event.target.value);
   };
 
-
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Rejestracja nowego konta
+            Aktualizacja danych użytkownika
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* Wypisywananie błędów z backendu */}
           {error.__html && (
-            <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={error}>
-            </div>
+            <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={error}></div>
           )}
-
 
           <form className="space-y-6" method="POST">
             <div>
@@ -136,28 +149,25 @@ export default function RegistrationForm() {
                 Stanowisko
               </label>
               <div className="mt-2">
-              <select
-                id="position"
-                name="position"
-                autoComplete="position"
-                value={position}
-                onChange={handlePositionChange}
-                required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                <option value="">Wybierz z listy</option>
-                {Array.isArray(positionsList.positions) && positionsList.positions.map(position => (
-                    <option key={position.Stanowisko_id} value={position.nazwa_stanowiska}>{position.nazwa_stanowiska}, {position.stawka_h}zł</option>
-                ))}
-                <option value="other">Inne</option>
-              </select>
-
-
-
+                <select
+                  id="position"
+                  name="position"
+                  autoComplete="position"
+                  value={position}
+                  onChange={handlePositionChange}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+                  {Array.isArray(positionsList.positions) && positionsList.positions.map(position => (
+                    <option key={position.Stanowisko_id} value={position.Stanowisko_id}>
+                      {position.nazwa_stanowiska}, {position.stawka_h}zł
+                    </option>
+                  ))}
+                  <option value="other">Inne</option>
+                </select>
               </div>
             </div>
 
-            {/* Dodatkowe pola dla nowego stanowiska */}
             {position === "other" && (
               <>
                 <div>
@@ -195,8 +205,8 @@ export default function RegistrationForm() {
                   </div>
                 </div>
                 <div>
-                <label htmlFor="hourlyRate" className="block text-sm font-medium leading-6 text-gray-900">
-                  Stawka za h
+                  <label htmlFor="hourlyRate" className="block text-sm font-medium leading-6 text-gray-900">
+                    Stawka za h
                   </label>
                   <div className="mt-2">
                     <input
@@ -242,38 +252,34 @@ export default function RegistrationForm() {
             </div>
 
             <div>
-
-              <div>
-                <label htmlFor="group" className="block text-sm font-medium leading-6 text-gray-900">
-                  Grupa
-                </label>
-                <div className="mt-2">
-                  <select
-                    id="group"
-                    name="group"
-                    autoComplete="group"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    value={group}
-                    onChange={(e) => setGroup(e.target.value)}
-                  >
-                    <option value="">Wybierz z listy</option>
-                    <option value="admin">Admin</option>
-                    <option value="pracownik">Pracownik</option>
-                  </select>
-                </div>
+              <label htmlFor="group" className="block text-sm font-medium leading-6 text-gray-900">
+                Grupa
+              </label>
+              <div className="mt-2">
+                <select
+                  id="group"
+                  name="group"
+                  autoComplete="group"
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  value={group}
+                  onChange={(e) => setGroup(e.target.value)}
+                >
+                  <option value="1">Admin</option>
+                  <option value="2">Pracownik</option>
+                  {/* Pomijamy wartość grupy 3 (Super admin) */}
+                </select>
               </div>
+            </div>
 
-              <div className="flex items-center justify-between mt-4">
-                <Link to="/admin/pracownicy" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
-                  Anuluj
-                </Link>
+            <div className="flex items-center justify-between mt-4">
+              <Link to="/admin/pracownicy" className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                Anuluj
+              </Link>
 
-
-                <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
-                  Dodaj
-                </Link>
-              </div>
+              <Link onClick={handleSaveChanges} className="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-25 transition">
+                Zapisz zmiany
+              </Link>
             </div>
           </form>
         </div>

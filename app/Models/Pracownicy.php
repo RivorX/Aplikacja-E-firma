@@ -46,4 +46,10 @@ class Pracownicy extends Authenticatable
     {
         return $this->belongsTo(Grupy::class, 'Grupy_id', 'Grupy_id');
     }
+
+    // Dodaj relację do kart dostępu
+    public function kartyDostepu()
+    {
+        return $this->hasMany(KartaDostepu::class, 'Pracownicy_id', 'Pracownicy_id');
+    }
 }

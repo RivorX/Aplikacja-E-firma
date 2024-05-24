@@ -61,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('pracownicy/{id}', [PracownicyController::class, 'show']);
     Route::post('pracownicy', [PracownicyController::class, 'store']);
     Route::put('pracownicy/{id}', [PracownicyController::class, 'update']);
+    Route::put('pracownicy/{id}/change-status ', [PracownicyController::class, 'change_status']);
     Route::delete('pracownicy/{id}', [PracownicyController::class, 'destroy']);
 });
 

@@ -13,6 +13,7 @@ const navigation = [
   { name: 'Karty dostepu', to: 'kartyDostepu'},
   { name: 'Drzwi / Kody QR', to: 'kodyQR'},
   { name: 'Strefy Dostepu', to: 'StrefyDostepu'},
+  { name: 'Budynki', to: 'Budynki'},
   { name: 'Aktualnosci', to: 'Aktualnosci'},
   { name: 'Ogłoszenia', to: 'Ogloszenia'},
   { name: 'Raporty', to: 'Raporty'},
