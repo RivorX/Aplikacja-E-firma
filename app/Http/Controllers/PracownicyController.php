@@ -55,75 +55,121 @@ class PracownicyController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'imie' => 'required',
-            'nazwisko' => 'required',
-            'stanowisko_id' => 'required|exists:stanowisko,id',
-            'pensja' => 'required|numeric',
-        ]);
+        DB::beginTransaction();
 
-        $pracownik = Pracownicy::create($validatedData);
+        try {
+            // Tworzenie nowego pracownika
+            $validatedData = $request->validate([
+                'imie' => 'required',
+                'nazwisko' => 'required',
+                'stanowisko_id' => 'required|exists:stanowisko,id',
+                'pensja' => 'required|numeric',
+            ]);
+            $pracownik = Pracownicy::create($validatedData);
 
-        return response()->json(['message' => 'Pracownik dodany', 'pracownik' => $pracownik], 201);
+            // Jeśli wszystko jest w porządku, zatwierdzamy transakcję
+            DB::commit();
+
+            return response()->json(['message' => 'Pracownik dodany', 'pracownik' => $pracownik], 201);
+        } catch (\Exception $e) {
+            // W przypadku błędu, wycofujemy zmiany
+            DB::rollback();
+            return response()->json(['message' => 'Wystąpił błąd podczas dodawania pracownika'], 500);
+        }
     }
 
     public function update(Request $request, $id)
     {
-        $pracownik = Pracownicy::find($id);
-
-        if (!$pracownik) {
-            return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
+        DB::beginTransaction();
+    
+        try {
+            $pracownik = Pracownicy::find($id);
+    
+            if (!$pracownik) {
+                return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
+            }
+    
+            $validatedData = $request->validate([
+                'imie' => 'required',
+                'nazwisko' => 'required',
+                'stanowisko_id' => 'required|exists:stanowisko,id',
+                'pensja' => 'required|numeric',
+            ]);
+    
+            $pracownik->update($validatedData);
+    
+            // Jeśli wszystko jest w porządku, zatwierdzamy transakcję
+            DB::commit();
+    
+            return response()->json(['message' => 'Pracownik zaktualizowany', 'pracownik' => $pracownik]);
+        } catch (\Exception $e) {
+            // W przypadku błędu, wycofujemy zmiany
+            DB::rollback();
+            return response()->json(['message' => 'Wystąpił błąd podczas aktualizacji pracownika'], 500);
         }
-
-        $validatedData = $request->validate([
-            'imie' => 'required',
-            'nazwisko' => 'required',
-            'stanowisko_id' => 'required|exists:stanowisko,id',
-            'pensja' => 'required|numeric',
-        ]);
-
-        $pracownik->update($validatedData);
-
-        return response()->json(['message' => 'Pracownik zaktualizowany', 'pracownik' => $pracownik]);
     }
-
+    
     public function change_status(Request $request, $id)
     {
-        $pracownik = Pracownicy::find($id);
-
-        if (!$pracownik) {
-            return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
-        }
-
-        // Zmiana statusu konta pracownika
-        $pracownik->konto_aktywne = !$pracownik->konto_aktywne;
-
-        // Zablokowanie wszystkich kart pracownika
-        if (!$pracownik->konto_aktywne) {
-            $karty = $pracownik->kartyDostepu;
-            foreach ($karty as $karta) {
-                $karta->karta_aktywna = 0;
-                $karta->save();
+        DB::beginTransaction();
+    
+        try {
+            $pracownik = Pracownicy::find($id);
+    
+            if (!$pracownik) {
+                return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
             }
+    
+            // Zmiana statusu konta pracownika
+            $pracownik->konto_aktywne = !$pracownik->konto_aktywne;
+    
+            // Zablokowanie wszystkich kart pracownika
+            if (!$pracownik->konto_aktywne) {
+                $karty = $pracownik->kartyDostepu;
+                foreach ($karty as $karta) {
+                    $karta->karta_aktywna = 0;
+                    $karta->save();
+                }
+            }
+    
+            // Zapisanie zmian
+            $pracownik->save();
+    
+            // Jeśli wszystko jest w porządku, zatwierdzamy transakcję
+            DB::commit();
+    
+            return response()->json(['message' => 'Status konta pracownika zmieniony, zablokowano karty', 'pracownik' => $pracownik]);
+        } catch (\Exception $e) {
+            // W przypadku błędu, wycofujemy zmiany
+            DB::rollback();
+            return response()->json(['message' => 'Wystąpił błąd podczas zmiany statusu konta pracownika'], 500);
         }
-
-        // Zapisanie zmian
-        $pracownik->save();
-
-        return response()->json(['message' => 'Status konta pracownika zmieniony, zablokowano karty', 'pracownik' => $pracownik]);
     }
+    
 
 
     public function destroy($id)
     {
-        $pracownik = Pracownicy::find($id);
-
-        if (!$pracownik) {
-            return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
+        DB::beginTransaction();
+    
+        try {
+            $pracownik = Pracownicy::find($id);
+    
+            if (!$pracownik) {
+                return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
+            }
+    
+            $pracownik->delete();
+    
+            // Jeśli wszystko jest w porządku, zatwierdzamy transakcję
+            DB::commit();
+    
+            return response()->json(['message' => 'Pracownik usunięty']);
+        } catch (\Exception $e) {
+            // W przypadku błędu, wycofujemy zmiany
+            DB::rollback();
+            return response()->json(['message' => 'Wystąpił błąd podczas usuwania pracownika'], 500);
         }
-
-        $pracownik->delete();
-
-        return response()->json(['message' => 'Pracownik usunięty']);
     }
+    
 }
