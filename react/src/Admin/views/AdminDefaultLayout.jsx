@@ -43,15 +43,6 @@ export default function LogedDefaultLayout() {
         // Przekierowanie na stronę gdy nie jesteśmy adminem
         return <Navigate to="/" />
     }
-    
-    // Wczytanie danych użytkownika
-    useEffect(() => {
-        axiosClient.get('/me')
-        .then(({data}) => {
-            setCurrentUser(data)
-            console.log(data)
-        })
-    }, [])
 
     // Wylogowanie
     const logout = (ev) => {
