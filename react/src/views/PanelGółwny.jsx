@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from '../axios';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function PanelGłówny() {
-  const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null);
   const [absence, setAbsence] = useState('');
   const [overtimeForm, setOvertimeForm] = useState('');
   const [vacationDays, setVacationDays] = useState(0);
@@ -12,21 +11,8 @@ export default function PanelGłówny() {
   const [obecnoscButtonDisabled, setObecnoscButtonDisabled] = useState(false);
   const [koniecPracyButtonDisabled, setKoniecPracyButtonDisabled] = useState(false);
   const [initialButtonClicked, setInitialButtonClicked] = useState('');
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const { data: userData } = await axiosClient.get('/me');
-        setUserId(userData.Pracownicy_id);
-        setLoading(false);
-      } catch (error) {
-        console.error('Błąd pobierania danych użytkownika:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
+  const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
+  const [userId, setUserId] = useState(currentUser.Pracownicy_id);
 
   const handleAbsenceChange = (event) => {
     setAbsence(event.target.value);
@@ -101,36 +87,32 @@ export default function PanelGłówny() {
         <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
           <section>
             <div className="overflow-x-auto">
-              {loading ? (
-                <p>Ładowanie...</p>
-              ) : (
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">Forma wykorzystania nadgodzin:</h2>
-                  <select className="form-select mb-3 block w-full mt-1" value={overtimeForm} onChange={handleOvertimeFormChange}>
-                    <option value="">Wybierz formę wykorzystania nadgodzin</option>
-                    <option value="Urlop">Urlop</option>
-                    <option value="Premia">Premia</option>
-                  </select>
-                  <h2 className="text-xl font-semibold mb-4">Wykorzystaj urlop:</h2>
-                  <input type="number" className="form-control mb-3 block w-full mt-1" min="0" step="1" value={vacationDays} onChange={handleVacationDaysChange} />
-                  <h2 className="text-xl font-semibold mb-4">Kalendarz</h2>
-                  <input type="date" className="form-control mb-3 block w-full mt-1" value={selectedDate} onChange={(e) => handleDateChange(e.target.value)} />
-                  <button
-                    className={`btn btn-primary font-bold py-2 px-4 rounded text-white ${obecnoscButtonDisabled ? 'bg-gray-500 pointer-events-none' : 'bg-blue-500 hover:bg-blue-700'}`}
-                    onClick={handleObecnoscSubmit}
-                    disabled={obecnoscButtonDisabled}
-                  >
-                    Zgłoś obecność
-                  </button>
-                  <button
-                    className={`btn btn-secondary font-bold py-2 px-4 rounded text-white ${koniecPracyButtonDisabled ? 'bg-gray-500 pointer-events-none' : 'bg-red-500 hover:bg-red-700'}`}
-                    onClick={handleKoniecPracySubmit}
-                    disabled={koniecPracyButtonDisabled}
-                  >
-                    Koniec pracy
-                  </button>
-                </div>
-              )}
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Forma wykorzystania nadgodzin:</h2>
+                <select className="form-select mb-3 block w-full mt-1" value={overtimeForm} onChange={handleOvertimeFormChange}>
+                  <option value="">Wybierz formę wykorzystania nadgodzin</option>
+                  <option value="Urlop">Urlop</option>
+                  <option value="Premia">Premia</option>
+                </select>
+                <h2 className="text-xl font-semibold mb-4">Wykorzystaj urlop:</h2>
+                <input type="number" className="form-control mb-3 block w-full mt-1" min="0" step="1" value={vacationDays} onChange={handleVacationDaysChange} />
+                <h2 className="text-xl font-semibold mb-4">Kalendarz</h2>
+                <input type="date" className="form-control mb-3 block w-full mt-1" value={selectedDate} onChange={(e) => handleDateChange(e.target.value)} />
+                <button
+                  className={`btn btn-primary font-bold py-2 px-4 rounded text-white ${obecnoscButtonDisabled ? 'bg-gray-500 pointer-events-none' : 'bg-blue-500 hover:bg-blue-700'}`}
+                  onClick={handleObecnoscSubmit}
+                  disabled={obecnoscButtonDisabled}
+                >
+                  Zgłoś obecność
+                </button>
+                <button
+                  className={`btn btn-secondary font-bold py-2 px-4 rounded text-white ${koniecPracyButtonDisabled ? 'bg-gray-500 pointer-events-none' : 'bg-red-500 hover:bg-red-700'}`}
+                  onClick={handleKoniecPracySubmit}
+                  disabled={koniecPracyButtonDisabled}
+                >
+                  Koniec pracy
+                </button>
+              </div>
             </div>
           </section>
         </div>
