@@ -26,7 +26,8 @@ class PracownicyController extends Controller
                 Pracownicy.Data_utworzenia,
                 Karta_dostepu.Karta_Dostepu_id,
                 Karta_dostepu.numer_seryjny,
-                Karta_dostepu.data_wydania
+                Karta_dostepu.data_wydania,
+                Karta_dostepu.karta_aktywna
             FROM 
                 Pracownicy
             LEFT JOIN 
@@ -41,8 +42,10 @@ class PracownicyController extends Controller
 
     public function show($id)
     {
-        $pracownik = Pracownicy::find($id);
-        
+        $pracownik = Pracownicy::with(['stanowisko', 'grupa'])
+            ->where('Pracownicy_id', $id)
+            ->first();
+
         if (!$pracownik) {
             return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
         }
@@ -83,6 +86,33 @@ class PracownicyController extends Controller
 
         return response()->json(['message' => 'Pracownik zaktualizowany', 'pracownik' => $pracownik]);
     }
+
+    public function change_status(Request $request, $id)
+    {
+        $pracownik = Pracownicy::find($id);
+
+        if (!$pracownik) {
+            return response()->json(['message' => 'Pracownik nie znaleziony'], 404);
+        }
+
+        // Zmiana statusu konta pracownika
+        $pracownik->konto_aktywne = !$pracownik->konto_aktywne;
+
+        // Zablokowanie wszystkich kart pracownika
+        if (!$pracownik->konto_aktywne) {
+            $karty = $pracownik->kartyDostepu;
+            foreach ($karty as $karta) {
+                $karta->karta_aktywna = 0;
+                $karta->save();
+            }
+        }
+
+        // Zapisanie zmian
+        $pracownik->save();
+
+        return response()->json(['message' => 'Status konta pracownika zmieniony, zablokowano karty', 'pracownik' => $pracownik]);
+    }
+
 
     public function destroy($id)
     {

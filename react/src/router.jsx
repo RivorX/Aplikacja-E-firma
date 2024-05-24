@@ -26,6 +26,7 @@ import Form from "./Admin/views/Form.jsx";
 
 //formularze do admina
 import Users_ADD from "./Admin/components/Users_ADD.jsx";
+import Users_UPDATE from "./Admin/components/Users_UPDATE.jsx";
 
 import AddNews from "./Admin/components/News_ADD.jsx";
 import News_UPDATE from "./Admin/components/News_UPDATE.jsx";
@@ -43,6 +44,8 @@ import StrefyDostępu_ADD from "./Admin/components/StrefaDostepu_ADD.jsx";
 import StrefyDostepu from "./Admin/views/StrefyDostepu.jsx";
 import StrefaDostepu_UPDATE from "./Admin/components/StrefaDostepu_UPDATE.jsx";
 import Raporty from "./Admin/views/Raporty.jsx";
+import Budynki from "./Admin/views/Budynki.jsx";
+import Budynek_ADD from "./Admin/components/Budynek_ADD.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -122,6 +125,10 @@ const router = createBrowserRouter([
                 element: <StrefyDostepu/>
             },
             {
+                path: 'Budynki',
+                element: <Budynki/>
+            },
+            {
                 path: 'Raporty',
                 element: <Raporty/>
             }
@@ -161,6 +168,10 @@ const router = createBrowserRouter([
                 element: <Users_ADD/>
             },
             {
+                path: 'editUser/:id',
+                element: <Users_UPDATE/>
+            },
+            {
                 path: 'ADDKartaDostepu',
                 element: <KartyDostepu_ADD/>
             },
@@ -183,6 +194,10 @@ const router = createBrowserRouter([
             {
                 path: 'StrefaDostepu_UPDATE/:id',
                 element: <StrefaDostepu_UPDATE/>
+            },
+            {
+                path: 'ADDBudynek',
+                element: <Budynek_ADD/>
             }
         ]
     },
