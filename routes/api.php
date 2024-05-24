@@ -14,7 +14,8 @@ use App\Http\Controllers\AdresZamieszkaniaController;
 use App\Http\Controllers\BudynkiController;
 use App\Http\Controllers\ObecnoscPracownikowController;
 use App\Http\Controllers\QrCodeController;
-use App\Http\Controllers\LogiKartController;
+use App\Http\Controllers\RaportyController;
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -126,5 +127,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //Raporty
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logs/card', [LogiKartController::class, 'cardLogsReport']);
+    Route::post('/logs/card', [RaportyController::class, 'cardLogsReport']);
+    Route::post('/logs/workedHours', [RaportyController::class, 'workedHoursReport']);
 });
