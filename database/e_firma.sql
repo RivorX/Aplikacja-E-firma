@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 18, 2024 at 08:07 PM
+-- Generation Time: Maj 26, 2024 at 08:04 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -20,6 +20,23 @@ SET time_zone = "+00:00";
 --
 -- Database: `e_firma`
 --
+
+DELIMITER $$
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `czas_przebywania_pracownika` (`pracownik_id` INT, `data` DATE) RETURNS TIME  BEGIN
+    DECLARE total_time TIME;
+    
+    SELECT SEC_TO_TIME(SUM(TIMESTAMPDIFF(SECOND, Wejście, Wyjście))) INTO total_time
+    FROM Obecność_pracowników
+    WHERE Pracownicy_id = pracownik_id
+    AND Data = data;
+    
+    RETURN total_time;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -97,8 +114,7 @@ CREATE TABLE `budynki` (
 
 INSERT INTO `budynki` (`budynek_id`, `nazwa_budynku`, `opis_budynku`) VALUES
 (3, 'Siedziba główna', NULL),
-(4, 'Plan główny', NULL),
-(5, 'testowy', NULL);
+(6, 'Testowy', NULL);
 
 -- --------------------------------------------------------
 
@@ -243,7 +259,8 @@ CREATE TABLE `karta_dostepu` (
 --
 
 INSERT INTO `karta_dostepu` (`Karta_Dostepu_id`, `Pracownicy_id`, `numer_seryjny`, `data_wydania`, `data_waznosci`, `karta_aktywna`, `inne_dane`) VALUES
-(1, 7, '23432424', '2024-05-04', '2024-05-04', 1, NULL);
+(1, 7, '23432424', '2024-05-04', '2026-05-02', 1, NULL),
+(9, 8, 'FD620150E3', '2024-05-19', '2025-02-02', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -255,6 +272,16 @@ CREATE TABLE `karta_dostepu_has_strefy_dostepu` (
   `Karta_Dostepu_id` int(11) NOT NULL,
   `Strefy_Dostepu_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `karta_dostepu_has_strefy_dostepu`
+--
+
+INSERT INTO `karta_dostepu_has_strefy_dostepu` (`Karta_Dostepu_id`, `Strefy_Dostepu_id`) VALUES
+(1, 1),
+(9, 1),
+(9, 3),
+(9, 4);
 
 -- --------------------------------------------------------
 
@@ -325,7 +352,24 @@ INSERT INTO `logi_kart` (`Logi_kart_id`, `Karta_Dostepu_id`, `Strefy_Dostepu_id`
 (97, 1, 2, 1, '2024-05-13 08:04:00', 1),
 (98, 1, 2, 1, '2024-05-12 21:04:00', 1),
 (99, 1, 1, 1, '2024-05-13 03:04:00', 0),
-(100, 1, 3, 1, '2024-05-12 17:04:00', 0);
+(100, 1, 3, 1, '2024-05-12 17:04:00', 0),
+(101, 1, 2, 1, '2024-05-19 13:31:07', 1),
+(102, 1, 2, 1, '2024-05-19 13:33:51', 1),
+(103, 1, 2, 1, '2024-05-21 10:20:34', 1),
+(104, 1, 2, 1, '2024-05-21 10:21:14', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `log_operacji`
+--
+
+CREATE TABLE `log_operacji` (
+  `id` int(11) NOT NULL,
+  `akcja` varchar(50) DEFAULT NULL,
+  `data` datetime DEFAULT NULL,
+  `szczegoly` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -375,6 +419,14 @@ CREATE TABLE `obecność_pracowników` (
   `Wyjście` datetime DEFAULT NULL,
   `Ostrzeżenie` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `obecność_pracowników`
+--
+
+INSERT INTO `obecność_pracowników` (`Obecność_pracowników_id`, `Pracownicy_id`, `Data`, `Wejście`, `Wyjście`, `Ostrzeżenie`) VALUES
+(1, 7, '2024-05-24', '2024-05-24 16:42:19', '2024-05-24 16:42:22', NULL),
+(2, 7, '2024-05-24', '2024-05-24 18:08:07', '2024-05-24 18:23:39', NULL);
 
 -- --------------------------------------------------------
 
@@ -461,7 +513,12 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (44, 'App\\Models\\Pracownicy', 8, 'main', '82462cf9d558db53b1f052d45747d1f5a3b83eeef0fa9eb75a0dffa942552137', '[\"*\"]', '2024-04-29 14:37:07', NULL, '2024-04-29 14:36:59', '2024-04-29 14:37:07'),
 (55, 'App\\Models\\Pracownicy', 9, 'main', '51a401949ee27c9fdc42c7cf8ebd17cde17536bc551cf3d1d5f76e67cbd7c7a0', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:41', '2024-05-12 16:41:41'),
 (56, 'App\\Models\\Pracownicy', 10, 'main', '663014fa85a6e01645c2941947ff1c9b6bac0bb9724ba3f599cd559682de01cc', '[\"*\"]', NULL, NULL, '2024-05-12 16:41:52', '2024-05-12 16:41:52'),
-(60, 'App\\Models\\Pracownicy', 7, 'main', 'a0518def00641be0729969fba44b78c8e6ae12e9acbd50d10ac320ba72a480a8', '[\"*\"]', '2024-05-15 10:59:49', NULL, '2024-05-14 18:22:53', '2024-05-15 10:59:49');
+(63, 'App\\Models\\Pracownicy', 11, 'main', '0fd3b700dc6dd29da9d9b83426fbb237610db8fab10942503b4d991681a17759', '[\"*\"]', NULL, NULL, '2024-05-24 09:00:34', '2024-05-24 09:00:34'),
+(64, 'App\\Models\\Pracownicy', 12, 'main', 'd7e317c601c01648b14ee8a290f93a1372f47adaaa95e5f55fa0955dc3e9780a', '[\"*\"]', NULL, NULL, '2024-05-24 14:11:10', '2024-05-24 14:11:10'),
+(65, 'App\\Models\\Pracownicy', 13, 'main', '310a1893379f35074beecba777582cc35edc6d181ab98df3bb13d55abaed65e4', '[\"*\"]', NULL, NULL, '2024-05-24 14:13:16', '2024-05-24 14:13:16'),
+(66, 'App\\Models\\Pracownicy', 14, 'main', '6845b83d89ed89f0bf7036338dd199dd9721b3001fa0e888c1b653b04bc99ce9', '[\"*\"]', NULL, NULL, '2024-05-24 14:15:31', '2024-05-24 14:15:31'),
+(68, 'App\\Models\\Pracownicy', 7, 'main', '263d97c8436e0e31b17aa357194a004f38bd432646d376557cc64778a31e8cef', '[\"*\"]', '2024-05-24 17:16:13', NULL, '2024-05-24 14:38:29', '2024-05-24 17:16:13'),
+(69, 'App\\Models\\Pracownicy', 7, 'main', 'b5b3898577c573e22c340c325c632921b355004d6af51cebadc4ce1518c7ef04', '[\"*\"]', '2024-05-26 14:51:38', NULL, '2024-05-26 14:51:34', '2024-05-26 14:51:38');
 
 -- --------------------------------------------------------
 
@@ -489,9 +546,7 @@ CREATE TABLE `pracownicy` (
 
 INSERT INTO `pracownicy` (`Pracownicy_id`, `Stanowisko_id`, `Grupy_id`, `email`, `password`, `imie`, `nazwisko`, `konto_aktywne`, `ilosc_dni_urlopu`, `Data_edycji`, `Data_utworzenia`) VALUES
 (7, 1, 3, 'admin@example.pl', '$2y$12$G4fTGOhmj1Rom2Wx4sLSiORhzmC2HnB/QmVhzSvVxx.Rpe1lM9vGq', 'Rafał', 'Admin', 1, 0, '2024-05-12 18:41:16', '2024-04-29 15:01:07'),
-(8, 8, 1, 'aga@example.pl', '$2y$12$BW/PNqICXw1RlCY4HXXk2.0aDJ5VoSD0m0pm4DCf.0gIpWknf/Nuq', 'Agała', 'Magała', 1, 0, NULL, '2024-04-29 16:35:35'),
-(9, 8, 1, 'rm@example.pl', '$2y$12$736I2qwGclz9LFxsp3pX.uVTKUxM9oD2lJ3fN2O7d6kJRt.sieXc.', 'Rafał', 'Madoń', 1, 0, NULL, '2024-05-12 18:41:37'),
-(10, 8, 1, 'rm1@example.pl', '$2y$12$DZ7ghIVMndAX0q9K33ia4.28HkUkM3i4tPDAURAd5xZYrw.Fk.g6e', 'Rafał', 'Madoń', 1, 0, NULL, '2024-05-12 18:41:50');
+(8, 8, 1, 'aga@example.pl', '$2y$12$BW/PNqICXw1RlCY4HXXk2.0aDJ5VoSD0m0pm4DCf.0gIpWknf/Nuq', 'Agała', 'Magała', 1, 0, NULL, '2024-04-29 16:35:35');
 
 -- --------------------------------------------------------
 
@@ -555,11 +610,13 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('8UPI0UMbKAGoPWGkKBIn63DxeRjHrioVGOAyoCsV', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiT2Nxc3BVdVl6VnFYaUpXa2tIY0UzMTJCVDB1ZTBhamRpYk5rcURxRCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1716070715),
 ('Bf5ZxHYilkMj1BhEA7e1NqjBIO34hYkOVFbpVEGx', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMjZUZWpUb3l6Q1dkVUtRMzdWdWtzZkdQZTJydFR3YkppYmFLVTM5UCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1714846690),
 ('gSzLRxqmcDsELRwsAsJwkminQsXMrJsiBaIzayP9', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTW5ueEk2SnJ4WnZJWHhwSGV2SWxXTmxwbmdHUnRtNG1kSGNCNHd6MiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713696097),
 ('jogtYTkCIcrgJLd8zVPul4UQ9FCM2BtZ5PsI5w7V', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTVFqTUpFMXBhRlUzdTJVazRXTlZud2xuSU80d2pWTjZ4TWpNdmZUbyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713638117),
 ('JOUPa0MVzp8xhXMKu5WKeA9N17e2CSa44DUYJgNj', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiWWFOR0drTGY5bFRuQ1ZuVEpnRFRqZjc3NGxvbGlydTFCOW5jN3FpNyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713807779),
 ('k7tQKperE3zKITSD1gjiSuWSkrtRFkQIpwaDynKO', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiY0YwdjhXNnJjdk1SQ3BybjJlSTB5UXZYSG84SU45OTh2UUxsN2s0diI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713642903),
+('marAWYnV5SxXU4NemF1PLgrZSnDPdtOPr8N4CSxk', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidjRad2xjRWRqR2RmeDU3dHF1RnlMZlpjTnpvSEFPcUhIb2FuWUtLOCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1716059861),
 ('nNAXiysVc6S4ERXxpYSEXU2n3eWyTpAu4KjFqbvN', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibHRKUWhLa21zT3dnOTFOZW94OHJNT1VKRWVheFJPeUR6NzY5SVR2byI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1713694710),
 ('YDjmiODV5eT9SIApsozjuHGfCdURSjPJLeP1Txxt', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0 (Edition std-1)', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVjQxUGpQV2JjdjUyN1NOZnRmYjRrRk5PZEpuam5maXoyeW9KZnRzMiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1715431603);
 
@@ -613,11 +670,45 @@ CREATE TABLE `strefy_dostepu` (
 --
 
 INSERT INTO `strefy_dostepu` (`Strefy_Dostepu_id`, `nazwa_strefy`, `budynek_id`) VALUES
-(1, 'Strefa A', NULL),
-(2, 'Kuchnia', NULL),
-(3, 'Strefa B', NULL),
-(4, 'Strefa C', NULL),
-(5, 'Atrefa AB', NULL);
+(1, 'Strefa A', 3),
+(2, 'Kuchnia', 3),
+(3, 'Strefa B', 3),
+(4, 'Strefa C', 3),
+(5, 'Atrefa AB', 6);
+
+--
+-- Wyzwalacze `strefy_dostepu`
+--
+DELIMITER $$
+CREATE TRIGGER `after_insert_strefy_dostepu` AFTER INSERT ON `strefy_dostepu` FOR EACH ROW BEGIN
+    INSERT INTO log_operacji (akcja, data, szczegoly)
+    VALUES ('INSERT', NOW(), CONCAT('Dodano nową strefę: ', NEW.nazwa_strefy));
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_update_strefy_dostepu` AFTER UPDATE ON `strefy_dostepu` FOR EACH ROW BEGIN
+    INSERT INTO log_operacji (akcja, data, szczegoly)
+    VALUES ('UPDATE', NOW(), CONCAT('Zaktualizowano strefę ID: ', NEW.Strefy_Dostepu_id));
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `before_delete_strefy_dostepu` BEFORE DELETE ON `strefy_dostepu` FOR EACH ROW BEGIN
+    INSERT INTO log_operacji (akcja, data, szczegoly)
+    VALUES ('DELETE', NOW(), CONCAT('Usunięto strefę ID: ', OLD.Strefy_Dostepu_id));
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `before_insert_strefy_dostepu` BEFORE INSERT ON `strefy_dostepu` FOR EACH ROW BEGIN
+    IF NEW.nazwa_strefy IS NULL OR NEW.nazwa_strefy = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Nazwa strefy nie może być pusta';
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -815,6 +906,12 @@ ALTER TABLE `logi_kart`
   ADD KEY `Drzwi_id` (`Drzwi_id`);
 
 --
+-- Indeksy dla tabeli `log_operacji`
+--
+ALTER TABLE `log_operacji`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeksy dla tabeli `migrations`
 --
 ALTER TABLE `migrations`
@@ -998,7 +1095,7 @@ ALTER TABLE `badania_okresowe`
 -- AUTO_INCREMENT for table `budynki`
 --
 ALTER TABLE `budynki`
-  MODIFY `budynek_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `budynek_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `drzwi`
@@ -1028,13 +1125,19 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `karta_dostepu`
 --
 ALTER TABLE `karta_dostepu`
-  MODIFY `Karta_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Karta_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `logi_kart`
 --
 ALTER TABLE `logi_kart`
-  MODIFY `Logi_kart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `Logi_kart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+
+--
+-- AUTO_INCREMENT for table `log_operacji`
+--
+ALTER TABLE `log_operacji`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -1052,7 +1155,7 @@ ALTER TABLE `nadgodziny`
 -- AUTO_INCREMENT for table `obecność_pracowników`
 --
 ALTER TABLE `obecność_pracowników`
-  MODIFY `Obecność_pracowników_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Obecność_pracowników_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `ogloszenia`
@@ -1064,13 +1167,13 @@ ALTER TABLE `ogloszenia`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
-  MODIFY `Pracownicy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `Pracownicy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `rodzaj_etatu`
@@ -1094,7 +1197,7 @@ ALTER TABLE `stanowisko`
 -- AUTO_INCREMENT for table `strefy_dostepu`
 --
 ALTER TABLE `strefy_dostepu`
-  MODIFY `Strefy_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Strefy_Dostepu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `szkolenia`
