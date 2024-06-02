@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\StrefyDostepu;
-use App\Models\Budynki;
+use Illuminate\Support\Facades\DB;
 
 class StrefyDostepuController extends Controller
 {
     public function index(Request $request)
     {
-        $strefyDostepu = StrefyDostepu::with('budynek')->get();
-
+        $strefyDostepu = DB::select('SELECT s.*, b.* FROM strefy_dostepu s LEFT JOIN budynki b ON s.budynek_id = b.budynek_id');
         return response()->json(['strefyDostepu' => $strefyDostepu]);
     }
 
@@ -27,22 +25,28 @@ class StrefyDostepuController extends Controller
         $nowy_budynek = $request->input('nowy_budynek');
 
         if ($nowy_budynek) {
-            $budynek = Budynki::create(['nazwa_budynku' => $nowy_budynek]);
-            $budynek_id = $budynek->budynek_id;
+            DB::insert('INSERT INTO budynki (nazwa_budynku) VALUES (?)', [$nowy_budynek]);
+            $budynek_id = DB::getPdo()->lastInsertId();
         }
 
-        $strefaDostepu = StrefyDostepu::create([
-            'nazwa_strefy' => $request->input('nazwa_strefy'),
-            'budynek_id' => $budynek_id,
+        DB::insert('INSERT INTO strefy_dostepu (nazwa_strefy, budynek_id) VALUES (?, ?)', [
+            $request->input('nazwa_strefy'),
+            $budynek_id
         ]);
 
-        return response()->json($strefaDostepu, 201);
+        $id = DB::getPdo()->lastInsertId();
+        $strefaDostepu = DB::select('SELECT * FROM strefy_dostepu WHERE strefy_dostepu_id = ?', [$id]);
+
+        return response()->json($strefaDostepu[0], 201);
     }
 
     public function show($id)
     {
-        $strefaDostepu = StrefyDostepu::with('budynek')->findOrFail($id);
-        return response()->json($strefaDostepu);
+        $strefaDostepu = DB::select('SELECT s.*, b.* FROM strefy_dostepu s LEFT JOIN budynki b ON s.budynek_id = b.budynek_id WHERE s.strefy_dostepu_id = ?', [$id]);
+        if (empty($strefaDostepu)) {
+            return response()->json(['message' => 'Strefa dostępu nie znaleziona'], 404);
+        }
+        return response()->json($strefaDostepu[0]);
     }
 
     public function update(Request $request, $id)
@@ -53,28 +57,38 @@ class StrefyDostepuController extends Controller
             'nowy_budynek' => 'nullable|string|max:255',
         ]);
 
-        $strefaDostepu = StrefyDostepu::findOrFail($id);
+        $strefaDostepu = DB::select('SELECT * FROM strefy_dostepu WHERE strefy_dostepu_id = ?', [$id]);
+        if (empty($strefaDostepu)) {
+            return response()->json(['message' => 'Strefa dostępu nie znaleziona'], 404);
+        }
 
         $budynek_id = $request->input('budynek_id');
         $nowy_budynek = $request->input('nowy_budynek');
 
         if ($nowy_budynek) {
-            $budynek = Budynki::create(['nazwa_budynku' => $nowy_budynek]);
-            $budynek_id = $budynek->id;
+            DB::insert('INSERT INTO budynki (nazwa_budynku) VALUES (?)', [$nowy_budynek]);
+            $budynek_id = DB::getPdo()->lastInsertId();
         }
 
-        $strefaDostepu->update([
-            'nazwa_strefy' => $request->input('nazwa_strefy'),
-            'budynek_id' => $budynek_id,
+        DB::update('UPDATE strefy_dostepu SET nazwa_strefy = ?, budynek_id = ? WHERE strefy_dostepu_id = ?', [
+            $request->input('nazwa_strefy'),
+            $budynek_id,
+            $id
         ]);
 
-        return response()->json($strefaDostepu, 200);
+        $strefaDostepu = DB::select('SELECT * FROM strefy_dostepu WHERE strefy_dostepu_id = ?', [$id]);
+
+        return response()->json($strefaDostepu[0], 200);
     }
 
     public function destroy($id)
     {
-        $strefaDostepu = StrefyDostepu::findOrFail($id);
-        $strefaDostepu->delete();
+        $strefaDostepu = DB::select('SELECT * FROM strefy_dostepu WHERE strefy_dostepu_id = ?', [$id]);
+        if (empty($strefaDostepu)) {
+            return response()->json(['message' => 'Strefa dostępu nie znaleziona'], 404);
+        }
+
+        DB::delete('DELETE FROM strefy_dostepu WHERE strefy_dostepu_id = ?', [$id]);
 
         return response()->json(null, 204);
     }

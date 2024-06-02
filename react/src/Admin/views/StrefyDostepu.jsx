@@ -94,7 +94,7 @@ export default function StrefyDostepu() {
                       <tr key={strefa.Strefy_Dostepu_id}>
                         <td className="border px-4 py-2 text-gray-700">{strefa.Strefy_Dostepu_id}</td>
                         <td className="border px-4 py-2 text-gray-700">{strefa.nazwa_strefy}</td>
-                        <td className="border px-4 py-2 text-gray-700">{strefa.budynek ? strefa.budynek.nazwa_budynku : 'Brak'}</td>
+                        <td className="border px-4 py-2 text-gray-700">{strefa.nazwa_budynku ? strefa.nazwa_budynku : 'Brak'}</td>
                         <td className="border px-4 py-2 text-gray-700">
                           <NavLink
                             to={`/admin/form/StrefaDostepu_UPDATE/${strefa.Strefy_Dostepu_id}`}
