@@ -3,21 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Drzwi;
+use Illuminate\Support\Facades\DB;
 
 class DrzwiController extends Controller
 {
     public function index()
     {
-        $drzwis = Drzwi::with('strefyDostepu')->get();
+        $drzwis = DB::select('SELECT d.*, s.* FROM drzwi d LEFT JOIN strefy_dostepu s ON d.Strefy_Dostepu_id = s.Strefy_Dostepu_id');
         return response()->json($drzwis);
     }
 
     public function show($id)
     {
-        $drzwi = Drzwi::with('strefyDostepu')->findOrFail($id);
-        return response()->json($drzwi);
+        $drzwi = DB::select('SELECT d.*, s.* FROM drzwi d LEFT JOIN strefy_dostepu s ON d.Strefy_Dostepu_id = s.Strefy_Dostepu_id WHERE d.drzwi_id = ?', [$id]);
+        if (empty($drzwi)) {
+            return response()->json(['message' => 'Drzwi nie znalezione'], 404);
+        }
+        return response()->json($drzwi[0]);
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -28,10 +32,20 @@ class DrzwiController extends Controller
             'drzwi_aktywne' => 'required',
         ]);
 
-        $drzwi = Drzwi::create($request->all());
-        
-        return response()->json($drzwi, 201);
+        DB::insert('INSERT INTO drzwi (nr_drzwi, nazwa, WeWy, Strefy_Dostepu_id, drzwi_aktywne) VALUES (?, ?, ?, ?, ?)', [
+            $request->input('nr_drzwi'),
+            $request->input('nazwa'),
+            $request->input('WeWy'),
+            $request->input('Strefy_Dostepu_id'),
+            $request->input('drzwi_aktywne')
+        ]);
+
+        $id = DB::getPdo()->lastInsertId();
+        $drzwi = DB::select('SELECT * FROM drzwi WHERE drzwi_id = ?', [$id]);
+
+        return response()->json($drzwi[0], 201);
     }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -41,17 +55,29 @@ class DrzwiController extends Controller
             'Strefy_Dostepu_id' => 'required',
             'drzwi_aktywne' => 'required',
         ]);
-    
-        $drzwi = Drzwi::findOrFail($id);
-        $drzwi->update($request->all());
-    
-        return response()->json($drzwi, 200);
+
+        DB::update('UPDATE drzwi SET nr_drzwi = ?, nazwa = ?, WeWy = ?, Strefy_Dostepu_id = ?, drzwi_aktywne = ? WHERE drzwi_id = ?', [
+            $request->input('nr_drzwi'),
+            $request->input('nazwa'),
+            $request->input('WeWy'),
+            $request->input('Strefy_Dostepu_id'),
+            $request->input('drzwi_aktywne'),
+            $id
+        ]);
+
+        $drzwi = DB::select('SELECT * FROM drzwi WHERE drzwi_id = ?', [$id]);
+
+        return response()->json($drzwi[0], 200);
     }
 
     public function destroy($id)
     {
-        $drzwi = Drzwi::findOrFail($id);
-        $drzwi->delete();
+        $drzwi = DB::select('SELECT * FROM drzwi WHERE drzwi_id = ?', [$id]);
+        if (empty($drzwi)) {
+            return response()->json(['message' => 'Drzwi nie znalezione'], 404);
+        }
+
+        DB::delete('DELETE FROM drzwi WHERE drzwi_id = ?', [$id]);
 
         return response()->json(null, 204);
     }
