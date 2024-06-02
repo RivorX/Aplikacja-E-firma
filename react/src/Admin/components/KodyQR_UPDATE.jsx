@@ -25,7 +25,7 @@ export default function KodyQR_UPDATE() {
         setNrDrzwi(response.data.nr_drzwi);
         setNazwa(response.data.nazwa);
         setWeWy(response.data.WeWy);
-        setStrefaDostepu(response.data.strefy_dostepu.Strefy_Dostepu_id);
+        setStrefaDostepu(response.data.Strefy_Dostepu_id);
         setDrzwiAktywne(response.data.drzwi_aktywne ? 1 : 0);
       })
       .catch((error) => {
