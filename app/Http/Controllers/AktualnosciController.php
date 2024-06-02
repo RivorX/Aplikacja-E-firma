@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Aktualnosci;
- 
+
 /**
  * @OA\Info(
  *      version="1.0.0",
@@ -47,9 +48,9 @@ class AktualnosciController extends Controller
      */
     public function Aktualnosci()
     {
-        $Aktualnosci = Aktualnosci::limit(6)->get();
+        $Aktualnosci = DB::select('SELECT * FROM aktualnosci LIMIT 6');
 
-        if ($Aktualnosci->isEmpty()) {
+        if (empty($Aktualnosci)) {
             return response()->json(['message' => 'Brak aktualności'], 404);
         }
 
@@ -92,17 +93,17 @@ class AktualnosciController extends Controller
      */
     public function show_id($id)
     {
-        $news = Aktualnosci::find($id);
-        if (!$news) {
+        $news = DB::select('SELECT * FROM aktualnosci WHERE aktualnosci_id = ?', [$id]);
+        if (empty($news)) {
             return response()->json(['message' => 'Aktualność nie znaleziona'], 404);
         }
-        return response()->json(['news' => $news]);
+        return response()->json(['news' => $news[0]]);
     }
 
     public function showALL()
     {
-        $news = Aktualnosci::get();
-        if ($news->isEmpty()) {
+        $news = DB::select('SELECT * FROM aktualnosci');
+        if (empty($news)) {
             return response()->json(['message' => 'Aktualność nie znaleziona'], 404);
         }
         return response()->json(['news' => $news]);
@@ -123,18 +124,21 @@ class AktualnosciController extends Controller
         $validatedData['data_nadania'] = $data_nadania;
 
         // Utwórz nową aktualność
-        $news = Aktualnosci::create($validatedData);
+        DB::insert('INSERT INTO aktualnosci (tytul, opis, data_nadania) VALUES (?, ?, ?)', [
+            $validatedData['tytul'],
+            $validatedData['opis'],
+            $validatedData['data_nadania']
+        ]);
 
         // Zwróć odpowiedź JSON z informacją o sukcesie i nową aktualnością
-        return response()->json(['message' => 'Aktualność dodana', 'news' => $news], 201);
+        return response()->json(['message' => 'Aktualność dodana'], 201);
     }
-
 
     public function update(Request $request, $id)
     {
         // Znajdź aktualność do aktualizacji
-        $news = Aktualnosci::find($id);
-        if (!$news) {
+        $news = DB::select('SELECT * FROM aktualnosci WHERE aktualnosci_id = ?', [$id]);
+        if (empty($news)) {
             return response()->json(['message' => 'Aktualność nie znaleziona'], 404);
         }
 
@@ -151,19 +155,26 @@ class AktualnosciController extends Controller
         $validatedData['data_nadania'] = $data_nadania;
 
         // Zaktualizuj aktualność
-        $news->update($validatedData);
+        DB::update('UPDATE aktualnosci SET tytul = ?, opis = ?, data_nadania = ? WHERE aktualnosci_id = ?', [
+            $validatedData['tytul'],
+            $validatedData['opis'],
+            $validatedData['data_nadania'],
+            $id
+        ]);
 
         // Zwróć odpowiedź JSON z informacją o sukcesie oraz zaktualizowaną aktualnością
-        return response()->json(['message' => 'Aktualność zaktualizowana', 'news' => $news]);
+        return response()->json(['message' => 'Aktualność zaktualizowana']);
     }
 
     public function destroy($id)
     {
-        $news = Aktualnosci::find($id);
-        if (!$news) {
+        $news = DB::select('SELECT * FROM aktualnosci WHERE aktualnosci_id = ?', [$id]);
+        if (empty($news)) {
             return response()->json(['message' => 'Aktualność nie znaleziona'], 404);
         }
-        $news->delete();
+
+        DB::delete('DELETE FROM aktualnosci WHERE aktualnosci_id = ?', [$id]);
+
         return response()->json(['message' => 'Aktualność usunięta']);
     }
 }
