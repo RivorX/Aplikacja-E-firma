@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Budynki;
+use Illuminate\Support\Facades\DB;
 
 class BudynkiController extends Controller
 {
     public function index()
     {
-        $budynki = Budynki::all();
+        $budynki = DB::select('SELECT * FROM budynki');
         return response()->json($budynki);
     }
 
@@ -20,15 +20,24 @@ class BudynkiController extends Controller
             'opis_budynku' => 'nullable|string|max:255',
         ]);
 
-        $budynki = Budynki::create($request->all());
+        DB::insert('INSERT INTO budynki (nazwa_budynku, opis_budynku) VALUES (?, ?)', [
+            $request->input('nazwa_budynku'),
+            $request->input('opis_budynku')
+        ]);
 
-        return response()->json($budynki, 201);
+        $id = DB::getPdo()->lastInsertId();
+        $budynki = DB::select('SELECT * FROM budynki WHERE budynek_id= ?', [$id]);
+
+        return response()->json($budynki[0], 201);
     }
 
     public function show($id)
     {
-        $budynki = Budynki::findOrFail($id);
-        return response()->json($budynki);
+        $budynki = DB::select('SELECT * FROM budynki WHERE budynek_id = ?', [$id]);
+        if (empty($budynki)) {
+            return response()->json(['message' => 'Budynek nie znaleziony'], 404);
+        }
+        return response()->json($budynki[0]);
     }
 
     public function update(Request $request, $id)
@@ -38,16 +47,25 @@ class BudynkiController extends Controller
             'opis_budynku' => 'nullable|string|max:255',
         ]);
 
-        $budynki = Budynki::findOrFail($id);
-        $budynki->update($request->all());
+        DB::update('UPDATE budynki SET nazwa_budynku = ?, opis_budynku = ? WHERE budynek_id = ?', [
+            $request->input('nazwa_budynku'),
+            $request->input('opis_budynku'),
+            $id
+        ]);
 
-        return response()->json($budynki, 200);
+        $budynki = DB::select('SELECT * FROM budynki WHERE budynek_id = ?', [$id]);
+
+        return response()->json($budynki[0], 200);
     }
 
     public function destroy($id)
     {
-        $budynki = Budynki::findOrFail($id);
-        $budynki->delete();
+        $budynki = DB::select('SELECT * FROM budynki WHERE budynek_id = ?', [$id]);
+        if (empty($budynki)) {
+            return response()->json(['message' => 'Budynek nie znaleziony'], 404);
+        }
+
+        DB::delete('DELETE FROM budynki WHERE budynek_id = ?', [$id]);
 
         return response()->json(null, 204);
     }

@@ -44,8 +44,10 @@ import StrefyDostępu_ADD from "./Admin/components/StrefaDostepu_ADD.jsx";
 import StrefyDostepu from "./Admin/views/StrefyDostepu.jsx";
 import StrefaDostepu_UPDATE from "./Admin/components/StrefaDostepu_UPDATE.jsx";
 import Raporty from "./Admin/views/Raporty.jsx";
+
 import Budynki from "./Admin/views/Budynki.jsx";
 import Budynek_ADD from "./Admin/components/Budynek_ADD.jsx";
+import Budynek_UPDATE from "./Admin/components/Budynek_UPDATE.jsx";
 
 const router = createBrowserRouter([
     {   path: '/',
@@ -198,6 +200,10 @@ const router = createBrowserRouter([
             {
                 path: 'ADDBudynek',
                 element: <Budynek_ADD/>
+            },
+            {
+                path: 'Budynek_UPDATE/:id',
+                element: <Budynek_UPDATE/>
             }
         ]
     },
