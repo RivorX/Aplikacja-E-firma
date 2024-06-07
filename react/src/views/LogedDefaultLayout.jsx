@@ -22,11 +22,6 @@ export default function LogedDefaultLayout() {
   const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
   const [loading, setLoading] = useState(true);
 
-  if (!userToken) {
-    // Redirect to the main page if not logged in
-    return <Navigate to="/mainpage" />;
-  }
-
   useEffect(() => {
     // Fetch user data from the server
     axiosClient.get('/me')
@@ -40,16 +35,6 @@ export default function LogedDefaultLayout() {
       });
   }, [userToken, setCurrentUser]);
 
-  if (loading) {
-    // Display a loading state while fetching user data
-    return <div>Loading...</div>;
-  }
-
-  if (currentUser.Data_edycji === null) {
-    // Redirect to the change password page if user data is fetched and data_edycji is null
-    return <Navigate to="/change-password" />;
-  }
-
   // Logout function
   const logout = (ev) => {
     ev.preventDefault();
@@ -62,6 +47,21 @@ export default function LogedDefaultLayout() {
         console.error('Error logging out:', error);
       });
   };
+
+  if (!userToken) {
+    // Redirect to the main page if not logged in
+    return <Navigate to="/mainpage" />;
+  }
+
+  if (loading) {
+    // Display a loading state while fetching user data
+    return <div>Loading...</div>;
+  }
+
+  if (currentUser.Data_edycji === null) {
+    // Redirect to the change password page if user data is fetched and data_edycji is null
+    return <Navigate to="/change-password" />;
+  }
 
   // Check if the user has admin role
   const hasAdminRole = currentUser?.grupa?.nazwa_grupy.toLowerCase() === "admin" ||

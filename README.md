@@ -11,10 +11,10 @@ Nasz projekt wykorzystuje **Laravel** jako backend i **React** jako frontend. Po
 
 Przed rozpoczęciem upewnij się, że masz zainstalowane następujące oprogramowanie:
 
-- [PHP](https://www.php.net/) >= 7.3
+- [PHP](https://www.php.net/) >= 8.2
 - [Composer](https://getcomposer.org/)
-- [Node.js](https://nodejs.org/) >= 12.x
-- [npm](https://www.npmjs.com/) lub [Yarn](https://yarnpkg.com/)
+- [Node.js](https://nodejs.org/) >= 20.11.x
+- [npm](https://www.npmjs.com/)
 
 ## Instalacja
 
@@ -25,7 +25,9 @@ Przed rozpoczęciem upewnij się, że masz zainstalowane następujące oprogramo
 2. Zainstaluj zależności PHP:
     composer install (?)
 
-
+## Modyfikacja php.ini
+1. Odkomentować linijki wymagane do poprawnego funkcjonowania aplikacji:
+    ;extension=gd -> extension=gd
 ## Uruchomienie Aplikacji
 
 1. Uruchomienie bazy danych pod portem 3306, bazę zaimportować z pliku który znajduje się w '/database/e_firma.sql' do utworzonej wcześniej bazy, którą należy nazwać 'e_firma'
