@@ -1,0 +1,47 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Mapa funkcji projektu E-firma</title>
+  <desc id="desc">Diagram pokazujacy funkcje goscia, pracownika, administratora oraz wspolna baze danych.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="720">
+      <stop stop-color="#FFF7ED"/>
+      <stop offset="1" stop-color="#E0F2FE"/>
+    </linearGradient>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <text x="70" y="76" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="800">Mapa funkcji</text>
+  <text x="70" y="112" fill="#475569" font-family="Segoe UI, Arial, sans-serif" font-size="18">Zakres aplikacji na podstawie PDF-a, tras API i widokow React.</text>
+  <g filter="url(#soft)">
+    <rect x="70" y="166" width="330" height="410" rx="28" fill="#FFFFFF"/>
+    <rect x="475" y="166" width="330" height="410" rx="28" fill="#FFFFFF"/>
+    <rect x="880" y="166" width="330" height="410" rx="28" fill="#FFFFFF"/>
+  </g>
+  <circle cx="124" cy="222" r="28" fill="#F97316"/>
+  <text x="166" y="232" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="800">Gosc</text>
+  <text x="108" y="317" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Aktualnosci firmowe</text>
+  <text x="108" y="366" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Informacje o firmie</text>
+  <text x="108" y="415" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Kontakt</text>
+  <text x="108" y="464" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Logowanie</text>
+  <circle cx="529" cy="222" r="28" fill="#0EA5E9"/>
+  <text x="571" y="232" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="800">Pracownik</text>
+  <text x="513" y="317" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Start i koniec pracy</text>
+  <text x="513" y="366" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Ogloszenia wedlug stanowiska</text>
+  <text x="513" y="415" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Karta dostepu</text>
+  <text x="513" y="464" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Skaner QR</text>
+  <text x="513" y="513" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Dane adresowe</text>
+  <circle cx="934" cy="222" r="28" fill="#0F766E"/>
+  <text x="976" y="232" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="27" font-weight="800">Administrator</text>
+  <text x="918" y="304" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">CRUD pracownikow</text>
+  <text x="918" y="348" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Karty, strefy i drzwi</text>
+  <text x="918" y="392" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Kody QR do drzwi</text>
+  <text x="918" y="436" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Aktualnosci i ogloszenia</text>
+  <text x="918" y="480" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Budynki</text>
+  <text x="918" y="524" fill="#334155" font-family="Segoe UI, Arial, sans-serif" font-size="19">Raporty PDF</text>
+  <rect x="278" y="618" width="724" height="58" rx="29" fill="#0F172A"/>
+  <text x="640" y="655" text-anchor="middle" fill="#E2E8F0" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">Wspolna baza MySQL: pracownicy, karty, strefy, logi, obecnosc, ogloszenia</text>
+  <path d="M235 576 C235 614 340 625 420 635" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 10"/>
+  <path d="M640 576 C640 612 640 620 640 635" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 10"/>
+  <path d="M1045 576 C1045 614 940 625 860 635" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 10"/>
+</svg>

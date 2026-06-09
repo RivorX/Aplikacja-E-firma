@@ -1,0 +1,69 @@
+# E-firma - requirements
+
+# Biblioteki projektu pobiera sie z:
+# - composer.json / composer.lock          -> composer install
+# - package.json / package-lock.json       -> npm install
+# - react/package.json / package-lock.json -> cd react && npm install
+
+[system]
+PHP >= 8.2
+Composer >= 2.x
+Node.js >= 20.x
+npm >= 10.x
+MySQL albo MariaDB
+
+[php-extensions]
+pdo_mysql
+mbstring
+openssl
+tokenizer
+xml
+ctype
+json
+fileinfo
+gd
+curl
+zip
+
+[composer]
+laravel/framework ^11.0
+laravel/sanctum ^4.0
+laravel/breeze ^2.0
+inertiajs/inertia-laravel ^1.0
+barryvdh/laravel-dompdf ^2.2
+simplesoftwareio/simple-qrcode ~4
+tightenco/ziggy ^2.0
+
+[npm-root]
+@headlessui/react ^1.4.2
+@inertiajs/react ^1.0.0
+@tailwindcss/forms ^0.5.3
+@vitejs/plugin-react ^4.2.0
+autoprefixer ^10.4.12
+axios ^1.6.4
+laravel-vite-plugin ^1.0
+postcss ^8.4.31
+react ^18.2.0
+react-dom ^18.2.0
+tailwindcss ^3.4.3
+vite ^5.0
+
+[npm-react-app]
+@babel/runtime ^7.24.5
+@tailwindcss/forms ^0.5.7
+@vituum/vite-plugin-postcss ^1.1.0
+axios ^1.6.8
+html5-qrcode ^2.3.8
+react ^18.2.0
+react-calendar ^5.0.0
+react-dom ^18.2.0
+react-qr-scanner ^1.0.0-alpha.11
+react-router-dom ^6.22.3
+vite ^5.2.0
+tailwindcss ^3.4.3
+
+[install-commands]
+composer install
+npm install
+cd react
+npm install
