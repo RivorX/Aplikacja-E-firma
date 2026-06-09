@@ -1,0 +1,62 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Panel administratora E-firma</title>
+  <desc id="desc">Schematyczny podglad panelu administracyjnego z lista pracownikow wygenerowany na podstawie komponentow React.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="760">
+      <stop stop-color="#ECFDF5"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="760" fill="url(#bg)"/>
+  <rect x="52" y="42" width="1176" height="676" rx="34" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="52" y="42" width="1176" height="206" rx="34" fill="#E5E7EB"/>
+  <rect x="52" y="42" width="1176" height="48" rx="24" fill="#FFFFFF"/>
+  <text x="94" y="73" fill="#22C55E" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Przejdz do panelu pracownika</text>
+  <text x="1102" y="73" text-anchor="end" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Wyloguj sie</text>
+  <rect x="104" y="112" width="88" height="88" rx="22" fill="#111827"/>
+  <path d="M126 155 H170 M148 133 V177" stroke="#10B981" stroke-width="10" stroke-linecap="round"/>
+  <text x="640" y="145" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="20">Witaj</text>
+  <text x="640" y="175" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="800">Rafal</text>
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">
+    <rect x="140" y="210" width="118" height="36" rx="18" fill="#9CA3AF"/><text x="199" y="233" text-anchor="middle" fill="#FFFFFF">Pracownicy</text>
+    <rect x="276" y="210" width="128" height="36" rx="18" fill="#FFFFFF"/><text x="340" y="233" text-anchor="middle" fill="#111827">Karty dostepu</text>
+    <rect x="422" y="210" width="132" height="36" rx="18" fill="#FFFFFF"/><text x="488" y="233" text-anchor="middle" fill="#111827">Drzwi / Kody QR</text>
+    <rect x="572" y="210" width="132" height="36" rx="18" fill="#FFFFFF"/><text x="638" y="233" text-anchor="middle" fill="#111827">Strefy Dostepu</text>
+    <rect x="722" y="210" width="92" height="36" rx="18" fill="#FFFFFF"/><text x="768" y="233" text-anchor="middle" fill="#111827">Budynki</text>
+    <rect x="832" y="210" width="110" height="36" rx="18" fill="#FFFFFF"/><text x="887" y="233" text-anchor="middle" fill="#111827">Aktualnosci</text>
+    <rect x="960" y="210" width="102" height="36" rx="18" fill="#FFFFFF"/><text x="1011" y="233" text-anchor="middle" fill="#111827">Ogloszenia</text>
+    <rect x="1080" y="210" width="82" height="36" rx="18" fill="#FFFFFF"/><text x="1121" y="233" text-anchor="middle" fill="#111827">Raporty</text>
+  </g>
+  <rect x="52" y="248" width="1176" height="86" fill="#FFFFFF"/>
+  <text x="104" y="301" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="800">Lista pracownikow</text>
+  <g transform="translate(92 372)">
+    <rect width="1096" height="274" rx="26" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <rect x="28" y="28" width="1040" height="48" rx="12" fill="#E5E7EB"/>
+    <g fill="#374151" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="800">
+      <text x="58" y="58">Imie</text>
+      <text x="174" y="58">Nazwisko</text>
+      <text x="322" y="58">Email</text>
+      <text x="520" y="58">Status pracownika</text>
+      <text x="704" y="58">Numer karty</text>
+      <text x="858" y="58">Status karty</text>
+      <text x="980" y="58">Akcje</text>
+    </g>
+    <g font-family="Segoe UI, Arial, sans-serif" font-size="14">
+      <rect x="28" y="88" width="1040" height="54" rx="10" fill="#FFFFFF"/>
+      <text x="58" y="122" fill="#111827">Rafal</text><text x="174" y="122" fill="#111827">Admin</text><text x="322" y="122" fill="#111827">admin@example.pl</text>
+      <text x="520" y="122" fill="#22C55E" font-weight="800">Aktywny</text><text x="704" y="122" fill="#111827">123456789</text><text x="858" y="122" fill="#22C55E" font-weight="800">Aktywna</text>
+      <rect x="948" y="102" width="54" height="28" rx="8" fill="#DCFCE7"/><text x="975" y="121" text-anchor="middle" fill="#15803D" font-size="12" font-weight="800">Edytuj</text>
+      <rect x="1010" y="102" width="52" height="28" rx="8" fill="#FEE2E2"/><text x="1036" y="121" text-anchor="middle" fill="#B91C1C" font-size="12" font-weight="800">Usun</text>
+      <rect x="28" y="154" width="1040" height="54" rx="10" fill="#FFFFFF"/>
+      <text x="58" y="188" fill="#111827">Agala</text><text x="174" y="188" fill="#111827">Magala</text><text x="322" y="188" fill="#111827">aga@example.pl</text>
+      <text x="520" y="188" fill="#22C55E" font-weight="800">Aktywny</text><text x="704" y="188" fill="#111827">987654321</text><text x="858" y="188" fill="#EF4444" font-weight="800">Zablokowana</text>
+      <rect x="948" y="168" width="54" height="28" rx="8" fill="#DCFCE7"/><text x="975" y="187" text-anchor="middle" fill="#15803D" font-size="12" font-weight="800">Edytuj</text>
+      <rect x="1010" y="168" width="52" height="28" rx="8" fill="#FEE2E2"/><text x="1036" y="187" text-anchor="middle" fill="#B91C1C" font-size="12" font-weight="800">Usun</text>
+    </g>
+  </g>
+  <rect x="92" y="664" width="178" height="38" rx="10" fill="#4F46E5"/>
+  <text x="181" y="688" text-anchor="middle" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="800">Dodaj nowego uzytkownika</text>
+</svg>

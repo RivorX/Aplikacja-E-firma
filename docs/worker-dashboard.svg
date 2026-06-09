@@ -1,0 +1,61 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Panel pracownika E-firma</title>
+  <desc id="desc">Schematyczny podglad panelu glownego pracownika wygenerowany na podstawie komponentow React.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="760">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#E0F2FE"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="760" fill="url(#bg)"/>
+  <rect x="64" y="48" width="1152" height="664" rx="34" fill="#FFFFFF" filter="url(#shadow)"/>
+  <rect x="64" y="48" width="1152" height="178" rx="34" fill="#E5E7EB"/>
+  <rect x="64" y="48" width="1152" height="48" rx="24" fill="#FFFFFF"/>
+  <text x="104" y="79" fill="#EF4444" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Panel Administratora</text>
+  <text x="1084" y="79" text-anchor="end" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">Wyloguj sie</text>
+  <rect x="116" y="116" width="88" height="88" rx="22" fill="#111827"/>
+  <path d="M138 159 H182 M160 137 V181" stroke="#F59E0B" stroke-width="10" stroke-linecap="round"/>
+  <text x="640" y="146" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="20">Witaj</text>
+  <text x="640" y="176" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="800">Rafal Admin</text>
+  <g>
+    <rect x="280" y="188" width="150" height="38" rx="19" fill="#9CA3AF"/>
+    <text x="355" y="212" text-anchor="middle" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Panel glowny</text>
+    <rect x="456" y="188" width="140" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="526" y="212" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Ogloszenia</text>
+    <rect x="622" y="188" width="100" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="672" y="212" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Karta</text>
+    <rect x="748" y="188" width="132" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="814" y="212" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700">Informacje</text>
+  </g>
+  <rect x="64" y="226" width="1152" height="86" fill="#FFFFFF"/>
+  <text x="116" y="279" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="800">Panel glowny</text>
+  <g transform="translate(116 352)">
+    <rect width="1048" height="296" rx="28" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <rect x="40" y="38" width="154" height="44" rx="10" fill="#3B82F6"/>
+    <text x="117" y="66" text-anchor="middle" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="800">Zglos obecnosc</text>
+    <rect x="214" y="38" width="142" height="44" rx="10" fill="#EF4444"/>
+    <text x="285" y="66" text-anchor="middle" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="800">Koniec pracy</text>
+    <text x="40" y="132" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">Forma wykorzystania nadgodzin:</text>
+    <rect x="40" y="154" width="430" height="46" rx="10" fill="#FFFFFF" stroke="#CBD5E1"/>
+    <text x="62" y="183" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="16">Wybierz forme wykorzystania nadgodzin</text>
+    <text x="40" y="240" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">Wykorzystaj urlop</text>
+    <text x="40" y="268" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700">Liczba dni urlopu: 20</text>
+    <g transform="translate(594 32)">
+      <rect width="390" height="226" rx="22" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="195" y="38" text-anchor="middle" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">Czerwiec 2026</text>
+      <g fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700">
+        <text x="36" y="72">Pn</text><text x="88" y="72">Wt</text><text x="140" y="72">Sr</text><text x="192" y="72">Cz</text><text x="244" y="72">Pt</text><text x="296" y="72">So</text><text x="348" y="72">Nd</text>
+      </g>
+      <g fill="#E2E8F0">
+        <rect x="24" y="88" width="34" height="28" rx="8"/><rect x="76" y="88" width="34" height="28" rx="8"/><rect x="128" y="88" width="34" height="28" rx="8"/><rect x="180" y="88" width="34" height="28" rx="8"/><rect x="232" y="88" width="34" height="28" rx="8"/><rect x="284" y="88" width="34" height="28" rx="8"/><rect x="336" y="88" width="34" height="28" rx="8"/>
+        <rect x="24" y="128" width="34" height="28" rx="8"/><rect x="76" y="128" width="34" height="28" rx="8"/><rect x="128" y="128" width="34" height="28" rx="8"/><rect x="180" y="128" width="34" height="28" rx="8"/><rect x="232" y="128" width="34" height="28" rx="8"/><rect x="284" y="128" width="34" height="28" rx="8"/><rect x="336" y="128" width="34" height="28" rx="8"/>
+      </g>
+      <rect x="128" y="168" width="34" height="28" rx="8" fill="#3B82F6"/>
+      <rect x="180" y="168" width="34" height="28" rx="8" fill="#93C5FD"/>
+      <rect x="232" y="168" width="34" height="28" rx="8" fill="#93C5FD"/>
+    </g>
+  </g>
+</svg>

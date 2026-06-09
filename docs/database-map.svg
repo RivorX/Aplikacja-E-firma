@@ -1,0 +1,70 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Uproszczona mapa bazy danych E-firma</title>
+  <desc id="desc">Diagram najwazniejszych tabel i mechanizmow SQL w bazie projektu.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="720">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#ECFDF5"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-12%" width="124%" height="124%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748B"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <text x="72" y="78" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="42" font-weight="800">Baza danych</text>
+  <text x="72" y="114" fill="#475569" font-family="Segoe UI, Arial, sans-serif" font-size="18">Najwazniejsze tabele, relacje i mechanizmy SQL z pliku database/e_firma.sql.</text>
+  <g filter="url(#shadow)">
+    <rect x="498" y="166" width="284" height="102" rx="22" fill="#0F766E"/>
+    <text x="640" y="208" text-anchor="middle" fill="#ECFDF5" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="800">pracownicy</text>
+    <text x="640" y="239" text-anchor="middle" fill="#CCFBF1" font-family="Segoe UI, Arial, sans-serif" font-size="15">konto, grupa, stanowisko, urlop</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="116" y="328" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="239" y="364" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">karta_dostepu</text>
+    <text x="239" y="394" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">aktywnosc i wlasciciel</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="400" y="328" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="523" y="364" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">strefy_dostepu</text>
+    <text x="523" y="394" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">budynki i uprawnienia</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="684" y="328" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="807" y="364" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">drzwi</text>
+    <text x="807" y="394" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">QR i wejscia/wyjscia</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="968" y="328" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="1091" y="364" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">logi_kart</text>
+    <text x="1091" y="394" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">proby dostepu</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="176" y="514" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="299" y="550" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">obecnosc</text>
+    <text x="299" y="580" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">czas pracy</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="517" y="514" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="640" y="550" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">ogloszenia</text>
+    <text x="640" y="580" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">stanowiska i grupy</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="858" y="514" width="246" height="92" rx="20" fill="#FFFFFF"/>
+    <text x="981" y="550" text-anchor="middle" fill="#0F172A" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="800">urlopy / wyplaty</text>
+    <text x="981" y="580" text-anchor="middle" fill="#64748B" font-family="Segoe UI, Arial, sans-serif" font-size="15">obszary do rozwoju</text>
+  </g>
+  <path d="M562 268 L285 328" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M612 268 L542 328" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M684 268 L780 328" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M780 374 H968" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M362 374 H400" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M930 374 H968" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M604 268 L330 514" stroke="#64748B" stroke-width="3" opacity="0.75" marker-end="url(#arrow)"/>
+  <path d="M640 268 V514" stroke="#64748B" stroke-width="3" opacity="0.75" marker-end="url(#arrow)"/>
+  <path d="M690 268 L946 514" stroke="#64748B" stroke-width="3" opacity="0.75" marker-end="url(#arrow)"/>
+  <rect x="72" y="650" width="1136" height="34" rx="17" fill="#DCFCE7"/>
+  <text x="640" y="672" text-anchor="middle" fill="#166534" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">Mechanizmy SQL: funkcja czas_przebywania_pracownika + triggery logujace operacje na strefach dostepu</text>
+</svg>
